@@ -1,0 +1,6 @@
+{
+  "name": "CodeBridge AI",
+  "description": "Your AI mentor for Hacktoberfest and open-source beginners. Understand code, solve GitHub issues, and make your first pull request with confidence.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
