@@ -4,6 +4,8 @@ export type ActiveTab =
   | 'issue-helper'
   | 'pr-guide'
   | 'idea-generator'
+  | 'repo-finder'
+  | 'roadmap'
   | 'chat-mentor'
   | 'tracker';
 
@@ -63,14 +65,110 @@ export interface IssueAnalysisResult {
 export interface ProjectIdea {
   title: string;
   shortDescription: string;
-  problemSolved: string;
-  targetAudience: string;
-  suggestedTechnologies: string[];
-  coreFeatures: string[];
-  mvpRoadmap: Array<{ phase: string; milestone: string }>;
-  aiFeature: string;
-  beginnerNextSteps: string[];
-  readmeSections: Array<{ heading: string; content: string }>;
+  skillsToPractice: string[];
+  suggestedFeatures: string[];
+  clearFirstStep: string;
+  problemSolved?: string;
+  suggestedTechnologies?: string[];
+  _meta?: {
+    modelUsed?: string;
+  };
+}
+
+export interface GitHubRepository {
+  id: number;
+  name: string;
+  fullName: string;
+  description: string;
+  htmlUrl: string;
+  language: string | null;
+  stars: number;
+  forks: number;
+  openIssuesCount: number;
+  topics: string[];
+  hasGoodFirstIssues: boolean;
+  goodFirstIssuesUrl: string;
+  updatedAt: string;
+  ownerAvatarUrl?: string;
+  licenseName?: string;
+}
+
+export interface VerifiedRepoData {
+  verified: boolean;
+  fullName: string;
+  description: string;
+  defaultBranch: string;
+  language: string | null;
+  stars: number;
+  openIssuesCount: number;
+  htmlUrl: string;
+  licenseName?: string;
+}
+
+export interface VerifiedIssueData {
+  verified: boolean;
+  number?: number;
+  title: string;
+  body: string;
+  state?: string;
+  htmlUrl?: string;
+}
+
+export interface ContributionRoadmap {
+  verifiedRepo: VerifiedRepoData;
+  verifiedIssue: VerifiedIssueData;
+  overview: string;
+  stages: {
+    projectAndGuidelines: {
+      title: string;
+      explanation: string;
+      contributingUrl?: string;
+      keyRules: string[];
+    };
+    understandIssue: {
+      title: string;
+      plainEnglishSummary: string;
+      expectedBehavior: string;
+      potentialTraps: string[];
+    };
+    areasToInvestigate: {
+      title: string;
+      disclaimer: string;
+      recommendedAreas: Array<{
+        area: string;
+        why: string;
+      }>;
+    };
+    taskBreakdown: {
+      title: string;
+      tasks: Array<{
+        id: string;
+        task: string;
+        details: string;
+      }>;
+    };
+    testingStrategy: {
+      title: string;
+      testCommands: string[];
+      manualSteps: string[];
+      howToAvoidRegression: string;
+    };
+    gitAndPrWorkflow: {
+      title: string;
+      branchName: string;
+      commands: Array<{
+        cmd: string;
+        purpose: string;
+      }>;
+      suggestedPrTitle: string;
+      suggestedPrBody: string;
+    };
+  };
+  interactiveChecklist: Array<{
+    id: string;
+    stage: string;
+    text: string;
+  }>;
   _meta?: {
     modelUsed?: string;
   };
@@ -93,7 +191,7 @@ export interface LearningTask {
 
 export interface SavedItem {
   id: string;
-  type: 'code' | 'issue' | 'idea';
+  type: 'code' | 'issue' | 'idea' | 'repo' | 'roadmap';
   title: string;
   date: string;
   summary: string;

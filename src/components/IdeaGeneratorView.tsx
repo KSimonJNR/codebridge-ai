@@ -16,13 +16,13 @@ import {
   Info,
   RefreshCw,
   FolderGit2,
-  Users,
   Cpu,
   Compass,
-  FileText,
-  Workflow,
-  Share2,
-  HeartHandshake
+  FileCode,
+  Wrench,
+  BookOpen,
+  Footprints,
+  Rocket
 } from 'lucide-react';
 import { ProjectIdea } from '../types.ts';
 
@@ -31,32 +31,20 @@ interface IdeaGeneratorViewProps {
   onSaveIdea?: (idea: ProjectIdea) => void;
 }
 
-const PRESET_INTERESTS = [
-  'Community Tools',
-  'AI',
-  'Education',
-  'Healthcare',
-  'Productivity',
-  'Climate',
-];
-
 export const IdeaGeneratorView: React.FC<IdeaGeneratorViewProps> = ({
   onOpenKeyInfo,
   onSaveIdea,
 }) => {
-  // User Inputs (Requirements 1-5)
+  // Required user inputs
+  const [language, setLanguage] = useState<'Python' | 'JavaScript' | 'Java' | 'Any language'>('Python');
   const [experience, setExperience] = useState<'Beginner' | 'Intermediate' | 'Advanced'>('Beginner');
-  const [language, setLanguage] = useState<'Python' | 'JavaScript' | 'TypeScript' | 'Java' | 'Other'>('TypeScript');
-  const [selectedInterest, setSelectedInterest] = useState<string>('Community Tools');
-  const [customInterest, setCustomInterest] = useState<string>('');
-  const [projectType, setProjectType] = useState<'Web app' | 'AI assistant' | 'Developer tool' | 'Automation'>('Web app');
-  const [customIdeaDescription, setCustomIdeaDescription] = useState<string>('');
+  const [interest, setInterest] = useState<'Web Development' | 'AI and Machine Learning' | 'Developer Tools' | 'Education' | 'Any'>('Web Development');
 
   // Execution states
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [ideas, setIdeas] = useState<ProjectIdea[]>(() => {
-    const saved = localStorage.getItem('codebridge_cached_ideas');
+    const saved = localStorage.getItem('codebridge_cached_ideas_v2');
     if (saved) {
       try {
         return JSON.parse(saved);
@@ -67,7 +55,7 @@ export const IdeaGeneratorView: React.FC<IdeaGeneratorViewProps> = ({
     return [];
   });
 
-  // Local persistence for saved ideas (Requirement: Persist saved ideas locally)
+  // Local persistence for saved ideas
   const [savedIdeas, setSavedIdeas] = useState<Record<string, boolean>>(() => {
     const saved = localStorage.getItem('codebridge_saved_ideas');
     if (saved) {
@@ -90,21 +78,11 @@ export const IdeaGeneratorView: React.FC<IdeaGeneratorViewProps> = ({
 
   useEffect(() => {
     if (ideas.length > 0) {
-      localStorage.setItem('codebridge_cached_ideas', JSON.stringify(ideas));
+      localStorage.setItem('codebridge_cached_ideas_v2', JSON.stringify(ideas));
     }
   }, [ideas]);
 
-  const activeInterestValue = selectedInterest === 'Custom'
-    ? (customInterest.trim() || 'General Community Tools')
-    : selectedInterest;
-
   const handleGenerate = async () => {
-    // Input validation
-    if (selectedInterest === 'Custom' && !customInterest.trim()) {
-      setError('Please specify your custom interest or select one of the preset topics.');
-      return;
-    }
-
     setLoading(true);
     setError(null);
 
@@ -113,11 +91,9 @@ export const IdeaGeneratorView: React.FC<IdeaGeneratorViewProps> = ({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          experience,
           language,
-          interests: activeInterestValue,
-          projectType,
-          customIdeaDescription: customIdeaDescription.trim(),
+          experience,
+          interest,
         }),
       });
 
@@ -140,7 +116,6 @@ export const IdeaGeneratorView: React.FC<IdeaGeneratorViewProps> = ({
   };
 
   const handleSave = (idea: ProjectIdea) => {
-    // Save to localStorage
     const existing: ProjectIdea[] = JSON.parse(localStorage.getItem('codebridge_saved_ideas') || '[]');
     const isAlreadySaved = existing.some((item) => item.title === idea.title);
 
@@ -155,43 +130,33 @@ export const IdeaGeneratorView: React.FC<IdeaGeneratorViewProps> = ({
 
     localStorage.setItem('codebridge_saved_ideas', JSON.stringify(updated));
 
-    // Also notify parent for personal dashboard synchronization
     if (onSaveIdea && !isAlreadySaved) {
       onSaveIdea(idea);
     }
   };
 
-  const handleCopyMarkdown = (idea: ProjectIdea, index: number) => {
+  const handleCopy = (idea: ProjectIdea, index: number) => {
     const md = `# ${idea.title}
 
 > ${idea.shortDescription}
 
-## Problem Solved
-${idea.problemSolved}
+### Problem Solved
+${idea.problemSolved || 'A practical open-source project designed for learners.'}
 
-## Target Audience
-${idea.targetAudience}
+### Skills to Practice
+${(idea.skillsToPractice || []).map((s) => `- ${s}`).join('\n')}
 
-## Suggested Technologies
-${idea.suggestedTechnologies.map((t) => `- ${t}`).join('\n')}
+### Suggested Beginner-Friendly Features
+${(idea.suggestedFeatures || []).map((f) => `- ${f}`).join('\n')}
 
-## Core Features
-${idea.coreFeatures.map((f) => `- ${f}`).join('\n')}
+### Clear First Step
+${idea.clearFirstStep}
 
-## MVP Roadmap
-${idea.mvpRoadmap.map((m) => `- **${m.phase}**: ${m.milestone}`).join('\n')}
-
-## AI Feature
-${idea.aiFeature}
-
-## Beginner Next Steps
-${idea.beginnerNextSteps.map((s, i) => `${i + 1}. ${s}`).join('\n')}
-
-## Recommended README Sections
-${idea.readmeSections.map((sec) => `### ${sec.heading}\n${sec.content}`).join('\n\n')}
+### Suggested Tech Stack
+${(idea.suggestedTechnologies || []).join(', ')}
 
 ---
-*Generated with CodeBridge AI for Hacktoberfest*
+*Generated by CodeBridge AI Mentor*
 `;
 
     navigator.clipboard.writeText(md);
@@ -206,11 +171,11 @@ ${idea.readmeSections.map((sec) => `### ${sec.heading}\n${sec.content}`).join('\
         <div>
           <div className="inline-flex items-center gap-1.5 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-1">
             <Sparkles className="w-3.5 h-3.5" />
-            Hacktoberfest Project Incubator
+            Open Source Project Matchmaker
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-white">AI Project Idea Generator</h2>
           <p className="text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed">
-            Discover tailored, portfolio-worthy open-source project concepts designed for your skill level, complete with core features, MVP roadmaps, and README blueprints.
+            Find realistic, beginner-friendly open-source project ideas tailored to your programming language, experience, and interests.
           </p>
         </div>
 
@@ -222,119 +187,76 @@ ${idea.readmeSections.map((sec) => `### ${sec.heading}\n${sec.content}`).join('\
             className="self-start sm:self-auto flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-white/10 text-xs font-semibold shadow-sm transition-all cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-            <span>Generate Another Set</span>
+            <span>Generate New Ideas</span>
           </button>
         )}
       </div>
 
-      {/* Input Configuration Panel (Requirements 1-5) */}
+      {/* Input Selection Card */}
       <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-5 sm:p-7 shadow-xl space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-          {/* 1. Programming Experience */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {/* 1. Programming Language */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-2">
-              1. Programming Experience:
+            <label htmlFor="lang-select" className="block text-xs font-semibold text-slate-300 mb-2 flex items-center gap-1.5">
+              <Code2 className="w-3.5 h-3.5 text-cyan-400" />
+              Programming Language:
             </label>
             <select
-              value={experience}
-              onChange={(e) => setExperience(e.target.value as any)}
-              className="w-full bg-[#080d1a] border border-white/10 text-cyan-300 text-xs sm:text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-400 font-medium cursor-pointer"
-            >
-              <option value="Beginner">Beginner (First-time open source)</option>
-              <option value="Intermediate">Intermediate (Building full apps)</option>
-              <option value="Advanced">Advanced (High-scale & architecture)</option>
-            </select>
-          </div>
-
-          {/* 2. Preferred Programming Language */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-2">
-              2. Preferred Language:
-            </label>
-            <select
+              id="lang-select"
               value={language}
               onChange={(e) => setLanguage(e.target.value as any)}
               className="w-full bg-[#080d1a] border border-white/10 text-cyan-300 text-xs sm:text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-400 font-medium cursor-pointer"
             >
               <option value="Python">Python</option>
               <option value="JavaScript">JavaScript</option>
-              <option value="TypeScript">TypeScript</option>
               <option value="Java">Java</option>
-              <option value="Other">Other (Go, Rust, etc.)</option>
+              <option value="Any language">Any language</option>
             </select>
           </div>
 
-          {/* 3. Project Type */}
+          {/* 2. Experience Level */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-2">
-              3. Project Type:
+            <label htmlFor="exp-select" className="block text-xs font-semibold text-slate-300 mb-2 flex items-center gap-1.5">
+              <Compass className="w-3.5 h-3.5 text-purple-400" />
+              Experience Level:
             </label>
             <select
-              value={projectType}
-              onChange={(e) => setProjectType(e.target.value as any)}
+              id="exp-select"
+              value={experience}
+              onChange={(e) => setExperience(e.target.value as any)}
               className="w-full bg-[#080d1a] border border-white/10 text-cyan-300 text-xs sm:text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-400 font-medium cursor-pointer"
             >
-              <option value="Web app">Web app</option>
-              <option value="AI assistant">AI assistant</option>
-              <option value="Developer tool">Developer tool</option>
-              <option value="Automation">Automation / CLI</option>
+              <option value="Beginner">Beginner (Learning syntax & basics)</option>
+              <option value="Intermediate">Intermediate (Building complete apps)</option>
+              <option value="Advanced">Advanced (Architecture & performance)</option>
             </select>
           </div>
 
-          {/* 4. Domain & Interests Selector */}
+          {/* 3. Interest */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-2">
-              4. Core Interest / Domain:
+            <label htmlFor="interest-select" className="block text-xs font-semibold text-slate-300 mb-2 flex items-center gap-1.5">
+              <Target className="w-3.5 h-3.5 text-cyan-400" />
+              Interest Domain:
             </label>
             <select
-              value={selectedInterest}
-              onChange={(e) => setSelectedInterest(e.target.value)}
+              id="interest-select"
+              value={interest}
+              onChange={(e) => setInterest(e.target.value as any)}
               className="w-full bg-[#080d1a] border border-white/10 text-cyan-300 text-xs sm:text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-400 font-medium cursor-pointer"
             >
-              {PRESET_INTERESTS.map((item) => (
-                <option key={item} value={item}>
-                  {item}
-                </option>
-              ))}
-              <option value="Custom">Custom Interest...</option>
+              <option value="Web Development">Web Development</option>
+              <option value="AI and Machine Learning">AI and Machine Learning</option>
+              <option value="Developer Tools">Developer Tools</option>
+              <option value="Education">Education</option>
+              <option value="Any">Any Interest</option>
             </select>
           </div>
         </div>
 
-        {/* Custom Interest Input (shown if Custom selected) */}
-        {selectedInterest === 'Custom' && (
-          <div className="pt-2 animate-fadeIn">
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-              Specify Your Custom Interest / Topic:
-            </label>
-            <input
-              type="text"
-              value={customInterest}
-              onChange={(e) => setCustomInterest(e.target.value)}
-              placeholder="e.g. Markdown notes, accessibility checkers, marine biology, gaming discord bots"
-              className="w-full bg-[#080d1a] border border-white/10 rounded-xl px-3.5 py-2 text-xs sm:text-sm text-cyan-200 placeholder:text-slate-600 focus:outline-none focus:border-purple-500"
-            />
-          </div>
-        )}
-
-        {/* 5. Optional Description / Ideas of the User */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-            5. Optional Description or Ideas (constraints, existing inspiration, or API preferences):
-          </label>
-          <textarea
-            value={customIdeaDescription}
-            onChange={(e) => setCustomIdeaDescription(e.target.value)}
-            placeholder="e.g. I want to build a lightweight tool with a fast CLI and no heavy database setup, or integrate with GitHub's public API..."
-            rows={3}
-            className="w-full bg-[#080d1a] border border-white/10 rounded-xl p-3 text-xs sm:text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-purple-500 resize-y leading-relaxed font-mono"
-          />
-        </div>
-
-        {/* Action Controls */}
+        {/* Action Button: "Generate Project Ideas" */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-3 border-t border-white/10">
           <span className="text-xs text-slate-400 hidden sm:inline">
-            Generates 3 full open-source project proposals tailored to your criteria
+            Generates 3 practical, realistic projects tailored to your level
           </span>
 
           <button
@@ -346,7 +268,7 @@ ${idea.readmeSections.map((sec) => `### ${sec.heading}\n${sec.content}`).join('\
             {loading ? (
               <>
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                <span>Crafting Project Blueprints with Gemini...</span>
+                <span>Crafting Ideas with Gemini...</span>
               </>
             ) : (
               <>
@@ -358,7 +280,7 @@ ${idea.readmeSections.map((sec) => `### ${sec.heading}\n${sec.content}`).join('\
         </div>
       </div>
 
-      {/* Friendly Error Display */}
+      {/* Error state */}
       {error && (
         <div className="rounded-xl bg-red-950/40 border border-red-500/40 p-4 text-red-200 text-xs sm:text-sm flex items-start gap-3 animate-fadeIn">
           <AlertTriangle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
@@ -369,249 +291,210 @@ ${idea.readmeSections.map((sec) => `### ${sec.heading}\n${sec.content}`).join('\
         </div>
       )}
 
-      {/* Mandatory Disclaimer (Requirement: Label generated content as AI suggestions, not verified project requirements) */}
-      {ideas.length > 0 && (
-        <div className="rounded-xl bg-indigo-950/30 border border-indigo-500/30 p-3.5 flex items-start gap-3 text-xs text-indigo-200">
-          <Info className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-          <p className="leading-relaxed">
-            <strong>Advisory:</strong> These project concepts are AI-generated suggestions to inspire your Hacktoberfest portfolio and open-source contributions. They are conceptual blueprints, not pre-verified project requirements. Feel free to adapt the scope, libraries, or architecture to fit your learning goals!
-          </p>
-        </div>
-      )}
-
       {/* Empty State */}
       {ideas.length === 0 && !loading && (
-        <div className="rounded-2xl bg-slate-900/60 border border-dashed border-white/15 p-12 text-center flex flex-col items-center justify-center min-h-[380px]">
+        <div className="rounded-2xl bg-slate-900/60 border border-dashed border-white/15 p-12 text-center flex flex-col items-center justify-center min-h-[360px]">
           <div className="w-16 h-16 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-4">
             <Lightbulb className="w-8 h-8" />
           </div>
-          <h3 className="text-lg font-bold text-white mb-2">Ready to Discover Ideas</h3>
+          <h3 className="text-lg font-bold text-white mb-2">No Ideas Generated Yet</h3>
           <p className="text-sm text-slate-400 max-w-md leading-relaxed mb-6">
-            Configure your experience level, favorite programming language, and interests above, then click <strong>"Generate Project Ideas"</strong> to create 3 full repository blueprints.
+            Choose your language, experience, and domain above, then click <strong>"Generate Project Ideas"</strong> to get 3 structured projects complete with skills to practice and a clear first step.
           </p>
           <button
             type="button"
             onClick={handleGenerate}
             className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-semibold border border-white/10 transition-colors cursor-pointer"
           >
-            Generate Ideas for {language} ({experience}) &rarr;
+            Generate Ideas for {language} &rarr;
           </button>
         </div>
       )}
 
-      {/* 3 Generated Project Cards */}
-      {ideas.length > 0 && (
-        <div className="space-y-8 animate-fadeIn">
-          {ideas.map((idea, index) => {
-            const isSaved = Boolean(savedIdeas[idea.title]);
+      {/* Loading Skeleton Indicator */}
+      {loading && (
+        <div className="rounded-2xl bg-slate-900/60 border border-white/10 p-12 text-center flex flex-col items-center justify-center min-h-[380px] space-y-4">
+          <div className="relative">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-500 to-cyan-500 animate-spin flex items-center justify-center p-[2px]">
+              <div className="w-full h-full bg-[#070a13] rounded-[14px]" />
+            </div>
+            <Sparkles className="w-6 h-6 text-cyan-300 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
+          </div>
+          <h3 className="text-base font-bold text-white">Generating Open-Source Ideas...</h3>
+          <p className="text-xs text-slate-400 max-w-xs leading-relaxed">
+            Formulating beginner-friendly features, skills to practice, and actionable first steps with Gemini.
+          </p>
+        </div>
+      )}
 
-            return (
-              <div
-                key={index}
-                className="rounded-2xl bg-gradient-to-b from-slate-900/95 to-slate-950/95 border border-white/10 p-6 sm:p-7 shadow-2xl space-y-6 hover:border-purple-500/40 transition-all"
-              >
-                {/* Top Idea Header */}
-                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-white/10 pb-5">
-                  <div className="space-y-1.5 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="w-6 h-6 rounded-lg bg-gradient-to-tr from-purple-500 to-cyan-500 text-white flex items-center justify-center text-xs font-extrabold">
-                        {index + 1}
-                      </span>
-                      <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-                        {idea.title}
-                      </h3>
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-purple-500/15 text-purple-300 border border-purple-500/30">
-                        {projectType}
-                      </span>
+      {/* Results Display */}
+      {ideas.length > 0 && !loading && (
+        <div className="space-y-6 animate-fadeIn">
+          {/* Disclaimer badge */}
+          <div className="rounded-xl bg-indigo-950/30 border border-indigo-500/25 p-3 flex items-start gap-2.5 text-xs text-indigo-200">
+            <Info className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+            <p className="leading-relaxed">
+              These suggestions are AI-generated open-source concepts designed to practice real coding skills. You can adapt the scope, libraries, or features to match your exact goals!
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6">
+            {ideas.map((idea, index) => {
+              const isSaved = Boolean(savedIdeas[idea.title]);
+
+              return (
+                <div
+                  key={index}
+                  className="rounded-2xl bg-gradient-to-b from-slate-900/95 to-slate-950/95 border border-white/10 p-6 sm:p-7 shadow-xl space-y-5 hover:border-purple-500/40 transition-all"
+                >
+                  {/* Top Bar: Title & Actions */}
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 border-b border-white/10 pb-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="w-6 h-6 rounded-lg bg-gradient-to-tr from-purple-500 to-cyan-500 text-white flex items-center justify-center text-xs font-black">
+                          {index + 1}
+                        </span>
+                        <h3 className="text-lg sm:text-xl font-black text-white tracking-tight">
+                          {idea.title}
+                        </h3>
+                      </div>
+                      <p className="text-xs sm:text-sm text-cyan-300 font-medium">
+                        {idea.shortDescription}
+                      </p>
                     </div>
 
-                    <p className="text-sm sm:text-base font-medium text-cyan-300">
-                      {idea.shortDescription}
-                    </p>
-                  </div>
-
-                  {/* Actions: Save & Copy (Requirements) */}
-                  <div className="flex items-center gap-2 shrink-0">
-                    <button
-                      type="button"
-                      onClick={() => handleSave(idea)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl border transition-all cursor-pointer ${
-                        isSaved
-                          ? 'bg-emerald-950/40 text-emerald-300 border-emerald-500/40'
-                          : 'bg-slate-800 text-slate-300 hover:text-white border-white/10 hover:border-purple-400'
-                      }`}
-                    >
-                      {isSaved ? (
-                        <>
-                          <BookmarkCheck className="w-3.5 h-3.5 text-emerald-400" />
-                          <span>Saved to Dashboard</span>
-                        </>
-                      ) : (
-                        <>
-                          <BookmarkPlus className="w-3.5 h-3.5 text-cyan-400" />
-                          <span>Save Idea</span>
-                        </>
-                      )}
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleCopyMarkdown(idea, index)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-white/10 transition-colors cursor-pointer"
-                      title="Copy full markdown proposal"
-                    >
-                      {copiedIndex === index ? (
-                        <>
-                          <Check className="w-3.5 h-3.5 text-emerald-400" />
-                          <span className="text-emerald-400">Copied Markdown</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3.5 h-3.5" />
-                          <span>Copy Spec</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Problem Solved & Target Audience */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="rounded-xl bg-[#080d1a] border border-white/5 p-4 space-y-1">
-                    <span className="text-[11px] font-bold text-purple-400 uppercase tracking-wider flex items-center gap-1">
-                      <Target className="w-3.5 h-3.5" />
-                      The Problem It Solves
-                    </span>
-                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                      {idea.problemSolved}
-                    </p>
-                  </div>
-
-                  <div className="rounded-xl bg-[#080d1a] border border-white/5 p-4 space-y-1">
-                    <span className="text-[11px] font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1">
-                      <Users className="w-3.5 h-3.5" />
-                      Who Would Benefit
-                    </span>
-                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                      {idea.targetAudience}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Suggested Technologies */}
-                <div className="space-y-2">
-                  <span className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                    <Code2 className="w-4 h-4 text-cyan-400" />
-                    Suggested Technologies & Stack
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    {idea.suggestedTechnologies.map((tech, tIdx) => (
-                      <span
-                        key={tIdx}
-                        className="px-2.5 py-1 rounded-lg bg-black/40 border border-white/10 text-xs font-mono text-cyan-200"
+                    <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => handleSave(idea)}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl border transition-all cursor-pointer ${
+                          isSaved
+                            ? 'bg-emerald-950/40 text-emerald-300 border-emerald-500/40'
+                            : 'bg-slate-800 text-slate-300 hover:text-white border-white/10 hover:border-purple-400'
+                        }`}
                       >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                        {isSaved ? (
+                          <>
+                            <BookmarkCheck className="w-3.5 h-3.5 text-emerald-400" />
+                            <span>Saved</span>
+                          </>
+                        ) : (
+                          <>
+                            <BookmarkPlus className="w-3.5 h-3.5 text-cyan-400" />
+                            <span>Save Idea</span>
+                          </>
+                        )}
+                      </button>
 
-                {/* Core Features & AI Feature */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="rounded-xl bg-[#080d1a] border border-white/5 p-4 space-y-2">
-                    <span className="text-[11px] font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1">
-                      <Layers className="w-3.5 h-3.5" />
-                      3–5 Core Features
-                    </span>
-                    <ul className="space-y-1.5 text-xs text-slate-300 list-disc list-inside">
-                      {idea.coreFeatures.map((feat, fIdx) => (
-                        <li key={fIdx} className="leading-relaxed">
-                          {feat}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="rounded-xl bg-purple-950/20 border border-purple-500/30 p-4 space-y-2">
-                    <span className="text-[11px] font-bold text-purple-300 uppercase tracking-wider flex items-center gap-1.5">
-                      <Cpu className="w-3.5 h-3.5 text-purple-400" />
-                      Recommended AI Enhancement
-                    </span>
-                    <p className="text-xs text-purple-100 leading-relaxed">
-                      {idea.aiFeature}
-                    </p>
-                  </div>
-                </div>
-
-                {/* MVP Roadmap */}
-                <div className="space-y-2.5">
-                  <span className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                    <Workflow className="w-4 h-4 text-cyan-400" />
-                    Simple MVP Development Roadmap
-                  </span>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                    {idea.mvpRoadmap.map((road, rIdx) => (
-                      <div
-                        key={rIdx}
-                        className="rounded-xl bg-[#060a14] border border-white/5 p-3 space-y-1"
+                      <button
+                        type="button"
+                        onClick={() => handleCopy(idea, index)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-white/10 transition-colors cursor-pointer"
+                        title="Copy project specification"
                       >
-                        <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider block">
-                          {road.phase}
+                        {copiedIndex === index ? (
+                          <>
+                            <Check className="w-3.5 h-3.5 text-emerald-400" />
+                            <span className="text-emerald-400">Copied</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3.5 h-3.5" />
+                            <span>Copy</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Problem Solved & Tech Stack */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {idea.problemSolved && (
+                      <div className="rounded-xl bg-[#080d1a] border border-white/5 p-4 space-y-1">
+                        <span className="text-[11px] font-bold text-purple-400 uppercase tracking-wider flex items-center gap-1">
+                          <Target className="w-3.5 h-3.5" />
+                          The Problem It Solves
                         </span>
                         <p className="text-xs text-slate-300 leading-relaxed">
-                          {road.milestone}
+                          {idea.problemSolved}
                         </p>
                       </div>
-                    ))}
-                  </div>
-                </div>
+                    )}
 
-                {/* Beginner-friendly Next Steps */}
-                <div className="rounded-xl bg-emerald-950/20 border border-emerald-500/30 p-4 space-y-2">
-                  <span className="text-[11px] font-bold text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
-                    <Compass className="w-3.5 h-3.5 text-emerald-400" />
-                    Beginner-Friendly Next Steps
-                  </span>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    {idea.beginnerNextSteps.map((step, sIdx) => (
-                      <div
-                        key={sIdx}
-                        className="bg-black/30 border border-white/5 rounded-lg p-2.5 text-xs text-slate-200 flex items-start gap-2"
-                      >
-                        <span className="font-bold text-emerald-400 shrink-0">{sIdx + 1}.</span>
-                        <span className="leading-relaxed">{step}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Suggested GitHub README Sections */}
-                <div className="rounded-xl bg-[#060a14] border border-white/10 p-4 space-y-3">
-                  <span className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                    <FileText className="w-4 h-4 text-purple-400" />
-                    Suggested GitHub README.md Blueprint
-                  </span>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {idea.readmeSections.map((sec, secIdx) => (
-                      <div
-                        key={secIdx}
-                        className="rounded-lg bg-[#080d1a] border border-white/5 p-3 space-y-1 text-xs"
-                      >
-                        <span className="font-mono font-bold text-cyan-300 text-[11px]">
-                          ## {sec.heading}
+                    {idea.suggestedTechnologies && idea.suggestedTechnologies.length > 0 && (
+                      <div className="rounded-xl bg-[#080d1a] border border-white/5 p-4 space-y-2">
+                        <span className="text-[11px] font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1">
+                          <Code2 className="w-3.5 h-3.5" />
+                          Suggested Tech Stack
                         </span>
-                        <p className="text-slate-400 text-[11px] leading-relaxed">
-                          {sec.content}
-                        </p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {idea.suggestedTechnologies.map((tech, tIdx) => (
+                            <span
+                              key={tIdx}
+                              className="px-2 py-0.5 rounded bg-black/40 border border-white/10 text-xs font-mono text-cyan-200"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    ))}
+                    )}
+                  </div>
+
+                  {/* Skills to Practice & Suggested Features (Required) */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Skills to Practice */}
+                    <div className="rounded-xl bg-[#080d1a] border border-white/5 p-4 space-y-2">
+                      <span className="text-[11px] font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <Wrench className="w-3.5 h-3.5" />
+                        Skills to Practice
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {idea.skillsToPractice && idea.skillsToPractice.length > 0 ? (
+                          idea.skillsToPractice.map((skill, sIdx) => (
+                            <span
+                              key={sIdx}
+                              className="px-2.5 py-1 rounded-md bg-purple-500/10 text-purple-300 border border-purple-500/25 text-xs font-medium"
+                            >
+                              {skill}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="text-xs text-slate-400">Core programming fundamentals</span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Suggested Beginner-Friendly Features */}
+                    <div className="rounded-xl bg-[#080d1a] border border-white/5 p-4 space-y-2">
+                      <span className="text-[11px] font-bold text-purple-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <Layers className="w-3.5 h-3.5" />
+                        Suggested Beginner-Friendly Features
+                      </span>
+                      <ul className="space-y-1.5 text-xs text-slate-300 list-disc list-inside">
+                        {idea.suggestedFeatures && idea.suggestedFeatures.map((feat, fIdx) => (
+                          <li key={fIdx} className="leading-relaxed">
+                            {feat}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Clear First Step (Required) */}
+                  <div className="rounded-xl bg-gradient-to-r from-emerald-950/30 to-cyan-950/20 border border-emerald-500/30 p-4 space-y-1.5">
+                    <span className="text-[11px] font-bold text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
+                      <Footprints className="w-4 h-4 text-emerald-400" />
+                      Clear First Step to Start Building
+                    </span>
+                    <p className="text-xs sm:text-sm text-slate-100 leading-relaxed font-medium">
+                      {idea.clearFirstStep}
+                    </p>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       )}
     </div>

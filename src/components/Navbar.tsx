@@ -12,7 +12,9 @@ import {
   HelpCircle,
   Lightbulb,
   MessageSquare,
-  Trophy
+  Trophy,
+  Compass,
+  Map
 } from 'lucide-react';
 import { ActiveTab, ServerStatus } from '../types.ts';
 
@@ -34,11 +36,13 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems: { id: ActiveTab; label: string; icon: React.ReactNode; badge?: string }[] = [
-    { id: 'dashboard', label: 'Dashboard', icon: <Layers className="w-4 h-4" /> },
+    { id: 'dashboard', label: 'My Dashboard', icon: <Layers className="w-4 h-4" /> },
     { id: 'explainer', label: 'Code Explainer', icon: <Code2 className="w-4 h-4" /> },
     { id: 'issue-helper', label: 'Issue Helper', icon: <FileCode2 className="w-4 h-4" /> },
     { id: 'pr-guide', label: 'PR Guide', icon: <GitPullRequest className="w-4 h-4" /> },
     { id: 'idea-generator', label: 'Idea Generator', icon: <Lightbulb className="w-4 h-4" /> },
+    { id: 'repo-finder', label: 'Repo Finder', icon: <Compass className="w-4 h-4" /> },
+    { id: 'roadmap', label: 'Roadmap', icon: <Map className="w-4 h-4" /> },
     { id: 'chat-mentor', label: 'Ask Mentor', icon: <MessageSquare className="w-4 h-4" /> },
     {
       id: 'tracker',

@@ -420,20 +420,15 @@ Provide a clear, realistic resolution blueprint following the JSON schema:
       const {
         experience = 'Beginner',
         language = 'JavaScript',
-        interests = 'Community Tools',
-        projectType = 'Web app',
+        interest = 'Web Development',
+        interests,
         customIdeaDescription = ''
       } = req.body;
 
-      // Validation
-      const validExperiences = ['Beginner', 'Intermediate', 'Advanced'];
-      const validLanguages = ['Python', 'JavaScript', 'TypeScript', 'Java', 'Other'];
-      const validProjectTypes = ['Web app', 'AI assistant', 'Developer tool', 'Automation'];
-
-      const sanitizedExperience = validExperiences.includes(experience) ? experience : 'Beginner';
-      const sanitizedLanguage = validLanguages.includes(language) ? language : 'JavaScript';
-      const sanitizedProjectType = validProjectTypes.includes(projectType) ? projectType : 'Web app';
-      const sanitizedInterests = typeof interests === 'string' && interests.trim() ? interests.trim() : 'Developer Tooling & Community Tools';
+      // Normalize inputs
+      const chosenInterest = interest || interests || 'Web Development';
+      const chosenLanguage = language || 'JavaScript';
+      const chosenExperience = experience || 'Beginner';
 
       const ai = getGeminiClient();
       if (!ai) {
@@ -443,30 +438,24 @@ Provide a clear, realistic resolution blueprint following the JSON schema:
         });
       }
 
-      const prompt = `You are a friendly, experienced open-source mentor and Hacktoberfest project advisor.
-A developer is looking for practical, engaging open-source project ideas to build and share for Hacktoberfest.
+      const prompt = `You are a friendly, experienced open-source mentor and project advisor for beginners learning to code.
+A developer is looking for 3 realistic open-source project ideas to practice coding and contribute to open source.
 
-Contributor Profile & Preferences:
-- Experience Level: ${sanitizedExperience}
-- Preferred Programming Language: ${sanitizedLanguage}
-- Domain / Interests: ${sanitizedInterests}
-- Project Type: ${sanitizedProjectType}
-${customIdeaDescription && customIdeaDescription.trim() ? `- Contributor's Custom Vision / Notes: "${customIdeaDescription.trim()}"\n` : ''}
+Contributor Profile:
+- Programming Language: ${chosenLanguage}
+- Experience Level: ${chosenExperience}
+- Domain / Interest: ${chosenInterest}
+${customIdeaDescription ? `- Extra Context: ${customIdeaDescription}\n` : ''}
 
-Generate exactly THREE (3) distinct, realistic, portfolio-worthy open-source project ideas tailored to their skill level and preferred language.
-Each project must follow the JSON schema strictly and include:
-1. title: Creative, memorable open-source project name.
-2. shortDescription: 1-2 sentence compelling hook explaining what the project is.
-3. problemSolved: Clear explanation of the real-world problem or developer pain point it addresses.
-4. targetAudience: Specific users or communities who will benefit from this project (e.g. students, remote teams, open-source maintainers).
-5. suggestedTechnologies: 3-5 specific libraries, frameworks, or tools suitable for the stack.
-6. coreFeatures: 3-5 concrete core features that define the initial release.
-7. mvpRoadmap: 3-4 progressive development milestones from initial setup to public release.
-8. aiFeature: One practical, suitable AI feature that enhances the project when relevant (e.g. automated tagging, smart search, natural language parser, error explainer).
-9. beginnerNextSteps: 3 actionable, beginner-friendly next steps to start building the repository today.
-10. readmeSections: 3-4 suggested sections for the repository's GitHub README.md (e.g., Problem Statement, Quickstart, Architecture, Contributing).
-
-Keep the scope realistic for Hacktoberfest contributors at the ${sanitizedExperience} level.`;
+Generate exactly THREE (3) distinct, practical, realistic open-source project ideas tailored to someone learning to code.
+Follow the JSON schema strictly. For each idea include:
+1. title: Creative, memorable project name.
+2. shortDescription: A clear 1-2 sentence overview of what the project does.
+3. skillsToPractice: 3-5 specific technical skills or concepts to practice (e.g. "DOM Manipulation", "REST APIs", "Error Handling", "Async/Await").
+4. suggestedFeatures: 3-5 beginner-friendly, modular features to implement.
+5. clearFirstStep: A concrete, actionable first step to get started immediately (e.g. "Initialize the repository with a README and create a basic index.html file with a form").
+6. problemSolved: A 1-sentence description of the problem it solves.
+7. suggestedTechnologies: 2-4 recommended libraries, tools, or frameworks.`;
 
       const { result: response, usedModel } = await executeWithRetryAndFallback(ai, async (modelName) => {
         return await ai.models.generateContent({
@@ -484,55 +473,29 @@ Keep the scope realistic for Hacktoberfest contributors at the ${sanitizedExperi
                     properties: {
                       title: { type: Type.STRING },
                       shortDescription: { type: Type.STRING },
+                      skillsToPractice: {
+                        type: Type.ARRAY,
+                        items: { type: Type.STRING }
+                      },
+                      suggestedFeatures: {
+                        type: Type.ARRAY,
+                        items: { type: Type.STRING }
+                      },
+                      clearFirstStep: { type: Type.STRING },
                       problemSolved: { type: Type.STRING },
-                      targetAudience: { type: Type.STRING },
                       suggestedTechnologies: {
                         type: Type.ARRAY,
                         items: { type: Type.STRING }
-                      },
-                      coreFeatures: {
-                        type: Type.ARRAY,
-                        items: { type: Type.STRING }
-                      },
-                      mvpRoadmap: {
-                        type: Type.ARRAY,
-                        items: {
-                          type: Type.OBJECT,
-                          properties: {
-                            phase: { type: Type.STRING, description: 'e.g. Milestone 1: Core Setup' },
-                            milestone: { type: Type.STRING, description: 'Description of what is completed' }
-                          },
-                          required: ['phase', 'milestone']
-                        }
-                      },
-                      aiFeature: { type: Type.STRING },
-                      beginnerNextSteps: {
-                        type: Type.ARRAY,
-                        items: { type: Type.STRING }
-                      },
-                      readmeSections: {
-                        type: Type.ARRAY,
-                        items: {
-                          type: Type.OBJECT,
-                          properties: {
-                            heading: { type: Type.STRING },
-                            content: { type: Type.STRING }
-                          },
-                          required: ['heading', 'content']
-                        }
                       }
                     },
                     required: [
                       'title',
                       'shortDescription',
+                      'skillsToPractice',
+                      'suggestedFeatures',
+                      'clearFirstStep',
                       'problemSolved',
-                      'targetAudience',
-                      'suggestedTechnologies',
-                      'coreFeatures',
-                      'mvpRoadmap',
-                      'aiFeature',
-                      'beginnerNextSteps',
-                      'readmeSections'
+                      'suggestedTechnologies'
                     ]
                   }
                 }
@@ -681,6 +644,436 @@ Keep tone warm, practical, and beginner-friendly. Never be condescending.`;
       const userMessage = isTransientError(status, message)
         ? 'The AI model is temporarily experiencing high traffic across available endpoints. Please wait a few moments and try again.'
         : `Mentor could not provide guidance: ${message}`;
+
+      return res.status(status && status >= 400 && status < 600 ? status : 503).json({
+        error: userMessage,
+        details: message
+      });
+    }
+  });
+
+  // Feature 5: Open-Source Repository Finder (Live GitHub API)
+  app.post('/api/find-repositories', async (req, res) => {
+    try {
+      const { language, topic, experience, keyword } = req.body;
+
+      // Construct GitHub search query
+      const queryParts: string[] = ['is:public', 'archived:false'];
+
+      // Language filter
+      if (language && language !== 'Any' && language !== 'Any language') {
+        const langClean = language.toLowerCase() === 'c++' ? 'cpp' : language.toLowerCase();
+        queryParts.push(`language:${langClean}`);
+      }
+
+      // Topic mapping (use clean GitHub search qualifiers without parentheses)
+      const topicKeywords: Record<string, string> = {
+        'Web Development': 'topic:web',
+        'AI and Machine Learning': 'topic:machine-learning',
+        'Developer Tools': 'topic:developer-tools',
+        'Education': 'topic:education',
+        'Productivity': 'topic:productivity',
+        'Climate': 'topic:climate',
+        'Community Tools': 'topic:hacktoberfest'
+      };
+
+      if (topic && topic !== 'Any' && topic !== 'All Topics') {
+        const mapped = topicKeywords[topic] || `topic:${topic.toLowerCase().replace(/\s+/g, '-')}`;
+        queryParts.push(mapped);
+      }
+
+      // Keyword filter
+      if (keyword && typeof keyword === 'string' && keyword.trim()) {
+        queryParts.push(keyword.trim());
+      }
+
+      // Experience weighting: for beginners, prioritize good-first-issues or approachable star count
+      if (experience === 'Beginner') {
+        queryParts.push('good-first-issues:>0');
+      } else if (experience === 'Intermediate') {
+        queryParts.push('help-wanted-issues:>0');
+      }
+
+      const q = queryParts.join(' ');
+      const sort = experience === 'Beginner' ? 'help-wanted-issues' : 'stars';
+      const searchUrl = `https://api.github.com/search/repositories?q=${encodeURIComponent(q)}&sort=${sort}&order=desc&per_page=12`;
+
+      const headers: Record<string, string> = {
+        'Accept': 'application/vnd.github.v3+json',
+        'User-Agent': 'CodeBridge-AI-Applet/1.0',
+      };
+
+      if (process.env.GITHUB_TOKEN && process.env.GITHUB_TOKEN.trim()) {
+        headers['Authorization'] = `Bearer ${process.env.GITHUB_TOKEN.trim()}`;
+      }
+
+      const ghResponse = await fetch(searchUrl, { headers });
+
+      if (!ghResponse.ok) {
+        if (ghResponse.status === 403 || ghResponse.status === 429) {
+          return res.status(429).json({
+            error: 'GitHub API search rate limit reached (GitHub limits unauthenticated searches to 10 queries per minute). Please wait 30 seconds and try again.',
+            isRateLimited: true,
+          });
+        }
+        return res.status(ghResponse.status).json({
+          error: `GitHub API returned ${ghResponse.status}: ${ghResponse.statusText}`,
+        });
+      }
+
+      const ghData = (await ghResponse.json()) as any;
+      let items = ghData.items || [];
+
+      // Fallback search if 0 items found for high-constraint queries
+      if (items.length === 0 && (experience === 'Beginner' || experience === 'Intermediate')) {
+        const fallbackParts = queryParts.filter(
+          (p) => !p.includes('good-first-issues') && !p.includes('help-wanted-issues')
+        );
+        fallbackParts.push('topic:good-first-issue');
+        const fallbackUrl = `https://api.github.com/search/repositories?q=${encodeURIComponent(
+          fallbackParts.join(' ')
+        )}&sort=stars&order=desc&per_page=12`;
+
+        const fbRes = await fetch(fallbackUrl, { headers });
+        if (fbRes.ok) {
+          const fbData = (await fbRes.json()) as any;
+          items = fbData.items || [];
+        }
+      }
+
+      const repositories = items.map((item: any) => ({
+        id: item.id,
+        name: item.name,
+        fullName: item.full_name,
+        description: item.description || 'No description provided by repository.',
+        htmlUrl: item.html_url,
+        language: item.language,
+        stars: item.stargazers_count,
+        forks: item.forks_count,
+        openIssuesCount: item.open_issues_count,
+        topics: item.topics || [],
+        hasGoodFirstIssues: Boolean(
+          item.topics?.some((t: string) => t.includes('good-first') || t.includes('help-wanted')) ||
+          item.open_issues_count > 0
+        ),
+        goodFirstIssuesUrl: `https://github.com/${item.full_name}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22`,
+        updatedAt: item.updated_at,
+        ownerAvatarUrl: item.owner?.avatar_url,
+        licenseName: item.license?.spdx_id || item.license?.name,
+      }));
+
+      return res.json({
+        repositories,
+        totalCount: ghData.total_count || repositories.length,
+        query: q,
+      });
+    } catch (err: unknown) {
+      console.error('Error in /api/find-repositories:', err);
+      return res.status(502).json({
+        error: 'Unable to connect to the GitHub API. Please check your internet connection or try again later.',
+      });
+    }
+  });
+
+  // Feature 6: AI Contribution Roadmap
+  app.post('/api/create-roadmap', async (req, res) => {
+    try {
+      const { repoUrl, issueInput } = req.body;
+
+      if (!repoUrl || typeof repoUrl !== 'string' || !repoUrl.trim()) {
+        return res.status(400).json({ error: 'Please enter a GitHub repository URL or owner/repo identifier.' });
+      }
+
+      if (!issueInput || typeof issueInput !== 'string' || !issueInput.trim()) {
+        return res.status(400).json({ error: 'Please provide a GitHub issue URL or issue description.' });
+      }
+
+      const ai = getGeminiClient();
+      if (!ai) {
+        return res.status(503).json({
+          error: 'GEMINI_API_KEY is not configured on the server. Please add your Gemini API key in the AI Studio Secrets panel or .env file.',
+          keyMissing: true
+        });
+      }
+
+      // Step 1: Parse and attempt to verify repository on GitHub
+      let owner = '';
+      let repo = '';
+      const cleanRepoInput = repoUrl.trim().replace(/^https?:\/\/github\.com\//i, '').replace(/\.git$/i, '');
+      const slashParts = cleanRepoInput.split('/').filter(Boolean);
+      if (slashParts.length >= 2) {
+        owner = slashParts[0];
+        repo = slashParts[1];
+      }
+
+      const ghHeaders: Record<string, string> = {
+        'Accept': 'application/vnd.github.v3+json',
+        'User-Agent': 'CodeBridge-AI-Applet/1.0',
+      };
+      if (process.env.GITHUB_TOKEN && process.env.GITHUB_TOKEN.trim()) {
+        ghHeaders['Authorization'] = `Bearer ${process.env.GITHUB_TOKEN.trim()}`;
+      }
+
+      let verifiedRepo = {
+        verified: false,
+        fullName: cleanRepoInput || 'Repository',
+        description: 'Repository could not be directly verified on GitHub API. Recommendations are based on standard open-source conventions.',
+        defaultBranch: 'main',
+        language: null as string | null,
+        stars: 0,
+        openIssuesCount: 0,
+        htmlUrl: repoUrl.startsWith('http') ? repoUrl.trim() : `https://github.com/${cleanRepoInput}`,
+        licenseName: undefined as string | undefined,
+      };
+
+      if (owner && repo) {
+        try {
+          const ghRepoRes = await fetch(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`, {
+            headers: ghHeaders,
+          });
+          if (ghRepoRes.ok) {
+            const repoData = (await ghRepoRes.json()) as any;
+            verifiedRepo = {
+              verified: true,
+              fullName: repoData.full_name,
+              description: repoData.description || 'Public GitHub repository.',
+              defaultBranch: repoData.default_branch || 'main',
+              language: repoData.language,
+              stars: repoData.stargazers_count,
+              openIssuesCount: repoData.open_issues_count,
+              htmlUrl: repoData.html_url,
+              licenseName: repoData.license?.spdx_id || repoData.license?.name,
+            };
+          }
+        } catch {
+          // If GitHub API unreachable, verified remains false
+        }
+      }
+
+      // Step 2: Parse and attempt to verify issue on GitHub
+      const cleanIssueInput = issueInput.trim();
+      let verifiedIssue = {
+        verified: false,
+        number: undefined as number | undefined,
+        title: cleanIssueInput.split('\n')[0].substring(0, 100) || 'Contribution Task',
+        body: cleanIssueInput,
+        state: undefined as string | undefined,
+        htmlUrl: undefined as string | undefined,
+      };
+
+      const issueUrlMatch = cleanIssueInput.match(/github\.com\/([^/]+)\/([^/]+)\/issues\/(\d+)/i);
+      if (issueUrlMatch) {
+        const issueOwner = issueUrlMatch[1];
+        const issueRepo = issueUrlMatch[2];
+        const issueNumber = parseInt(issueUrlMatch[3], 10);
+
+        try {
+          const ghIssueRes = await fetch(
+            `https://api.github.com/repos/${encodeURIComponent(issueOwner)}/${encodeURIComponent(issueRepo)}/issues/${issueNumber}`,
+            { headers: ghHeaders }
+          );
+          if (ghIssueRes.ok) {
+            const issueData = (await ghIssueRes.json()) as any;
+            verifiedIssue = {
+              verified: true,
+              number: issueData.number,
+              title: issueData.title,
+              body: issueData.body || 'No description body provided in the GitHub issue ticket.',
+              state: issueData.state,
+              htmlUrl: issueData.html_url,
+            };
+          }
+        } catch {
+          // Fallback to unverified user text
+        }
+      }
+
+      // Step 3: Prompt Gemini with clear grounding boundaries
+      const prompt = `You are CodeBridge AI Senior Open-Source Mentor.
+Create a personalized, beginner-friendly Contribution Roadmap to help a contributor go from discovering this repository to submitting their first pull request.
+
+Repository Information:
+- Full Name: ${verifiedRepo.fullName} (${verifiedRepo.verified ? 'VERIFIED via official GitHub API' : 'Unverified URL / Custom Input'})
+- Primary Language / Stack: ${verifiedRepo.language || 'General Open Source'}
+- Default Branch: ${verifiedRepo.defaultBranch}
+- Description: ${verifiedRepo.description}
+
+Issue Information:
+- Issue Title: ${verifiedIssue.title} (${verifiedIssue.verified ? `VERIFIED via GitHub Issue #${verifiedIssue.number}` : 'User-Provided Issue Text'})
+- Issue Description:
+"""
+${verifiedIssue.body}
+"""
+
+GROUNDING & INTEGRITY DIRECTIVES:
+- Do NOT pretend to know exact file paths or internal lines of code that have not been retrieved or verified above.
+- In "areasToInvestigate", recommend 2 to 4 likely directories, files, or architectural areas based on standard ${verifiedRepo.language || 'software'} conventions, and explicitly include a disclaimer that the contributor must verify internal file structures in their local checkout.
+- Break down the work into 4 to 6 approachable, bite-sized tasks.
+- Provide clear testing instructions (e.g. npm test, pytest, or manual checks).
+- Provide clean, exact Git commands for forking, branching, committing, and opening a PR.
+
+Follow the JSON schema strictly.`;
+
+      const { result: response, usedModel } = await executeWithRetryAndFallback(ai, async (modelName) => {
+        return await ai.models.generateContent({
+          model: modelName,
+          contents: prompt,
+          config: {
+            responseMimeType: 'application/json',
+            responseSchema: {
+              type: Type.OBJECT,
+              properties: {
+                overview: { type: Type.STRING },
+                stages: {
+                  type: Type.OBJECT,
+                  properties: {
+                    projectAndGuidelines: {
+                      type: Type.OBJECT,
+                      properties: {
+                        title: { type: Type.STRING },
+                        explanation: { type: Type.STRING },
+                        contributingUrl: { type: Type.STRING },
+                        keyRules: {
+                          type: Type.ARRAY,
+                          items: { type: Type.STRING }
+                        }
+                      },
+                      required: ['title', 'explanation', 'keyRules']
+                    },
+                    understandIssue: {
+                      type: Type.OBJECT,
+                      properties: {
+                        title: { type: Type.STRING },
+                        plainEnglishSummary: { type: Type.STRING },
+                        expectedBehavior: { type: Type.STRING },
+                        potentialTraps: {
+                          type: Type.ARRAY,
+                          items: { type: Type.STRING }
+                        }
+                      },
+                      required: ['title', 'plainEnglishSummary', 'expectedBehavior', 'potentialTraps']
+                    },
+                    areasToInvestigate: {
+                      type: Type.OBJECT,
+                      properties: {
+                        title: { type: Type.STRING },
+                        disclaimer: { type: Type.STRING },
+                        recommendedAreas: {
+                          type: Type.ARRAY,
+                          items: {
+                            type: Type.OBJECT,
+                            properties: {
+                              area: { type: Type.STRING },
+                              why: { type: Type.STRING }
+                            },
+                            required: ['area', 'why']
+                          }
+                        }
+                      },
+                      required: ['title', 'disclaimer', 'recommendedAreas']
+                    },
+                    taskBreakdown: {
+                      type: Type.OBJECT,
+                      properties: {
+                        title: { type: Type.STRING },
+                        tasks: {
+                          type: Type.ARRAY,
+                          items: {
+                            type: Type.OBJECT,
+                            properties: {
+                              id: { type: Type.STRING },
+                              task: { type: Type.STRING },
+                              details: { type: Type.STRING }
+                            },
+                            required: ['id', 'task', 'details']
+                          }
+                        }
+                      },
+                      required: ['title', 'tasks']
+                    },
+                    testingStrategy: {
+                      type: Type.OBJECT,
+                      properties: {
+                        title: { type: Type.STRING },
+                        testCommands: {
+                          type: Type.ARRAY,
+                          items: { type: Type.STRING }
+                        },
+                        manualSteps: {
+                          type: Type.ARRAY,
+                          items: { type: Type.STRING }
+                        },
+                        howToAvoidRegression: { type: Type.STRING }
+                      },
+                      required: ['title', 'testCommands', 'manualSteps', 'howToAvoidRegression']
+                    },
+                    gitAndPrWorkflow: {
+                      type: Type.OBJECT,
+                      properties: {
+                        title: { type: Type.STRING },
+                        branchName: { type: Type.STRING },
+                        commands: {
+                          type: Type.ARRAY,
+                          items: {
+                            type: Type.OBJECT,
+                            properties: {
+                              cmd: { type: Type.STRING },
+                              purpose: { type: Type.STRING }
+                            },
+                            required: ['cmd', 'purpose']
+                          }
+                        },
+                        suggestedPrTitle: { type: Type.STRING },
+                        suggestedPrBody: { type: Type.STRING }
+                      },
+                      required: ['title', 'branchName', 'commands', 'suggestedPrTitle', 'suggestedPrBody']
+                    }
+                  },
+                  required: [
+                    'projectAndGuidelines',
+                    'understandIssue',
+                    'areasToInvestigate',
+                    'taskBreakdown',
+                    'testingStrategy',
+                    'gitAndPrWorkflow'
+                  ]
+                },
+                interactiveChecklist: {
+                  type: Type.ARRAY,
+                  items: {
+                    type: Type.OBJECT,
+                    properties: {
+                      id: { type: Type.STRING },
+                      stage: { type: Type.STRING },
+                      text: { type: Type.STRING }
+                    },
+                    required: ['id', 'stage', 'text']
+                  }
+                }
+              },
+              required: ['overview', 'stages', 'interactiveChecklist']
+            }
+          }
+        });
+      });
+
+      const responseText = response.text;
+      if (!responseText) {
+        throw new Error('Empty response received from Gemini.');
+      }
+
+      const data = JSON.parse(responseText);
+      data.verifiedRepo = verifiedRepo;
+      data.verifiedIssue = verifiedIssue;
+      data._meta = { modelUsed: usedModel };
+      return res.json(data);
+    } catch (err: unknown) {
+      console.error('Error in /api/create-roadmap:', err);
+      const { status, message } = parseGeminiError(err);
+
+      const userMessage = isTransientError(status, message)
+        ? 'The AI model is temporarily experiencing high traffic across available endpoints. Please wait a few moments and try again.'
+        : `Failed to create contribution roadmap: ${message}`;
 
       return res.status(status && status >= 400 && status < 600 ? status : 503).json({
         error: userMessage,

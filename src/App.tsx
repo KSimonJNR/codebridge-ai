@@ -5,6 +5,8 @@ import { CodeExplainerView } from './components/CodeExplainerView.tsx';
 import { IssueHelperView } from './components/IssueHelperView.tsx';
 import { PrGuideView } from './components/PrGuideView.tsx';
 import { IdeaGeneratorView } from './components/IdeaGeneratorView.tsx';
+import { RepoFinderView } from './components/RepoFinderView.tsx';
+import { RoadmapView } from './components/RoadmapView.tsx';
 import { ChatMentorView } from './components/ChatMentorView.tsx';
 import { PersonalTrackerView } from './components/PersonalTrackerView.tsx';
 import { ApiKeyModal } from './components/ApiKeyModal.tsx';
@@ -145,7 +147,7 @@ export default function App() {
     );
   };
 
-  const handleSaveItem = (title: string, summary: string, details: any, type: 'issue' | 'code' | 'idea' = 'issue') => {
+  const handleSaveItem = (title: string, summary: string, details: any, type: 'issue' | 'code' | 'idea' | 'repo' | 'roadmap' = 'issue') => {
     const newItem: SavedItem = {
       id: `saved-${Date.now()}`,
       type,
@@ -227,6 +229,12 @@ export default function App() {
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             prCount={prCount}
+            tasks={tasks}
+            savedItems={savedItems}
+            onToggleTask={toggleTask}
+            onUpdatePrCount={setPrCount}
+            onResetProgress={handleResetProgress}
+            onRemoveSavedItem={handleRemoveSavedItem}
           />
         )}
 
@@ -253,6 +261,23 @@ export default function App() {
           <IdeaGeneratorView
             onOpenKeyInfo={() => setKeyModalOpen(true)}
             onSaveIdea={handleSaveIdea}
+          />
+        )}
+
+        {activeTab === 'repo-finder' && (
+          <RepoFinderView
+            onNavigateTab={(tab) => {
+              setActiveTab(tab);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onSaveRepo={(title, summary, details) => handleSaveItem(title, summary, details, 'repo')}
+          />
+        )}
+
+        {activeTab === 'roadmap' && (
+          <RoadmapView
+            onOpenKeyInfo={() => setKeyModalOpen(true)}
+            onSaveItem={(title, summary, details) => handleSaveItem(title, summary, details, 'roadmap')}
           />
         )}
 
