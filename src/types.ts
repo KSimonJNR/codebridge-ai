@@ -1,5 +1,6 @@
 export type ActiveTab =
   | 'dashboard'
+  | 'learning-center'
   | 'explainer'
   | 'issue-helper'
   | 'pr-guide'
@@ -7,7 +8,67 @@ export type ActiveTab =
   | 'repo-finder'
   | 'roadmap'
   | 'chat-mentor'
-  | 'tracker';
+  | 'tracker'
+  | 'account';
+
+export type SyncStatus = 'idle' | 'syncing' | 'synced' | 'offline' | 'error';
+
+export interface UserProfile {
+  id: string;
+  email?: string;
+  fullName?: string;
+  avatarUrl?: string;
+  createdAt: string;
+}
+
+export interface ProgressSyncState {
+  status: SyncStatus;
+  lastSyncedAt: string | null;
+  errorMessage?: string;
+  hasUnsyncedLocalData: boolean;
+}
+
+export interface LearningModule {
+  id: string;
+  moduleNumber: number;
+  title: string;
+  summary: string;
+  badge: string;
+  readTime: string;
+  explanation: {
+    coreConcept: string;
+    keyTakeaways: string[];
+    deepDive: string;
+  };
+  practicalExample: {
+    title: string;
+    scenario: string;
+    codeOrCommands?: Array<{
+      cmd: string;
+      explanation: string;
+    }>;
+    explanation: string;
+  };
+  exercise: {
+    prompt: string;
+    options: string[];
+    correctIndex: number;
+    explanation: string;
+  };
+  relatedFeature?: {
+    tab: ActiveTab;
+    label: string;
+    description: string;
+  };
+}
+
+export interface GlossaryTerm {
+  term: string;
+  category: 'Git' | 'GitHub' | 'Etiquette' | 'Workflow';
+  definition: string;
+  analogy?: string;
+  example?: string;
+}
 
 export type ProgrammingLanguage =
   | 'JavaScript'

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar.tsx';
 import { DashboardView } from './components/DashboardView.tsx';
+import { LearningCenterView } from './components/LearningCenterView.tsx';
 import { CodeExplainerView } from './components/CodeExplainerView.tsx';
 import { IssueHelperView } from './components/IssueHelperView.tsx';
 import { PrGuideView } from './components/PrGuideView.tsx';
@@ -9,7 +10,11 @@ import { RepoFinderView } from './components/RepoFinderView.tsx';
 import { RoadmapView } from './components/RoadmapView.tsx';
 import { ChatMentorView } from './components/ChatMentorView.tsx';
 import { PersonalTrackerView } from './components/PersonalTrackerView.tsx';
+import { AccountProfileView } from './components/AccountProfileView.tsx';
+import { AuthModal } from './components/AuthModal.tsx';
 import { ApiKeyModal } from './components/ApiKeyModal.tsx';
+import { AuthProvider, useAuth } from './context/AuthContext.tsx';
+import { saveCloudProgressItem } from './lib/progressSync.ts';
 import { ActiveTab, ServerStatus, LearningTask, SavedItem, ProjectIdea } from './types.ts';
 import { AlertTriangle, Sparkles, Heart, Github, Terminal } from 'lucide-react';
 
@@ -72,18 +77,21 @@ const DEFAULT_TASKS: LearningTask[] = [
   },
 ];
 
-export default function App() {
+function AppContent() {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<ActiveTab>('dashboard');
   const [status, setStatus] = useState<ServerStatus | null>(null);
   const [keyModalOpen, setKeyModalOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
 
   // LocalStorage state: Tasks
   const [tasks, setTasks] = useState<LearningTask[]>(() => {
     const saved = localStorage.getItem('codebridge_tasks');
     if (saved) {
       try {
-        return JSON.parse(saved);
-      } catch (e) {
+        const parsed = JSON.parse(saved);
+        return Array.isArray(parsed) ? parsed : DEFAULT_TASKS;
+      } catch {
         return DEFAULT_TASKS;
       }
     }
@@ -95,8 +103,9 @@ export default function App() {
     const saved = localStorage.getItem('codebridge_saved_items');
     if (saved) {
       try {
-        return JSON.parse(saved);
-      } catch (e) {
+        const parsed = JSON.parse(saved);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
         return [];
       }
     }
@@ -129,17 +138,57 @@ export default function App() {
     checkStatus();
   }, []);
 
+  // Listen for sync events dispatched by cloud sync or local resets
+  useEffect(() => {
+    const handleProgressUpdated = () => {
+      try {
+        const savedTasks = localStorage.getItem('codebridge_tasks');
+        if (savedTasks) {
+          const parsed = JSON.parse(savedTasks);
+          if (Array.isArray(parsed)) setTasks(parsed);
+        }
+        const savedSaved = localStorage.getItem('codebridge_saved_items');
+        if (savedSaved) {
+          const parsed = JSON.parse(savedSaved);
+          if (Array.isArray(parsed)) setSavedItems(parsed);
+        }
+        const savedPr = localStorage.getItem('codebridge_pr_count');
+        if (savedPr) {
+          const parsed = parseInt(savedPr, 10);
+          if (!isNaN(parsed)) setPrCount(parsed);
+        }
+      } catch (e) {
+        console.warn('Error refreshing state from progress update event', e);
+      }
+    };
+
+    window.addEventListener('codebridge_progress_updated', handleProgressUpdated);
+    return () => window.removeEventListener('codebridge_progress_updated', handleProgressUpdated);
+  }, []);
+
+  // Auto-persist tasks to localStorage & Cloud
   useEffect(() => {
     localStorage.setItem('codebridge_tasks', JSON.stringify(tasks));
-  }, [tasks]);
+    if (user) {
+      saveCloudProgressItem(user.id, 'tasks', tasks).catch(() => {});
+    }
+  }, [tasks, user]);
 
+  // Auto-persist saved items to localStorage & Cloud
   useEffect(() => {
     localStorage.setItem('codebridge_saved_items', JSON.stringify(savedItems));
-  }, [savedItems]);
+    if (user) {
+      saveCloudProgressItem(user.id, 'saved_items', savedItems).catch(() => {});
+    }
+  }, [savedItems, user]);
 
+  // Auto-persist PR count to localStorage & Cloud
   useEffect(() => {
     localStorage.setItem('codebridge_pr_count', prCount.toString());
-  }, [prCount]);
+    if (user) {
+      saveCloudProgressItem(user.id, 'pr_count', prCount).catch(() => {});
+    }
+  }, [prCount, user]);
 
   const toggleTask = (taskId: string) => {
     setTasks((prev) =>
@@ -147,7 +196,12 @@ export default function App() {
     );
   };
 
-  const handleSaveItem = (title: string, summary: string, details: any, type: 'issue' | 'code' | 'idea' | 'repo' | 'roadmap' = 'issue') => {
+  const handleSaveItem = (
+    title: string,
+    summary: string,
+    details: any,
+    type: 'issue' | 'code' | 'idea' | 'repo' | 'roadmap' = 'issue'
+  ) => {
     const newItem: SavedItem = {
       id: `saved-${Date.now()}`,
       type,
@@ -178,6 +232,10 @@ export default function App() {
       setPrCount(0);
       localStorage.removeItem('codebridge_tasks');
       localStorage.removeItem('codebridge_pr_count');
+      if (user) {
+        saveCloudProgressItem(user.id, 'tasks', DEFAULT_TASKS).catch(() => {});
+        saveCloudProgressItem(user.id, 'pr_count', 0).catch(() => {});
+      }
     }
   };
 
@@ -210,10 +268,11 @@ export default function App() {
         status={status}
         onOpenKeyInfo={() => setKeyModalOpen(true)}
         savedCount={savedItems.length}
+        onOpenAuthModal={() => setAuthModalOpen(true)}
       />
 
       {/* Main View Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 pb-12">
         {activeTab === 'dashboard' && (
           <DashboardView
             onNavigate={(tab) => {
@@ -235,6 +294,15 @@ export default function App() {
             onUpdatePrCount={setPrCount}
             onResetProgress={handleResetProgress}
             onRemoveSavedItem={handleRemoveSavedItem}
+          />
+        )}
+
+        {activeTab === 'learning-center' && (
+          <LearningCenterView
+            onNavigateTab={(tab) => {
+              setActiveTab(tab);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
           />
         )}
 
@@ -298,6 +366,16 @@ export default function App() {
             onResetProgress={handleResetProgress}
           />
         )}
+
+        {activeTab === 'account' && (
+          <AccountProfileView
+            onOpenAuthModal={() => setAuthModalOpen(true)}
+            onNavigateTab={(tab) => {
+              setActiveTab(tab);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
+        )}
       </main>
 
       {/* Footer */}
@@ -323,6 +401,20 @@ export default function App() {
         onClose={() => setKeyModalOpen(false)}
         onRecheck={checkStatus}
       />
+
+      {/* Supabase Auth Modal */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+      />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }

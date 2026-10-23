@@ -31,6 +31,15 @@ function getGeminiClient(): GoogleGenAI | null {
   });
 }
 
+function sanitizeSecret(text: string): string {
+  if (!text || typeof text !== 'string') return '';
+  return text
+    .replace(/key=[a-zA-Z0-9_\-]+/gi, 'key=[REDACTED]')
+    .replace(/AIza[0-9A-Za-z\-_]{35}/g, '[REDACTED_API_KEY]')
+    .replace(/Bearer\s+[a-zA-Z0-9_\-\.]+/gi, 'Bearer [REDACTED]')
+    .replace(/ghp_[a-zA-Z0-9]{36}/g, '[REDACTED_GH_TOKEN]');
+}
+
 function parseGeminiError(err: unknown): { status?: number; message: string; rawError: unknown } {
   if (!err) return { message: 'Unknown error', rawError: err };
   const e = err as any;
@@ -54,7 +63,7 @@ function parseGeminiError(err: unknown): { status?: number; message: string; raw
     }
   }
 
-  return { status: typeof status === 'number' ? status : undefined, message, rawError: err };
+  return { status: typeof status === 'number' ? status : undefined, message: sanitizeSecret(message), rawError: err };
 }
 
 function isTransientError(status?: number, message?: string): boolean {
@@ -186,6 +195,10 @@ async function startServer() {
         return res.status(400).json({ error: 'Please provide valid code to explain.' });
       }
 
+      if (code.length > 50000) {
+        return res.status(400).json({ error: 'Code input exceeds maximum limit of 50,000 characters.' });
+      }
+
       const ai = getGeminiClient();
       if (!ai) {
         return res.status(503).json({
@@ -292,6 +305,10 @@ Explain this code clearly for an open-source newcomer. Follow the JSON response 
 
       if (!issueBody || typeof issueBody !== 'string' || !issueBody.trim()) {
         return res.status(400).json({ error: 'Please provide the GitHub issue description.' });
+      }
+
+      if (issueBody.length > 50000) {
+        return res.status(400).json({ error: 'Issue description exceeds maximum limit of 50,000 characters.' });
       }
 
       const ai = getGeminiClient();
@@ -682,9 +699,12 @@ Keep tone warm, practical, and beginner-friendly. Never be condescending.`;
         queryParts.push(mapped);
       }
 
-      // Keyword filter
+      // Keyword filter with sanitization
       if (keyword && typeof keyword === 'string' && keyword.trim()) {
-        queryParts.push(keyword.trim());
+        const cleanKw = keyword.trim().substring(0, 100).replace(/[^\w\s\-\.\/]/g, '').trim();
+        if (cleanKw) {
+          queryParts.push(cleanKw);
+        }
       }
 
       // Experience weighting: for beginners, prioritize good-first-issues or approachable star count
@@ -784,8 +804,16 @@ Keep tone warm, practical, and beginner-friendly. Never be condescending.`;
         return res.status(400).json({ error: 'Please enter a GitHub repository URL or owner/repo identifier.' });
       }
 
+      if (repoUrl.length > 500) {
+        return res.status(400).json({ error: 'Repository URL exceeds maximum limit of 500 characters.' });
+      }
+
       if (!issueInput || typeof issueInput !== 'string' || !issueInput.trim()) {
         return res.status(400).json({ error: 'Please provide a GitHub issue URL or issue description.' });
+      }
+
+      if (issueInput.length > 50000) {
+        return res.status(400).json({ error: 'Issue description exceeds maximum limit of 50,000 characters.' });
       }
 
       const ai = getGeminiClient();
@@ -795,6 +823,8 @@ Keep tone warm, practical, and beginner-friendly. Never be condescending.`;
           keyMissing: true
         });
       }
+
+      const isValidSegment = (s: string) => /^[a-zA-Z0-9_\-\.]+$/.test(s);
 
       // Step 1: Parse and attempt to verify repository on GitHub
       let owner = '';
@@ -826,7 +856,7 @@ Keep tone warm, practical, and beginner-friendly. Never be condescending.`;
         licenseName: undefined as string | undefined,
       };
 
-      if (owner && repo) {
+      if (owner && repo && isValidSegment(owner) && isValidSegment(repo)) {
         try {
           const ghRepoRes = await fetch(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`, {
             headers: ghHeaders,
@@ -867,24 +897,26 @@ Keep tone warm, practical, and beginner-friendly. Never be condescending.`;
         const issueRepo = issueUrlMatch[2];
         const issueNumber = parseInt(issueUrlMatch[3], 10);
 
-        try {
-          const ghIssueRes = await fetch(
-            `https://api.github.com/repos/${encodeURIComponent(issueOwner)}/${encodeURIComponent(issueRepo)}/issues/${issueNumber}`,
-            { headers: ghHeaders }
-          );
-          if (ghIssueRes.ok) {
-            const issueData = (await ghIssueRes.json()) as any;
-            verifiedIssue = {
-              verified: true,
-              number: issueData.number,
-              title: issueData.title,
-              body: issueData.body || 'No description body provided in the GitHub issue ticket.',
-              state: issueData.state,
-              htmlUrl: issueData.html_url,
-            };
+        if (isValidSegment(issueOwner) && isValidSegment(issueRepo) && !isNaN(issueNumber)) {
+          try {
+            const ghIssueRes = await fetch(
+              `https://api.github.com/repos/${encodeURIComponent(issueOwner)}/${encodeURIComponent(issueRepo)}/issues/${issueNumber}`,
+              { headers: ghHeaders }
+            );
+            if (ghIssueRes.ok) {
+              const issueData = (await ghIssueRes.json()) as any;
+              verifiedIssue = {
+                verified: true,
+                number: issueData.number,
+                title: issueData.title,
+                body: issueData.body || 'No description body provided in the GitHub issue ticket.',
+                state: issueData.state,
+                htmlUrl: issueData.html_url,
+              };
+            }
+          } catch {
+            // Fallback to unverified user text
           }
-        } catch {
-          // Fallback to unverified user text
         }
       }
 

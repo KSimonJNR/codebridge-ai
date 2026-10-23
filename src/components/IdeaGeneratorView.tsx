@@ -116,7 +116,16 @@ export const IdeaGeneratorView: React.FC<IdeaGeneratorViewProps> = ({
   };
 
   const handleSave = (idea: ProjectIdea) => {
-    const existing: ProjectIdea[] = JSON.parse(localStorage.getItem('codebridge_saved_ideas') || '[]');
+    let existing: ProjectIdea[] = [];
+    try {
+      const stored = localStorage.getItem('codebridge_saved_ideas');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) existing = parsed;
+      }
+    } catch {
+      existing = [];
+    }
     const isAlreadySaved = existing.some((item) => item.title === idea.title);
 
     let updated: ProjectIdea[];

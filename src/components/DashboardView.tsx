@@ -25,7 +25,8 @@ import {
   Check,
   Layers,
   ChevronRight,
-  Award
+  Award,
+  GraduationCap
 } from 'lucide-react';
 import { ActiveTab, LearningTask, SavedItem, ContributionRoadmap, ProjectIdea } from '../types.ts';
 
@@ -80,11 +81,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   // 4. Read Saved Repositories from localStorage safely
   const [savedReposCount, setSavedReposCount] = useState<number>(0);
 
-  // Load and refresh actual stored data on mount or focus
+  // 5. Read Learning Center completed modules from localStorage safely
+  const [learningCompleted, setLearningCompleted] = useState<Record<string, boolean>>({});
+
+  // Load and refresh actual stored data on mount or focus or when cloud sync updates local storage
   useEffect(() => {
     loadLocalActivity();
     window.addEventListener('focus', loadLocalActivity);
-    return () => window.removeEventListener('focus', loadLocalActivity);
+    window.addEventListener('codebridge_progress_updated', loadLocalActivity);
+    return () => {
+      window.removeEventListener('focus', loadLocalActivity);
+      window.removeEventListener('codebridge_progress_updated', loadLocalActivity);
+    };
   }, []);
 
   const loadLocalActivity = () => {
@@ -143,14 +151,28 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     } catch {
       setSavedReposCount(0);
     }
+
+    // 5. Learning Center completed modules
+    try {
+      const learningSaved = localStorage.getItem('codebridge_learning_center_completed_modules');
+      if (learningSaved) {
+        const parsed = JSON.parse(learningSaved);
+        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+          setLearningCompleted(parsed);
+        }
+      }
+    } catch {
+      setLearningCompleted({});
+    }
   };
 
   // Calculations from ACTUAL stored data (Requirement 4)
   const prGuideFinishedCount = Object.values(prCompletedSteps).filter(Boolean).length;
   const roadmapFinishedCount = Object.values(roadmapCheckedTasks).filter(Boolean).length;
   const tasksFinishedCount = tasks.filter((t) => t.completed).length;
+  const learningFinishedCount = Object.values(learningCompleted).filter(Boolean).length;
 
-  const totalChecklistItemsCompleted = prGuideFinishedCount + roadmapFinishedCount + tasksFinishedCount;
+  const totalChecklistItemsCompleted = prGuideFinishedCount + roadmapFinishedCount + tasksFinishedCount + learningFinishedCount;
   const activeRoadmapsCount = activeRoadmap ? 1 : 0;
   const totalSavedCount = savedItems.length + savedReposCount;
 
@@ -176,6 +198,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
         {/* Quick Launch Return Buttons (Requirement 7) */}
         <div className="flex flex-wrap items-center justify-center gap-2.5">
+          <button
+            type="button"
+            onClick={() => onNavigate('learning-center')}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-cyan-300 border border-white/10 text-xs font-semibold hover:border-cyan-500/40 transition-all cursor-pointer"
+          >
+            <GraduationCap className="w-3.5 h-3.5" />
+            Learning Center
+          </button>
+
           <button
             type="button"
             onClick={() => onNavigate('explainer')}
@@ -246,7 +277,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             {totalChecklistItemsCompleted}
           </div>
           <p className="text-[11px] text-slate-400">
-            Across PR Guide ({prGuideFinishedCount}), Roadmap ({roadmapFinishedCount}), and Milestones ({tasksFinishedCount})
+            Across PR Guide ({prGuideFinishedCount}), Learning Center ({learningFinishedCount}), Roadmap ({roadmapFinishedCount}), and Milestones ({tasksFinishedCount})
           </p>
         </div>
 

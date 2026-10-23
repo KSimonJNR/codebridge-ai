@@ -137,9 +137,16 @@ export const RepoFinderView: React.FC<RepoFinderViewProps> = ({
   };
 
   const handleSave = (repo: GitHubRepository) => {
-    const existing: GitHubRepository[] = JSON.parse(
-      localStorage.getItem('codebridge_saved_repos') || '[]'
-    );
+    let existing: GitHubRepository[] = [];
+    try {
+      const stored = localStorage.getItem('codebridge_saved_repos');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) existing = parsed;
+      }
+    } catch {
+      existing = [];
+    }
     const isAlreadySaved = existing.some((item) => item.fullName === repo.fullName);
 
     let updated: GitHubRepository[];

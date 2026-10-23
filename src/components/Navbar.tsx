@@ -14,9 +14,13 @@ import {
   MessageSquare,
   Trophy,
   Compass,
-  Map
+  Map,
+  GraduationCap,
+  User,
+  Cloud
 } from 'lucide-react';
 import { ActiveTab, ServerStatus } from '../types.ts';
+import { useAuth } from '../context/AuthContext.tsx';
 
 interface NavbarProps {
   activeTab: ActiveTab;
@@ -24,6 +28,7 @@ interface NavbarProps {
   status: ServerStatus | null;
   onOpenKeyInfo: () => void;
   savedCount: number;
+  onOpenAuthModal: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -32,11 +37,14 @@ export const Navbar: React.FC<NavbarProps> = ({
   status,
   onOpenKeyInfo,
   savedCount,
+  onOpenAuthModal,
 }) => {
+  const { user, profile } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems: { id: ActiveTab; label: string; icon: React.ReactNode; badge?: string }[] = [
     { id: 'dashboard', label: 'My Dashboard', icon: <Layers className="w-4 h-4" /> },
+    { id: 'learning-center', label: 'Learning Center', icon: <GraduationCap className="w-4 h-4" /> },
     { id: 'explainer', label: 'Code Explainer', icon: <Code2 className="w-4 h-4" /> },
     { id: 'issue-helper', label: 'Issue Helper', icon: <FileCode2 className="w-4 h-4" /> },
     { id: 'pr-guide', label: 'PR Guide', icon: <GitPullRequest className="w-4 h-4" /> },
@@ -142,10 +150,46 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div className="h-6 w-16 bg-slate-800 animate-pulse rounded-full" />
             )}
 
+            {/* Auth Profile / Sign In Button */}
+            {user ? (
+              <button
+                type="button"
+                onClick={() => handleNavClick('account')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
+                  activeTab === 'account'
+                    ? 'bg-purple-600/30 text-cyan-300 border-purple-500/50'
+                    : 'bg-slate-900/90 text-slate-200 border-white/10 hover:border-cyan-500/40'
+                }`}
+                title={`Signed in as ${user.email} (Click for Account & Sync)`}
+              >
+                <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-purple-500 to-cyan-500 flex items-center justify-center text-[10px] text-white font-bold shrink-0">
+                  {profile?.avatarUrl ? (
+                    <img src={profile.avatarUrl} alt="Avatar" className="w-full h-full rounded-full object-cover" />
+                  ) : (
+                    user.email?.[0]?.toUpperCase() || 'U'
+                  )}
+                </div>
+                <span className="hidden md:inline truncate max-w-[100px]">
+                  {profile?.fullName || user.email?.split('@')[0]}
+                </span>
+                <Cloud className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={onOpenAuthModal}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white text-xs font-semibold shadow-md shadow-purple-600/20 transition-all cursor-pointer"
+              >
+                <User className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Sign In / Sync</span>
+                <span className="sm:hidden">Sign In</span>
+              </button>
+            )}
+
             {/* Mobile menu toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="xl:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="xl:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
               aria-label="Toggle navigation"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -180,6 +224,35 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
               );
             })}
+
+            {/* Mobile Account link */}
+            <div className="pt-2 border-t border-white/5">
+              {user ? (
+                <button
+                  type="button"
+                  onClick={() => handleNavClick('account')}
+                  className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-sm font-medium bg-slate-900 border border-white/10 text-cyan-300"
+                >
+                  <div className="flex items-center gap-3">
+                    <User className="w-4 h-4 text-cyan-400" />
+                    <span>Account & Cloud Sync ({user.email?.split('@')[0]})</span>
+                  </div>
+                  <Cloud className="w-4 h-4 text-emerald-400" />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenAuthModal();
+                  }}
+                  className="w-full flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-lg text-sm font-semibold bg-gradient-to-r from-purple-600 to-cyan-600 text-white"
+                >
+                  <User className="w-4 h-4" />
+                  <span>Sign In / Create Account</span>
+                </button>
+              )}
+            </div>
           </div>
         )}
       </div>
