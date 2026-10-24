@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
-import { supabase, isSupabaseConfigured } from '../lib/supabase.ts';
+import { supabase, isSupabaseConfigured, getSupabaseAnonKey } from '../lib/supabase.ts';
 import { UserProfile } from '../types.ts';
 
 interface AuthContextType {
@@ -164,22 +164,57 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (!configured) {
       return {
         error: new Error(
-          'Supabase credentials are not configured. Please add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your environment.'
+          'Supabase credentials are not configured. Please add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your environment variables or AI Studio Secrets.'
         ) as unknown as AuthError,
       };
     }
 
+    // Verify provider is enabled in Supabase project to give friendly in-app instructions
+    try {
+      const checkRes = await fetch(`/api/supabase/provider-status?provider=${provider}`);
+      if (checkRes.ok) {
+        const checkData = await checkRes.json();
+        if (checkData.enabled === false) {
+          const providerName = provider === 'google' ? 'Google' : 'GitHub';
+          return {
+            error: new Error(
+              `${providerName} OAuth is not enabled in your Supabase project yet. In your Supabase Dashboard, go to Authentication -> Providers -> ${providerName}, toggle it on, and configure your Client ID and Client Secret.`
+            ) as unknown as AuthError,
+          };
+        }
+      }
+    } catch {
+      // Continue if server status check is unreachable
+    }
+
     const redirectTo = typeof window !== 'undefined' ? window.location.origin : undefined;
+    const anonKey = getSupabaseAnonKey();
+
     const res = await supabase.auth.signInWithOAuth({
       provider,
       options: {
         redirectTo,
         // GitHub: request only read user profile identity without repository access
         scopes: provider === 'github' ? 'read:user user:email' : undefined,
+        // Explicitly attach apikey parameter to the authorization URL query
+        queryParams: anonKey ? { apikey: anonKey } : undefined,
       },
     });
 
-    return { error: res.error };
+    if (res.error) {
+      let friendlyMessage = res.error.message;
+      if (friendlyMessage.includes('provider is not enabled') || friendlyMessage.includes('validation_failed')) {
+        const providerName = provider === 'google' ? 'Google' : 'GitHub';
+        friendlyMessage = `${providerName} sign-in is not enabled in your Supabase project yet. Go to Authentication -> Providers -> ${providerName} in your Supabase Dashboard to enable it.`;
+      } else if (friendlyMessage.includes('No API key found')) {
+        friendlyMessage = 'Supabase API key was not recognized. Please check that VITE_SUPABASE_ANON_KEY matches the anon public key in your Supabase Project Settings -> API.';
+      }
+      return {
+        error: new Error(friendlyMessage) as unknown as AuthError,
+      };
+    }
+
+    return { error: null };
   };
 
   const signOut = async () => {

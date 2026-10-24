@@ -40,6 +40,21 @@ function sanitizeSecret(text: string): string {
     .replace(/ghp_[a-zA-Z0-9]{36}/g, '[REDACTED_GH_TOKEN]');
 }
 
+function normalizeSupabaseUrl(rawUrl: string): string {
+  if (!rawUrl || typeof rawUrl !== 'string') return '';
+  let cleaned = rawUrl.trim().replace(/^['"]|['"]$/g, '');
+  if (!cleaned) return '';
+  try {
+    if (!cleaned.startsWith('http://') && !cleaned.startsWith('https://')) {
+      cleaned = 'https://' + cleaned;
+    }
+    const parsed = new URL(cleaned);
+    return parsed.origin;
+  } catch {
+    return cleaned.replace(/\/rest\/v1\/?$/i, '').replace(/\/+$/, '');
+  }
+}
+
 function parseGeminiError(err: unknown): { status?: number; message: string; rawError: unknown } {
   if (!err) return { message: 'Unknown error', rawError: err };
   const e = err as any;
@@ -184,6 +199,54 @@ async function startServer() {
       fallbackModels: CANDIDATE_MODELS.slice(1),
       ready: true,
     });
+  });
+
+  // Supabase Auth & Provider status check endpoint
+  app.get('/api/supabase/provider-status', async (req, res) => {
+    try {
+      const provider = String(req.query.provider || '').toLowerCase();
+      const rawUrl = process.env.VITE_SUPABASE_URL || '';
+      const rawKey = process.env.VITE_SUPABASE_ANON_KEY || '';
+
+      const cleanUrl = normalizeSupabaseUrl(rawUrl);
+      const cleanKey = rawKey.trim().replace(/^['"]|['"]$/g, '');
+
+      if (!cleanUrl || !cleanKey) {
+        return res.json({ configured: false, enabled: false, reason: 'missing_credentials' });
+      }
+
+      const settingsRes = await fetch(`${cleanUrl}/auth/v1/settings`, {
+        headers: { apikey: cleanKey }
+      });
+
+      if (!settingsRes.ok) {
+        return res.json({
+          configured: true,
+          enabled: true,
+          warn: `Supabase returned status ${settingsRes.status}`
+        });
+      }
+
+      const settings = (await settingsRes.json()) as any;
+      const externalProviders = settings.external || {};
+
+      if (provider && provider in externalProviders) {
+        return res.json({
+          configured: true,
+          provider,
+          enabled: Boolean(externalProviders[provider]),
+          providers: externalProviders
+        });
+      }
+
+      return res.json({
+        configured: true,
+        providers: externalProviders
+      });
+    } catch (err: unknown) {
+      console.warn('Could not verify Supabase provider status', err);
+      return res.json({ configured: true, enabled: true });
+    }
   });
 
   // Feature 1: AI Code Explainer endpoint
