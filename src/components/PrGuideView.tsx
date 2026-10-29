@@ -404,16 +404,18 @@ export const PrGuideView: React.FC<PrGuideViewProps> = ({ onOpenKeyInfo }) => {
   const progressPct = Math.round((completedCount / totalStages) * 100);
 
   return (
-    <div className="space-y-8 pb-16">
+    <div className="space-y-6 pb-16">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-hairline pb-5">
         <div>
-          <div className="inline-flex items-center gap-1.5 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-1">
-            <Compass className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-1.5 text-ink-subtle text-[12px] font-medium uppercase tracking-wider mb-1">
+            <Compass className="w-3.5 h-3.5 text-[#0070E0]" />
             Complete 10-Stage Contributor Roadmap
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">First Pull Request Guide</h2>
-          <p className="text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed">
+          <h2 className="text-2xl sm:text-3xl font-normal text-ink-strong tracking-tight">
+            First Pull Request Guide <span className="text-ink-subtle">· 10 Step Mastery</span>
+          </h2>
+          <p className="text-[13px] text-ink-subtle mt-1 max-w-2xl leading-relaxed">
             Master the open-source contribution workflow from understanding repositories to handling code reviews, with reactive CLI commands and instant AI step mentorship.
           </p>
         </div>
@@ -421,7 +423,7 @@ export const PrGuideView: React.FC<PrGuideViewProps> = ({ onOpenKeyInfo }) => {
         <button
           type="button"
           onClick={handleResetProgress}
-          className="self-start sm:self-auto flex items-center gap-1.5 text-xs text-slate-400 hover:text-red-300 px-3 py-1.5 rounded-lg border border-white/10 hover:border-red-500/30 transition-colors cursor-pointer"
+          className="btn-secondary h-8 px-3 rounded-[10px] text-[12px] self-start sm:self-auto flex items-center gap-1.5 cursor-pointer"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           Reset Checklist
@@ -429,25 +431,25 @@ export const PrGuideView: React.FC<PrGuideViewProps> = ({ onOpenKeyInfo }) => {
       </div>
 
       {/* Progress & Interactive Checklist Card */}
-      <div className="rounded-2xl bg-gradient-to-r from-slate-900/90 via-purple-950/20 to-slate-900/90 border border-purple-500/30 p-5 sm:p-6 shadow-xl space-y-4">
+      <div className="rounded-xl bg-surface border border-hairline p-5 space-y-3.5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-300 flex items-center justify-center font-bold">
-              <CheckSquare className="w-5 h-5 text-cyan-400" />
+            <div className="w-8 h-8 rounded-[8px] bg-surface-2 border border-hairline text-[#0070E0] flex items-center justify-center font-medium">
+              <CheckSquare className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-sm sm:text-base font-bold text-white">Contributor Progress</h3>
-              <p className="text-xs text-slate-400">
+              <h3 className="text-[14px] font-medium text-ink-strong">Contributor Progress</h3>
+              <p className="text-[12px] text-ink-subtle">
                 {completedCount} of {totalStages} stages completed ({progressPct}%)
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs font-extrabold text-cyan-300">{progressPct}% Complete</span>
-            <div className="w-36 sm:w-48 h-2.5 bg-slate-800 rounded-full overflow-hidden border border-white/5">
+            <span className="text-[12px] font-mono font-medium text-[#0070E0] tabular-nums">{progressPct}% Complete</span>
+            <div className="w-36 sm:w-48 h-1.5 bg-surface-2 rounded-full overflow-hidden border border-hairline">
               <div
-                className="h-full bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 transition-all duration-300"
+                className="h-full bg-[#0070E0] transition-all duration-300"
                 style={{ width: `${progressPct}%` }}
               />
             </div>
@@ -455,7 +457,7 @@ export const PrGuideView: React.FC<PrGuideViewProps> = ({ onOpenKeyInfo }) => {
         </div>
 
         {/* Quick Stage Jump Pills */}
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-2 border-t border-white/5">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-2 border-t border-hairline">
           {stages.map((st) => {
             const isDone = Boolean(completedSteps[st.id]);
             const isActive = activeStageId === st.id;
@@ -464,19 +466,19 @@ export const PrGuideView: React.FC<PrGuideViewProps> = ({ onOpenKeyInfo }) => {
                 key={st.id}
                 type="button"
                 onClick={() => setActiveStageId(st.id)}
-                className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg border text-xs transition-all cursor-pointer ${
+                className={`flex items-center justify-between h-8 px-2.5 rounded-[8px] border text-[12px] transition-colors cursor-pointer ${
                   isActive
-                    ? 'border-cyan-400 bg-cyan-950/30 text-white font-bold'
+                    ? 'border-[#0070E0] bg-[#0070E0]/10 text-ink-strong font-medium'
                     : isDone
-                    ? 'border-emerald-500/30 bg-emerald-950/15 text-emerald-300'
-                    : 'border-white/5 bg-[#080d1a] text-slate-400 hover:text-slate-200'
+                    ? 'border-hairline bg-surface-2 text-ink-subtle'
+                    : 'border-hairline bg-surface text-ink-subtle hover:text-ink'
                 }`}
               >
                 <span className="truncate">Stage {st.id}</span>
                 {isDone ? (
-                  <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 ml-1" />
+                  <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0 ml-1" />
                 ) : (
-                  <Square className="w-3 h-3 text-slate-600 shrink-0 ml-1" />
+                  <Square className="w-3 h-3 text-ink-subtle shrink-0 ml-1" />
                 )}
               </button>
             );
@@ -485,20 +487,20 @@ export const PrGuideView: React.FC<PrGuideViewProps> = ({ onOpenKeyInfo }) => {
       </div>
 
       {/* Reactive Configuration Bar for Customized Commands */}
-      <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-5 shadow-xl space-y-4">
+      <div className="rounded-xl bg-surface border border-hairline p-4 space-y-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs font-bold text-white uppercase tracking-wider">
-            <Terminal className="w-4 h-4 text-cyan-400" />
+          <div className="flex items-center gap-2 text-[12px] font-medium text-ink-strong uppercase tracking-wider">
+            <Terminal className="w-4 h-4 text-[#0070E0]" />
             Customize Your Real Git Commands
           </div>
-          <span className="text-[11px] text-cyan-300 bg-cyan-500/10 px-2 py-0.5 rounded-full border border-cyan-500/20">
+          <span className="badge-71 text-[10px]">
             Reactive CLI Generator
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           <div>
-            <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+            <label className="block text-[11px] font-medium text-ink-subtle mb-1">
               Your GitHub Username:
             </label>
             <input
@@ -506,12 +508,12 @@ export const PrGuideView: React.FC<PrGuideViewProps> = ({ onOpenKeyInfo }) => {
               value={gitUser}
               onChange={(e) => setGitUser(e.target.value)}
               placeholder="e.g. octocat"
-              className="w-full bg-[#080d1a] border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-cyan-300 focus:outline-none focus:border-cyan-500"
+              className="input-71 font-mono text-[12px]"
             />
           </div>
 
           <div>
-            <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+            <label className="block text-[11px] font-medium text-ink-subtle mb-1">
               Target Repository (owner/repo):
             </label>
             <input
@@ -519,12 +521,12 @@ export const PrGuideView: React.FC<PrGuideViewProps> = ({ onOpenKeyInfo }) => {
               value={gitRepo}
               onChange={(e) => setGitRepo(e.target.value)}
               placeholder="e.g. facebook/react"
-              className="w-full bg-[#080d1a] border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-cyan-300 focus:outline-none focus:border-cyan-500"
+              className="input-71 font-mono text-[12px]"
             />
           </div>
 
           <div>
-            <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+            <label className="block text-[11px] font-medium text-ink-subtle mb-1">
               Feature Branch Name:
             </label>
             <input
@@ -532,12 +534,12 @@ export const PrGuideView: React.FC<PrGuideViewProps> = ({ onOpenKeyInfo }) => {
               value={gitBranch}
               onChange={(e) => setGitBranch(e.target.value)}
               placeholder="e.g. fix/readme-typo"
-              className="w-full bg-[#080d1a] border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-cyan-300 focus:outline-none focus:border-purple-500"
+              className="input-71 font-mono text-[12px]"
             />
           </div>
 
           <div>
-            <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+            <label className="block text-[11px] font-medium text-ink-subtle mb-1">
               Related Issue # (optional):
             </label>
             <input
@@ -545,14 +547,14 @@ export const PrGuideView: React.FC<PrGuideViewProps> = ({ onOpenKeyInfo }) => {
               value={issueNumber}
               onChange={(e) => setIssueNumber(e.target.value)}
               placeholder="e.g. 142"
-              className="w-full bg-[#080d1a] border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-cyan-300 focus:outline-none focus:border-purple-500"
+              className="input-71 font-mono text-[12px]"
             />
           </div>
         </div>
       </div>
 
       {/* 10 Step Detailed Learning Guide Stages */}
-      <div className="space-y-6">
+      <div className="space-y-3">
         {stages.map((stage) => {
           const isCompleted = Boolean(completedSteps[stage.id]);
           const isOpen = activeStageId === stage.id;
@@ -562,47 +564,47 @@ export const PrGuideView: React.FC<PrGuideViewProps> = ({ onOpenKeyInfo }) => {
           return (
             <div
               key={stage.id}
-              className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
+              className={`rounded-xl border transition-colors overflow-hidden ${
                 isCompleted
-                  ? 'bg-slate-900/90 border-emerald-500/30'
+                  ? 'bg-surface border-hairline'
                   : isOpen
-                  ? 'bg-slate-900/95 border-purple-500/40 shadow-xl shadow-purple-500/5'
-                  : 'bg-slate-900/60 border-white/10 hover:border-white/20'
+                  ? 'bg-surface border-hairline-strong'
+                  : 'bg-surface border-hairline hover:border-hairline-strong'
               }`}
             >
               {/* Stage Header Banner */}
               <div
                 onClick={() => setActiveStageId(isOpen ? 0 : stage.id)}
-                className="p-4 sm:p-5 flex items-center justify-between gap-3 cursor-pointer select-none"
+                className="p-4 flex items-center justify-between gap-3 cursor-pointer select-none"
               >
-                <div className="flex items-center gap-3.5 flex-1 min-w-0">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
                   <div
                     onClick={(e) => {
                       e.stopPropagation();
                       toggleStepCompleted(stage.id);
                     }}
                     title={isCompleted ? 'Mark incomplete' : 'Mark stage completed'}
-                    className={`w-9 h-9 rounded-xl flex items-center justify-center font-extrabold text-sm shrink-0 border transition-all cursor-pointer ${
+                    className={`w-7 h-7 rounded-[6px] flex items-center justify-center font-mono font-medium text-[12px] shrink-0 border transition-colors cursor-pointer ${
                       isCompleted
-                        ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40'
-                        : 'bg-purple-500/15 text-purple-300 border-purple-500/30 hover:border-cyan-400'
+                        ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+                        : 'bg-surface-2 text-ink-subtle border-hairline hover:text-ink'
                     }`}
                   >
-                    {isCompleted ? <Check className="w-5 h-5" /> : stage.id}
+                    {isCompleted ? <Check className="w-4 h-4" /> : stage.id}
                   </div>
 
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.2 rounded bg-black/40 text-purple-300 border border-white/5">
+                      <span className="badge-71 font-mono uppercase text-[10px]">
                         {stage.stageName}
                       </span>
                       {isCompleted && (
-                        <span className="text-[11px] font-semibold text-emerald-400 flex items-center gap-1">
+                        <span className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                           <CheckCheck className="w-3.5 h-3.5" /> Completed
                         </span>
                       )}
                     </div>
-                    <h3 className="text-sm sm:text-base font-bold text-white truncate mt-0.5">
+                    <h3 className="text-[14px] font-medium text-ink-strong truncate mt-0.5">
                       {stage.title}
                     </h3>
                   </div>
@@ -615,95 +617,95 @@ export const PrGuideView: React.FC<PrGuideViewProps> = ({ onOpenKeyInfo }) => {
                       e.stopPropagation();
                       toggleStepCompleted(stage.id);
                     }}
-                    className={`hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold border transition-colors cursor-pointer ${
+                    className={`hidden sm:flex items-center gap-1.5 h-7 px-2.5 rounded-[8px] text-[12px] font-medium border transition-colors cursor-pointer ${
                       isCompleted
-                        ? 'bg-emerald-950/40 text-emerald-300 border-emerald-500/30'
-                        : 'bg-slate-800 text-slate-300 border-white/10 hover:border-purple-400'
+                        ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+                        : 'btn-secondary'
                     }`}
                   >
                     {isCompleted ? (
                       <>
-                        <CheckSquare className="w-3.5 h-3.5 text-emerald-400" />
+                        <CheckSquare className="w-3.5 h-3.5" />
                         <span>Completed</span>
                       </>
                     ) : (
                       <>
-                        <Square className="w-3.5 h-3.5 text-slate-400" />
+                        <Square className="w-3.5 h-3.5" />
                         <span>Mark Done</span>
                       </>
                     )}
                   </button>
 
-                  <div className="p-1 text-slate-400">
-                    {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                  <div className="p-1 text-ink-subtle">
+                    {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </div>
                 </div>
               </div>
 
               {/* Stage Body */}
               {isOpen && (
-                <div className="px-4 sm:px-6 pb-6 pt-2 border-t border-white/5 space-y-5 animate-fadeIn">
+                <div className="px-4 pb-5 pt-2 border-t border-hairline space-y-4">
                   {/* Summary & Goal */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="rounded-xl bg-[#080d1a] border border-white/5 p-4">
-                      <span className="text-[11px] font-bold text-cyan-400 uppercase tracking-wider block mb-1">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="rounded-lg bg-surface-2 border border-hairline p-3.5 space-y-1">
+                      <span className="text-[11px] font-medium text-[#0070E0] uppercase tracking-wider block">
                         Overview
                       </span>
-                      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                      <p className="text-[12px] text-ink leading-relaxed">
                         {stage.summary}
                       </p>
                     </div>
 
-                    <div className="rounded-xl bg-[#080d1a] border border-white/5 p-4">
-                      <span className="text-[11px] font-bold text-purple-400 uppercase tracking-wider block mb-1">
+                    <div className="rounded-lg bg-surface-2 border border-hairline p-3.5 space-y-1">
+                      <span className="text-[11px] font-medium text-ink-strong uppercase tracking-wider block">
                         Target Outcome
                       </span>
-                      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                      <p className="text-[12px] text-ink leading-relaxed">
                         {stage.goal}
                       </p>
                     </div>
                   </div>
 
-                  {/* Git Commands Section (Requirement 3) */}
+                  {/* Git Commands Section */}
                   {stage.commands && stage.commands.length > 0 && (
-                    <div className="space-y-3">
-                      <span className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                        <Terminal className="w-4 h-4 text-cyan-400" />
+                    <div className="space-y-2">
+                      <span className="text-[11px] font-medium text-ink-strong uppercase tracking-wider flex items-center gap-1.5">
+                        <Terminal className="w-3.5 h-3.5 text-[#0070E0]" />
                         Relevant Terminal Commands
                       </span>
 
-                      <div className="space-y-2.5">
+                      <div className="space-y-2">
                         {stage.commands.map((cmdItem, cIdx) => (
                           <div
                             key={cIdx}
-                            className="rounded-xl bg-[#060a14] border border-white/10 p-3.5 space-y-2"
+                            className="rounded-[8px] bg-surface-2 border border-hairline p-3 space-y-1.5"
                           >
                             <div className="flex items-start justify-between gap-3">
-                              <pre className="text-xs font-mono text-cyan-300 overflow-x-auto whitespace-pre-wrap leading-relaxed flex-1">
+                              <pre className="text-[12px] font-mono text-[#0070E0] overflow-x-auto whitespace-pre-wrap leading-relaxed flex-1 font-medium">
                                 <code>{cmdItem.cmd}</code>
                               </pre>
 
                               <button
                                 type="button"
                                 onClick={() => handleCopy(cmdItem.cmd, `stage-${stage.id}-cmd-${cIdx}`)}
-                                className="px-2.5 py-1 text-xs rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 shrink-0 border border-white/10 flex items-center gap-1 cursor-pointer transition-colors"
+                                className="px-2 py-0.5 text-[11px] font-mono rounded-[4px] bg-surface text-ink-subtle hover:text-ink shrink-0 border border-hairline flex items-center gap-1 cursor-pointer transition-colors"
                               >
                                 {copiedKey === `stage-${stage.id}-cmd-${cIdx}` ? (
                                   <>
-                                    <Check className="w-3.5 h-3.5 text-emerald-400" />
-                                    <span className="text-emerald-400">Copied</span>
+                                    <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                                    <span>Copied</span>
                                   </>
                                 ) : (
                                   <>
-                                    <Copy className="w-3.5 h-3.5" />
+                                    <Copy className="w-3 h-3" />
                                     <span>Copy</span>
                                   </>
                                 )}
                               </button>
                             </div>
 
-                            <p className="text-[11px] text-slate-400 pt-1 border-t border-white/5">
-                              💡 <strong>What this does:</strong> {cmdItem.explanation}
+                            <p className="text-[11px] text-ink-subtle pt-1 border-t border-hairline">
+                              💡 <strong className="text-ink font-medium">What this does:</strong> {cmdItem.explanation}
                             </p>
                           </div>
                         ))}
@@ -711,15 +713,15 @@ export const PrGuideView: React.FC<PrGuideViewProps> = ({ onOpenKeyInfo }) => {
                     </div>
                   )}
 
-                  {/* Beginner Support: Common Mistakes & Maintainer Tip (Requirement 5) */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Beginner Support: Common Mistakes & Maintainer Tip */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {/* Mistakes */}
-                    <div className="rounded-xl bg-amber-950/20 border border-amber-500/30 p-4 space-y-2">
-                      <span className="text-[11px] font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-                        <AlertCircle className="w-3.5 h-3.5 text-amber-400" />
+                    <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 p-3.5 space-y-1.5">
+                      <span className="text-[11px] font-medium text-amber-700 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                        <AlertCircle className="w-3.5 h-3.5" />
                         Common Mistakes to Avoid
                       </span>
-                      <ul className="space-y-1.5 text-xs text-amber-100 list-disc list-inside">
+                      <ul className="space-y-1 text-[12px] text-amber-700 dark:text-amber-200 list-disc list-inside">
                         {stage.commonMistakes.map((mistake, mIdx) => (
                           <li key={mIdx} className="leading-relaxed">
                             {mistake}
@@ -729,35 +731,35 @@ export const PrGuideView: React.FC<PrGuideViewProps> = ({ onOpenKeyInfo }) => {
                     </div>
 
                     {/* Maintainer Rule */}
-                    <div className="rounded-xl bg-purple-950/20 border border-purple-500/30 p-4 space-y-2">
-                      <span className="text-[11px] font-bold text-purple-300 uppercase tracking-wider flex items-center gap-1.5">
-                        <ShieldCheck className="w-3.5 h-3.5 text-purple-400" />
+                    <div className="rounded-lg bg-surface-2 border border-hairline p-3.5 space-y-1.5">
+                      <span className="text-[11px] font-medium text-ink-strong uppercase tracking-wider flex items-center gap-1.5">
+                        <ShieldCheck className="w-3.5 h-3.5 text-[#0070E0]" />
                         Maintainer's Golden Rule
                       </span>
-                      <p className="text-xs text-slate-200 leading-relaxed">
+                      <p className="text-[12px] text-ink leading-relaxed">
                         {stage.maintainerTip}
                       </p>
-                      <div className="pt-2">
+                      <div className="pt-1">
                         <a
                           href={stage.docUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 text-xs text-cyan-400 hover:text-cyan-300 underline underline-offset-4"
+                          className="inline-flex items-center gap-1 text-[12px] text-[#0070E0] hover:underline"
                         >
-                          <BookOpen className="w-3.5 h-3.5" />
-                          {stage.docLabel}
+                          <BookOpen className="w-3 h-3" />
+                          <span>{stage.docLabel}</span>
                           <ExternalLink className="w-3 h-3" />
                         </a>
                       </div>
                     </div>
                   </div>
 
-                  {/* AI Mentor Stage Assistant (Requirement 4) */}
-                  <div className="rounded-xl bg-gradient-to-r from-purple-950/40 to-slate-900 border border-purple-500/30 p-4 space-y-3">
+                  {/* AI Mentor Stage Assistant */}
+                  <div className="rounded-lg bg-surface-2 border border-hairline p-3.5 space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <Bot className="w-4 h-4 text-cyan-400" />
-                        <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+                        <Bot className="w-4 h-4 text-[#0070E0]" />
+                        <h4 className="text-[12px] font-medium text-ink-strong uppercase tracking-wider">
                           AI Mentor for Stage {stage.id}
                         </h4>
                       </div>
@@ -771,14 +773,14 @@ export const PrGuideView: React.FC<PrGuideViewProps> = ({ onOpenKeyInfo }) => {
                             handleAskMentor(stage.id, stage.title);
                           }
                         }}
-                        className="text-xs text-cyan-300 hover:text-white px-2.5 py-1 rounded-lg bg-slate-800 border border-white/10 transition-colors cursor-pointer"
+                        className="btn-secondary h-7 px-2.5 rounded-[8px] text-[12px] cursor-pointer"
                       >
                         {isMentorOpen ? 'Collapse Mentor' : 'Ask AI Mentor About This Stage'}
                       </button>
                     </div>
 
                     {isMentorOpen && (
-                      <div className="pt-2 space-y-3">
+                      <div className="pt-2 space-y-2.5">
                         {/* Custom Question Form */}
                         <form
                           onSubmit={(e) => {
@@ -795,37 +797,37 @@ export const PrGuideView: React.FC<PrGuideViewProps> = ({ onOpenKeyInfo }) => {
                             }
                             placeholder={`Ask Gemini anything about ${stage.title.toLowerCase()}...`}
                             disabled={mentorData?.loading}
-                            className="flex-1 bg-[#080d1a] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500"
+                            className="input-71 flex-1 text-[12px]"
                           />
                           <button
                             type="submit"
                             disabled={mentorData?.loading}
-                            className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 text-white text-xs font-semibold shadow-md disabled:opacity-50 transition-all flex items-center gap-1 cursor-pointer"
+                            className="btn-primary h-8 px-3 rounded-[10px] text-[12px] font-medium flex items-center gap-1 cursor-pointer disabled:opacity-50"
                           >
-                            <Send className="w-3.5 h-3.5" />
+                            <Send className="w-3 h-3" />
                             <span>Ask</span>
                           </button>
                         </form>
 
                         {/* Loading State */}
                         {mentorData?.loading && (
-                          <div className="p-4 rounded-xl bg-[#080d1a] border border-white/5 flex items-center gap-2.5 text-xs text-slate-300">
-                            <div className="w-3.5 h-3.5 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
+                          <div className="p-3 rounded-lg bg-surface border border-hairline flex items-center gap-2 text-[12px] text-ink-subtle">
+                            <div className="w-3.5 h-3.5 border-2 border-[#0070E0] border-t-transparent rounded-full animate-spin" />
                             <span>Gemini AI Mentor is generating advice for Stage {stage.id}...</span>
                           </div>
                         )}
 
                         {/* Error state */}
                         {mentorData?.error && (
-                          <div className="p-3 rounded-xl bg-red-950/40 border border-red-500/30 text-xs text-red-200 flex items-center gap-2">
-                            <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+                          <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-[12px] text-red-600 dark:text-red-400 flex items-center gap-2">
+                            <AlertCircle className="w-4 h-4 shrink-0" />
                             <span>{mentorData.error}</span>
                           </div>
                         )}
 
                         {/* Advice Output */}
                         {mentorData?.text && !mentorData.loading && (
-                          <div className="rounded-xl bg-[#060a14] border border-white/10 p-4 text-xs sm:text-sm text-slate-200 leading-relaxed whitespace-pre-wrap font-sans space-y-2">
+                          <div className="rounded-lg bg-surface border border-hairline p-3.5 text-[12px] text-ink leading-relaxed whitespace-pre-wrap">
                             {mentorData.text}
                           </div>
                         )}
@@ -834,28 +836,28 @@ export const PrGuideView: React.FC<PrGuideViewProps> = ({ onOpenKeyInfo }) => {
                   </div>
 
                   {/* Complete stage button footer */}
-                  <div className="flex items-center justify-between pt-3 border-t border-white/5 text-xs">
-                    <span className="text-slate-400">
+                  <div className="flex items-center justify-between pt-2 border-t border-hairline text-[12px]">
+                    <span className="text-ink-subtle">
                       Step {stage.id} of 10
                     </span>
 
                     <button
                       type="button"
                       onClick={() => toggleStepCompleted(stage.id)}
-                      className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      className={`h-8 px-3 rounded-[10px] text-[12px] font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
                         isCompleted
-                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                          : 'bg-gradient-to-r from-purple-600 to-cyan-600 text-white shadow-md shadow-purple-600/20 hover:opacity-95'
+                          ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+                          : 'btn-primary'
                       }`}
                     >
                       {isCompleted ? (
                         <>
-                          <Check className="w-4 h-4 text-emerald-400" />
+                          <Check className="w-3.5 h-3.5" />
                           <span>Stage {stage.id} Completed! (Click to Undo)</span>
                         </>
                       ) : (
                         <>
-                          <CheckSquare className="w-4 h-4" />
+                          <CheckSquare className="w-3.5 h-3.5" />
                           <span>Mark Stage {stage.id} as Done &rarr;</span>
                         </>
                       )}
@@ -868,9 +870,9 @@ export const PrGuideView: React.FC<PrGuideViewProps> = ({ onOpenKeyInfo }) => {
         })}
       </div>
 
-      {/* Safety Notice (Requirement 7) */}
-      <div className="rounded-2xl bg-slate-900/80 border border-white/10 p-4 text-xs text-slate-400 text-center leading-relaxed">
-        <strong>Open Source Integrity:</strong> Pull requests must be submitted directly through your authenticated GitHub account via the GitHub web interface or terminal CLI. CodeBridge AI assists with preparation, code analysis, and command generation, but does not automatically submit PRs on your behalf.
+      {/* Safety Notice */}
+      <div className="rounded-xl bg-surface border border-hairline p-4 text-[12px] text-ink-subtle text-center leading-relaxed">
+        <strong className="text-ink font-medium">Open Source Integrity:</strong> Pull requests must be submitted directly through your authenticated GitHub account via the GitHub web interface or terminal CLI. CodeBridge AI assists with preparation, code analysis, and command generation, but does not automatically submit PRs on your behalf.
       </div>
     </div>
   );

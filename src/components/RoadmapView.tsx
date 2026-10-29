@@ -180,23 +180,25 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
   const progressPct = totalChecklistCount > 0 ? Math.round((completedChecklistCount / totalChecklistCount) * 100) : 0;
 
   return (
-    <div className="space-y-8 pb-16">
+    <div className="space-y-6 pb-16">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-hairline pb-5">
         <div>
-          <div className="inline-flex items-center gap-1.5 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-1">
-            <Map className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-1.5 text-ink-subtle text-[12px] font-medium uppercase tracking-wider mb-1">
+            <Map className="w-3.5 h-3.5 text-[#0070E0]" />
             End-to-End Contribution Pathway
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">AI Contribution Roadmap</h2>
-          <p className="text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed">
+          <h2 className="text-2xl sm:text-3xl font-normal text-ink-strong tracking-tight">
+            AI Contribution Roadmap <span className="text-ink-subtle">· Guided Plan</span>
+          </h2>
+          <p className="text-[13px] text-ink-subtle mt-1 max-w-2xl leading-relaxed">
             Go from discovering an open-source repository to preparing your first pull request with a tailored 6-stage roadmap and verified repository data.
           </p>
         </div>
 
         {/* Quick Sample Presets */}
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs text-slate-400 font-medium">Quick Presets:</span>
+          <span className="text-[12px] text-ink-subtle font-medium">Quick Presets:</span>
           {SAMPLE_ROADMAPS.map((sample, idx) => (
             <button
               key={idx}
@@ -206,7 +208,7 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
                 setIssueInput(sample.issue);
                 setError(null);
               }}
-              className="px-2.5 py-1 rounded-lg bg-slate-900 border border-white/10 hover:border-cyan-500/40 text-slate-300 hover:text-white text-xs font-medium transition-colors cursor-pointer"
+              className="btn-secondary h-7 px-2.5 rounded-[8px] text-[12px] cursor-pointer"
             >
               {sample.label}
             </button>
@@ -214,17 +216,17 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
         </div>
       </div>
 
-      {/* Input Form Panel (Requirements 1, 2, 3) */}
-      <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-5 sm:p-7 shadow-xl space-y-5">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      {/* Input Form Panel */}
+      <div className="rounded-xl bg-surface border border-hairline p-5 space-y-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* 1. GitHub Repository URL Input */}
           <div>
-            <label htmlFor="roadmap-repo" className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center justify-between">
+            <label htmlFor="roadmap-repo" className="block text-[12px] font-medium text-ink-strong mb-1.5 flex items-center justify-between">
               <span className="flex items-center gap-1.5">
-                <FolderGit2 className="w-3.5 h-3.5 text-cyan-400" />
+                <FolderGit2 className="w-3.5 h-3.5 text-[#0070E0]" />
                 1. GitHub Repository URL or Identifier:
               </span>
-              <span className="text-[11px] font-normal text-slate-500">e.g. facebook/react</span>
+              <span className="text-[11px] font-normal text-ink-subtle">e.g. facebook/react</span>
             </label>
             <input
               id="roadmap-repo"
@@ -232,18 +234,18 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
               value={repoUrl}
               onChange={(e) => setRepoUrl(e.target.value)}
               placeholder="https://github.com/facebook/react or owner/repo"
-              className="w-full bg-[#080d1a] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-cyan-200 placeholder:text-slate-600 focus:outline-none focus:border-cyan-400 font-mono"
+              className="input-71 font-mono text-[13px]"
             />
           </div>
 
           {/* 2. GitHub Issue URL or Description */}
           <div>
-            <label htmlFor="roadmap-issue" className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center justify-between">
+            <label htmlFor="roadmap-issue" className="block text-[12px] font-medium text-ink-strong mb-1.5 flex items-center justify-between">
               <span className="flex items-center gap-1.5">
-                <Bug className="w-3.5 h-3.5 text-purple-400" />
+                <Bug className="w-3.5 h-3.5 text-[#0070E0]" />
                 2. GitHub Issue URL or Description:
               </span>
-              <span className="text-[11px] font-normal text-slate-500">URL or pasted text</span>
+              <span className="text-[11px] font-normal text-ink-subtle">URL or pasted text</span>
             </label>
             <input
               id="roadmap-issue"
@@ -251,14 +253,14 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
               value={issueInput}
               onChange={(e) => setIssueInput(e.target.value)}
               placeholder="https://github.com/facebook/react/issues/12345 or paste issue description"
-              className="w-full bg-[#080d1a] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-cyan-200 placeholder:text-slate-600 focus:outline-none focus:border-purple-400 font-mono"
+              className="input-71 font-mono text-[13px]"
             />
           </div>
         </div>
 
         {/* Action Button: "Create My Roadmap" */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-3 border-t border-white/10">
-          <span className="text-xs text-slate-400 hidden sm:inline">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-hairline">
+          <span className="text-[12px] text-ink-subtle hidden sm:inline">
             Verifies live repository data on GitHub and generates your 6-stage roadmap
           </span>
 
@@ -266,16 +268,16 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
             type="button"
             onClick={handleCreateRoadmap}
             disabled={loading}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-7 py-3 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white font-bold text-sm shadow-lg shadow-purple-600/30 hover:shadow-cyan-600/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
+            className="btn-primary h-9 px-5 rounded-[10px] text-[13px] font-medium w-full sm:w-auto flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
           >
             {loading ? (
               <>
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 <span>Creating Your Roadmap...</span>
               </>
             ) : (
               <>
-                <Sparkles className="w-4 h-4 text-cyan-200" />
+                <Sparkles className="w-3.5 h-3.5" />
                 <span>Create My Roadmap</span>
               </>
             )}
@@ -285,29 +287,29 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
 
       {/* Error Banner */}
       {error && (
-        <div className="rounded-xl bg-red-950/40 border border-red-500/40 p-4 text-red-200 text-xs sm:text-sm flex items-start gap-3 animate-fadeIn">
-          <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
-          <div className="space-y-1">
-            <p className="font-semibold text-red-300">Could Not Create Roadmap</p>
-            <p className="text-slate-300">{error}</p>
+        <div className="rounded-lg bg-red-500/10 border border-red-500/20 p-4 text-red-600 dark:text-red-400 text-[13px] flex items-start gap-2.5">
+          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+          <div className="space-y-0.5">
+            <p className="font-medium text-red-700 dark:text-red-300">Could Not Create Roadmap</p>
+            <p className="text-ink-subtle">{error}</p>
           </div>
         </div>
       )}
 
       {/* Empty State */}
       {!roadmap && !loading && (
-        <div className="rounded-2xl bg-slate-900/60 border border-dashed border-white/15 p-12 text-center flex flex-col items-center justify-center min-h-[360px]">
-          <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mb-4">
-            <Map className="w-8 h-8" />
+        <div className="rounded-xl bg-surface border border-dashed border-hairline p-10 text-center flex flex-col items-center justify-center min-h-[300px]">
+          <div className="w-12 h-12 rounded-[10px] bg-surface-2 border border-hairline flex items-center justify-center text-ink-subtle mb-3">
+            <Map className="w-6 h-6 text-[#0070E0]" />
           </div>
-          <h3 className="text-lg font-bold text-white mb-2">No Roadmap Generated Yet</h3>
-          <p className="text-sm text-slate-400 max-w-md leading-relaxed mb-6">
+          <h3 className="text-[15px] font-medium text-ink-strong mb-1">No Roadmap Generated Yet</h3>
+          <p className="text-[12px] text-ink-subtle max-w-md leading-relaxed mb-4">
             Enter a target repository URL and issue URL above, then click <strong>"Create My Roadmap"</strong> to receive an end-to-end plan from project setup to PR submission.
           </p>
           <button
             type="button"
             onClick={handleCreateRoadmap}
-            className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-semibold border border-white/10 transition-colors cursor-pointer"
+            className="btn-secondary h-8 px-3 rounded-[10px] text-[12px] cursor-pointer"
           >
             Create Roadmap for {SAMPLE_ROADMAPS[0].label} &rarr;
           </button>
@@ -316,12 +318,10 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
 
       {/* Loading Skeleton */}
       {loading && (
-        <div className="rounded-2xl bg-slate-900/60 border border-white/10 p-12 text-center flex flex-col items-center justify-center min-h-[400px] space-y-4">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-500 to-cyan-500 animate-spin flex items-center justify-center p-[2px]">
-            <div className="w-full h-full bg-[#070a13] rounded-[14px]" />
-          </div>
-          <h3 className="text-base font-bold text-white">Verifying GitHub Repository & Building Roadmap...</h3>
-          <p className="text-xs text-slate-400 max-w-sm leading-relaxed">
+        <div className="rounded-xl bg-surface border border-hairline p-10 text-center flex flex-col items-center justify-center min-h-[320px] space-y-3">
+          <div className="w-10 h-10 border-2 border-[#0070E0] border-t-transparent rounded-full animate-spin" />
+          <h3 className="text-[14px] font-medium text-ink-strong">Verifying GitHub Repository & Building Roadmap...</h3>
+          <p className="text-[12px] text-ink-subtle max-w-sm leading-relaxed">
             Fetching verified repository details from GitHub, formulating investigation areas, breaking down tasks, and designing your PR template.
           </p>
         </div>
@@ -329,68 +329,56 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
 
       {/* Roadmap Output */}
       {roadmap && !loading && (
-        <div className="space-y-8 animate-fadeIn">
-          {/* Grounding & Verification Header (Requirements 6 & 11) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-6">
+          {/* Grounding & Verification Header */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
             {/* Repo Verification Status */}
-            <div
-              className={`rounded-2xl p-5 border flex flex-col justify-between space-y-3 ${
-                roadmap.verifiedRepo.verified
-                  ? 'bg-emerald-950/20 border-emerald-500/40'
-                  : 'bg-amber-950/20 border-amber-500/40'
-              }`}
-            >
+            <div className="rounded-xl bg-surface border border-hairline p-4 flex flex-col justify-between space-y-3">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-2">
                   {roadmap.verifiedRepo.verified ? (
-                    <BadgeCheck className="w-5 h-5 text-emerald-400 shrink-0" />
+                    <BadgeCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                   ) : (
-                    <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" />
+                    <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
                   )}
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider block text-slate-400">
+                    <span className="text-[10px] font-medium uppercase tracking-wider block text-ink-subtle">
                       Repository Verification
                     </span>
-                    <h4 className="text-sm sm:text-base font-bold text-white">
+                    <h4 className="text-[14px] font-medium text-ink-strong">
                       {roadmap.verifiedRepo.fullName}
                     </h4>
                   </div>
                 </div>
 
-                <span
-                  className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border ${
-                    roadmap.verifiedRepo.verified
-                      ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
-                      : 'bg-amber-500/15 text-amber-300 border-amber-500/30'
-                  }`}
-                >
+                <span className="badge-71 text-[10px]">
                   {roadmap.verifiedRepo.verified ? 'Verified via GitHub API' : 'Unverified URL'}
                 </span>
               </div>
 
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-[12px] text-ink-subtle leading-relaxed">
                 {roadmap.verifiedRepo.description}
               </p>
 
-              <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400 pt-1 border-t border-white/5">
+              <div className="flex flex-wrap items-center gap-2 text-[12px] text-ink-subtle pt-2 border-t border-hairline">
                 {roadmap.verifiedRepo.language && (
-                  <span className="font-semibold text-cyan-300">
+                  <span className="font-medium text-[#0070E0]">
                     {roadmap.verifiedRepo.language}
                   </span>
                 )}
                 {roadmap.verifiedRepo.verified && (
                   <>
-                    <span>•</span>
-                    <span>Default branch: <strong className="font-mono text-slate-200">{roadmap.verifiedRepo.defaultBranch}</strong></span>
-                    <span>•</span>
-                    <span>⭐ {roadmap.verifiedRepo.stars.toLocaleString()}</span>
+                    <span>·</span>
+                    <span>Branch: <strong className="font-mono text-ink font-normal">{roadmap.verifiedRepo.defaultBranch}</strong></span>
+                    <span>·</span>
+                    <span className="tabular-nums">★ {roadmap.verifiedRepo.stars.toLocaleString()}</span>
                   </>
                 )}
                 <a
                   href={roadmap.verifiedRepo.htmlUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="ml-auto text-cyan-400 hover:text-cyan-300 flex items-center gap-1"
+                  className="ml-auto text-[#0070E0] hover:underline flex items-center gap-1"
                 >
                   <span>Open Repo</span>
                   <ExternalLink className="w-3 h-3" />
@@ -399,44 +387,32 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
             </div>
 
             {/* Issue Verification Status */}
-            <div
-              className={`rounded-2xl p-5 border flex flex-col justify-between space-y-3 ${
-                roadmap.verifiedIssue.verified
-                  ? 'bg-purple-950/20 border-purple-500/40'
-                  : 'bg-slate-900/90 border-white/10'
-              }`}
-            >
+            <div className="rounded-xl bg-surface border border-hairline p-4 flex flex-col justify-between space-y-3">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-2">
-                  <Bug className="w-5 h-5 text-purple-400 shrink-0" />
+                  <Bug className="w-4 h-4 text-[#0070E0] shrink-0" />
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider block text-slate-400">
+                    <span className="text-[10px] font-medium uppercase tracking-wider block text-ink-subtle">
                       Issue Ticket Status
                     </span>
-                    <h4 className="text-sm sm:text-base font-bold text-white truncate max-w-xs">
+                    <h4 className="text-[14px] font-medium text-ink-strong truncate max-w-xs">
                       {roadmap.verifiedIssue.number ? `#${roadmap.verifiedIssue.number} ` : ''}
                       {roadmap.verifiedIssue.title}
                     </h4>
                   </div>
                 </div>
 
-                <span
-                  className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border ${
-                    roadmap.verifiedIssue.verified
-                      ? 'bg-purple-500/15 text-purple-300 border-purple-500/30'
-                      : 'bg-slate-800 text-slate-300 border-white/10'
-                  }`}
-                >
+                <span className="badge-71 text-[10px]">
                   {roadmap.verifiedIssue.verified ? 'Verified Ticket' : 'Pasted Text'}
                 </span>
               </div>
 
-              <p className="text-xs text-slate-300 line-clamp-3 leading-relaxed">
+              <p className="text-[12px] text-ink-subtle line-clamp-3 leading-relaxed">
                 {roadmap.verifiedIssue.body}
               </p>
 
-              <div className="flex items-center justify-between text-xs pt-1 border-t border-white/5">
-                <span className="text-slate-400">
+              <div className="flex items-center justify-between text-[12px] pt-2 border-t border-hairline">
+                <span className="text-ink-subtle">
                   {roadmap.verifiedIssue.verified ? 'Retrieved directly from GitHub' : 'Provided in user prompt'}
                 </span>
                 {roadmap.verifiedIssue.htmlUrl && (
@@ -444,7 +420,7 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
                     href={roadmap.verifiedIssue.htmlUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-purple-300 hover:text-purple-200 flex items-center gap-1"
+                    className="text-[#0070E0] hover:underline flex items-center gap-1"
                   >
                     <span>View Issue on GitHub</span>
                     <ExternalLink className="w-3 h-3" />
@@ -454,18 +430,18 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
             </div>
           </div>
 
-          {/* Interactive Checklist & Progress Tracker (Requirement 5) */}
-          <div className="rounded-2xl bg-gradient-to-r from-slate-900/90 via-purple-950/20 to-slate-900/90 border border-purple-500/30 p-5 sm:p-6 shadow-xl space-y-4">
+          {/* Interactive Checklist & Progress Tracker */}
+          <div className="rounded-xl bg-surface border border-hairline p-5 space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-300 flex items-center justify-center font-bold">
-                  <CheckSquare className="w-5 h-5 text-cyan-400" />
+                <div className="w-8 h-8 rounded-[8px] bg-surface-2 border border-hairline text-[#0070E0] flex items-center justify-center font-medium">
+                  <CheckSquare className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm sm:text-base font-bold text-white">
+                  <h3 className="text-[14px] font-medium text-ink-strong">
                     Personalized Contribution Checklist
                   </h3>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-[12px] text-ink-subtle">
                     {completedChecklistCount} of {totalChecklistCount} steps completed ({progressPct}%)
                   </p>
                 </div>
@@ -476,16 +452,16 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
                   <button
                     type="button"
                     onClick={handleSaveToDashboard}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 border border-white/10 transition-colors cursor-pointer"
+                    className="btn-secondary h-8 px-3 rounded-[10px] text-[12px] flex items-center gap-1.5 cursor-pointer"
                   >
                     {saved ? (
                       <>
-                        <BookmarkCheck className="w-3.5 h-3.5 text-emerald-400" />
-                        <span className="text-emerald-400">Saved to Dashboard</span>
+                        <BookmarkCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                        <span className="text-emerald-600 dark:text-emerald-400">Saved to Dashboard</span>
                       </>
                     ) : (
                       <>
-                        <BookmarkPlus className="w-3.5 h-3.5 text-cyan-400" />
+                        <BookmarkPlus className="w-3.5 h-3.5 text-[#0070E0]" />
                         <span>Bookmark Roadmap</span>
                       </>
                     )}
@@ -493,10 +469,10 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
                 )}
 
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-cyan-300">{progressPct}%</span>
-                  <div className="w-32 h-2.5 bg-slate-800 rounded-full overflow-hidden border border-white/5">
+                  <span className="text-[12px] font-mono font-medium text-[#0070E0] tabular-nums">{progressPct}%</span>
+                  <div className="w-32 h-1.5 bg-surface-2 rounded-full overflow-hidden border border-hairline">
                     <div
-                      className="h-full bg-gradient-to-r from-purple-500 to-cyan-400 transition-all duration-300"
+                      className="h-full bg-[#0070E0] transition-all duration-300"
                       style={{ width: `${progressPct}%` }}
                     />
                   </div>
@@ -505,28 +481,28 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
             </div>
 
             {/* Checklist items */}
-            <div className="space-y-2 pt-2 border-t border-white/5">
+            <div className="space-y-1.5 pt-2 border-t border-hairline">
               {roadmap.interactiveChecklist.map((item) => {
                 const isDone = Boolean(checkedTasks[item.id]);
                 return (
                   <div
                     key={item.id}
                     onClick={() => toggleTask(item.id)}
-                    className={`p-3 rounded-xl border flex items-center gap-3 transition-all cursor-pointer select-none ${
+                    className={`h-10 px-3 rounded-[8px] border flex items-center gap-2.5 text-[12px] transition-colors cursor-pointer select-none ${
                       isDone
-                        ? 'bg-emerald-950/25 border-emerald-500/40 text-slate-200'
-                        : 'bg-[#080d1a] border-white/5 text-slate-300 hover:border-white/20'
+                        ? 'bg-surface-2 border-hairline text-ink-subtle'
+                        : 'bg-surface border-hairline text-ink hover:border-hairline-strong'
                     }`}
                   >
                     {isDone ? (
-                      <CheckSquare className="w-4 h-4 text-emerald-400 shrink-0" />
+                      <CheckSquare className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                     ) : (
-                      <Square className="w-4 h-4 text-slate-500 shrink-0" />
+                      <Square className="w-3.5 h-3.5 text-ink-subtle shrink-0" />
                     )}
-                    <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-slate-800 text-purple-300 border border-white/5 shrink-0">
+                    <span className="badge-71 font-mono uppercase text-[10px] shrink-0">
                       {item.stage}
                     </span>
-                    <span className={`text-xs leading-relaxed flex-1 ${isDone ? 'line-through text-slate-400' : ''}`}>
+                    <span className={`leading-relaxed truncate flex-1 ${isDone ? 'line-through text-ink-subtle' : ''}`}>
                       {item.text}
                     </span>
                   </div>
@@ -535,33 +511,33 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
             </div>
           </div>
 
-          {/* 6 Core Personalized Stages (Requirement 4) */}
-          <div className="space-y-6">
+          {/* 6 Core Personalized Stages */}
+          <div className="space-y-4">
             {/* Stage 1: Understand Project & Guidelines */}
-            <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-6 space-y-4 shadow-xl">
-              <div className="flex items-center justify-between border-b border-white/5 pb-3">
+            <div className="rounded-xl bg-surface border border-hairline p-5 space-y-3">
+              <div className="flex items-center justify-between border-b border-hairline pb-2.5">
                 <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 flex items-center justify-center text-xs font-bold">
+                  <span className="w-5 h-5 rounded-[4px] bg-surface-2 border border-hairline text-[#0070E0] flex items-center justify-center text-[11px] font-mono font-medium">
                     1
                   </span>
-                  <h3 className="text-base font-bold text-white">
+                  <h3 className="text-[14px] font-medium text-ink-strong">
                     {roadmap.stages.projectAndGuidelines.title}
                   </h3>
                 </div>
-                <span className="text-[11px] font-semibold text-cyan-400 bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-500/20">
+                <span className="badge-71 text-[10px]">
                   Orientation & Rules
                 </span>
               </div>
 
-              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
+              <p className="text-[13px] text-ink leading-relaxed">
                 {roadmap.stages.projectAndGuidelines.explanation}
               </p>
 
-              <div className="rounded-xl bg-[#080d1a] border border-white/5 p-4 space-y-2">
-                <span className="text-[11px] font-bold text-slate-300 uppercase tracking-wider block">
+              <div className="rounded-lg bg-surface-2 border border-hairline p-3.5 space-y-1.5">
+                <span className="text-[11px] font-medium text-ink-strong uppercase tracking-wider block">
                   Golden Contribution Rules for this Project:
                 </span>
-                <ul className="space-y-1.5 text-xs text-slate-300 list-disc list-inside">
+                <ul className="space-y-1 text-[12px] text-ink-subtle list-disc list-inside">
                   {roadmap.stages.projectAndGuidelines.keyRules.map((rule, idx) => (
                     <li key={idx} className="leading-relaxed">
                       {rule}
@@ -572,47 +548,47 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
             </div>
 
             {/* Stage 2: Understand the Selected Issue */}
-            <div className="rounded-2xl bg-slate-900/90 border border-purple-500/30 p-6 space-y-4 shadow-xl">
-              <div className="flex items-center justify-between border-b border-white/5 pb-3">
+            <div className="rounded-xl bg-surface border border-hairline p-5 space-y-3">
+              <div className="flex items-center justify-between border-b border-hairline pb-2.5">
                 <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-purple-500/15 border border-purple-500/30 text-purple-300 flex items-center justify-center text-xs font-bold">
+                  <span className="w-5 h-5 rounded-[4px] bg-surface-2 border border-hairline text-[#0070E0] flex items-center justify-center text-[11px] font-mono font-medium">
                     2
                   </span>
-                  <h3 className="text-base font-bold text-white">
+                  <h3 className="text-[14px] font-medium text-ink-strong">
                     {roadmap.stages.understandIssue.title}
                   </h3>
                 </div>
-                <span className="text-[11px] font-semibold text-purple-300 bg-purple-950/40 px-2 py-0.5 rounded border border-purple-500/20">
+                <span className="badge-71 text-[10px]">
                   Problem Translation
                 </span>
               </div>
 
-              <div className="space-y-3">
-                <div className="rounded-xl bg-[#080d1a] border border-white/5 p-4 space-y-1">
-                  <span className="text-[11px] font-bold text-purple-400 uppercase tracking-wider block">
+              <div className="space-y-2.5">
+                <div className="rounded-lg bg-surface-2 border border-hairline p-3.5 space-y-1">
+                  <span className="text-[11px] font-medium text-[#0070E0] uppercase tracking-wider block">
                     Plain-English Summary:
                   </span>
-                  <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                  <p className="text-[13px] text-ink leading-relaxed">
                     {roadmap.stages.understandIssue.plainEnglishSummary}
                   </p>
                 </div>
 
-                <div className="rounded-xl bg-[#080d1a] border border-white/5 p-4 space-y-1">
-                  <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider block">
+                <div className="rounded-lg bg-surface-2 border border-hairline p-3.5 space-y-1">
+                  <span className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block">
                     Expected Behavior vs Current State:
                   </span>
-                  <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                  <p className="text-[13px] text-ink leading-relaxed">
                     {roadmap.stages.understandIssue.expectedBehavior}
                   </p>
                 </div>
 
                 {roadmap.stages.understandIssue.potentialTraps.length > 0 && (
-                  <div className="rounded-xl bg-amber-950/20 border border-amber-500/25 p-3.5 space-y-1.5">
-                    <span className="text-[11px] font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-                      <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
+                  <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 p-3 space-y-1">
+                    <span className="text-[11px] font-medium text-amber-700 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                      <AlertTriangle className="w-3.5 h-3.5" />
                       Potential Traps / Misunderstandings to Avoid:
                     </span>
-                    <ul className="space-y-1 text-xs text-amber-100 list-disc list-inside">
+                    <ul className="space-y-1 text-[12px] text-amber-700 dark:text-amber-200 list-disc list-inside">
                       {roadmap.stages.understandIssue.potentialTraps.map((trap, idx) => (
                         <li key={idx} className="leading-relaxed">
                           {trap}
@@ -625,39 +601,39 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
             </div>
 
             {/* Stage 3: Likely Files or Areas to Investigate */}
-            <div className="rounded-2xl bg-slate-900/90 border border-cyan-500/30 p-6 space-y-4 shadow-xl">
-              <div className="flex items-center justify-between border-b border-white/5 pb-3">
+            <div className="rounded-xl bg-surface border border-hairline p-5 space-y-3">
+              <div className="flex items-center justify-between border-b border-hairline pb-2.5">
                 <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 flex items-center justify-center text-xs font-bold">
+                  <span className="w-5 h-5 rounded-[4px] bg-surface-2 border border-hairline text-[#0070E0] flex items-center justify-center text-[11px] font-mono font-medium">
                     3
                   </span>
-                  <h3 className="text-base font-bold text-white">
+                  <h3 className="text-[14px] font-medium text-ink-strong">
                     {roadmap.stages.areasToInvestigate.title}
                   </h3>
                 </div>
-                <span className="text-[11px] font-semibold text-cyan-300 bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-500/20">
+                <span className="badge-71 text-[10px]">
                   Architectural Hypotheses
                 </span>
               </div>
 
-              {/* Mandatory Grounding Disclaimer (Requirement 6) */}
-              <div className="rounded-xl bg-indigo-950/40 border border-indigo-500/30 p-3.5 text-xs text-indigo-200 flex items-start gap-2.5">
-                <Info className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+              {/* Grounding Disclaimer */}
+              <div className="rounded-lg bg-surface-2 border border-hairline p-3 text-[12px] text-ink-subtle flex items-start gap-2">
+                <Info className="w-3.5 h-3.5 text-[#0070E0] shrink-0 mt-0.5" />
                 <p className="leading-relaxed">
-                  <strong>Notice:</strong> {roadmap.stages.areasToInvestigate.disclaimer || 'These areas are architectural recommendations based on repository conventions. Always verify internal file paths in your local checkout.'}
+                  <strong className="text-ink font-medium">Notice:</strong> {roadmap.stages.areasToInvestigate.disclaimer || 'These areas are architectural recommendations based on repository conventions. Always verify internal file paths in your local checkout.'}
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {roadmap.stages.areasToInvestigate.recommendedAreas.map((rec, idx) => (
                   <div
                     key={idx}
-                    className="rounded-xl bg-[#080d1a] border border-white/5 p-4 space-y-1.5"
+                    className="rounded-lg bg-surface-2 border border-hairline p-3.5 space-y-1"
                   >
-                    <span className="text-xs font-mono font-bold text-cyan-300 block">
+                    <span className="text-[12px] font-mono font-medium text-[#0070E0] block">
                       📁 {rec.area}
                     </span>
-                    <p className="text-xs text-slate-300 leading-relaxed">
+                    <p className="text-[12px] text-ink-subtle leading-relaxed">
                       {rec.why}
                     </p>
                   </div>
@@ -666,33 +642,33 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
             </div>
 
             {/* Stage 4: Task Breakdown */}
-            <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-6 space-y-4 shadow-xl">
-              <div className="flex items-center justify-between border-b border-white/5 pb-3">
+            <div className="rounded-xl bg-surface border border-hairline p-5 space-y-3">
+              <div className="flex items-center justify-between border-b border-hairline pb-2.5">
                 <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-purple-500/15 border border-purple-500/30 text-purple-300 flex items-center justify-center text-xs font-bold">
+                  <span className="w-5 h-5 rounded-[4px] bg-surface-2 border border-hairline text-[#0070E0] flex items-center justify-center text-[11px] font-mono font-medium">
                     4
                   </span>
-                  <h3 className="text-base font-bold text-white">
+                  <h3 className="text-[14px] font-medium text-ink-strong">
                     {roadmap.stages.taskBreakdown.title}
                   </h3>
                 </div>
-                <span className="text-[11px] font-semibold text-purple-300 bg-purple-950/40 px-2 py-0.5 rounded border border-purple-500/20">
+                <span className="badge-71 text-[10px]">
                   Micro-Milestones
                 </span>
               </div>
 
-              <div className="space-y-2.5">
+              <div className="space-y-2">
                 {roadmap.stages.taskBreakdown.tasks.map((task, idx) => (
                   <div
                     key={task.id || idx}
-                    className="rounded-xl bg-[#080d1a] border border-white/5 p-3.5 flex items-start gap-3"
+                    className="rounded-lg bg-surface-2 border border-hairline p-3 flex items-start gap-2.5"
                   >
-                    <div className="w-6 h-6 rounded-full bg-slate-800 text-slate-300 border border-white/10 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                    <div className="w-5 h-5 rounded-[4px] bg-surface border border-hairline text-ink-subtle flex items-center justify-center text-[11px] font-mono font-medium shrink-0 mt-0.5">
                       {idx + 1}
                     </div>
-                    <div className="space-y-1 flex-1">
-                      <h4 className="text-xs sm:text-sm font-bold text-white">{task.task}</h4>
-                      <p className="text-xs text-slate-300 leading-relaxed">{task.details}</p>
+                    <div className="space-y-0.5 flex-1">
+                      <h4 className="text-[13px] font-medium text-ink-strong">{task.task}</h4>
+                      <p className="text-[12px] text-ink-subtle leading-relaxed">{task.details}</p>
                     </div>
                   </div>
                 ))}
@@ -700,42 +676,42 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
             </div>
 
             {/* Stage 5: Testing Strategy */}
-            <div className="rounded-2xl bg-slate-900/90 border border-emerald-500/30 p-6 space-y-4 shadow-xl">
-              <div className="flex items-center justify-between border-b border-white/5 pb-3">
+            <div className="rounded-xl bg-surface border border-hairline p-5 space-y-3">
+              <div className="flex items-center justify-between border-b border-hairline pb-2.5">
                 <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 flex items-center justify-center text-xs font-bold">
+                  <span className="w-5 h-5 rounded-[4px] bg-surface-2 border border-hairline text-[#0070E0] flex items-center justify-center text-[11px] font-mono font-medium">
                     5
                   </span>
-                  <h3 className="text-base font-bold text-white">
+                  <h3 className="text-[14px] font-medium text-ink-strong">
                     {roadmap.stages.testingStrategy.title}
                   </h3>
                 </div>
-                <span className="text-[11px] font-semibold text-emerald-300 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-500/20">
+                <span className="badge-71 text-[10px]">
                   Verification & QA
                 </span>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {roadmap.stages.testingStrategy.testCommands.length > 0 && (
                   <div className="space-y-1.5">
-                    <span className="text-xs font-bold text-slate-300 uppercase tracking-wider block">
+                    <span className="text-[11px] font-medium text-ink-strong uppercase tracking-wider block">
                       Recommended Test Commands:
                     </span>
                     <div className="space-y-1.5">
                       {roadmap.stages.testingStrategy.testCommands.map((cmd, idx) => (
                         <div
                           key={idx}
-                          className="rounded-xl bg-[#060a14] border border-white/10 p-3 font-mono text-xs text-cyan-300 flex items-center justify-between"
+                          className="rounded-[8px] bg-surface-2 border border-hairline p-2.5 font-mono text-[12px] text-[#0070E0] flex items-center justify-between"
                         >
                           <code>{cmd}</code>
                           <button
                             type="button"
                             onClick={() => handleCopy(cmd, `test-cmd-${idx}`)}
-                            className="p-1 text-slate-400 hover:text-white"
+                            className="p-1 text-ink-subtle hover:text-ink cursor-pointer"
                             title="Copy command"
                           >
                             {copiedKey === `test-cmd-${idx}` ? (
-                              <Check className="w-3.5 h-3.5 text-emerald-400" />
+                              <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                             ) : (
                               <Copy className="w-3.5 h-3.5" />
                             )}
@@ -746,11 +722,11 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
                   </div>
                 )}
 
-                <div className="rounded-xl bg-[#080d1a] border border-white/5 p-4 space-y-2">
-                  <span className="text-[11px] font-bold text-slate-300 uppercase tracking-wider block">
+                <div className="rounded-lg bg-surface-2 border border-hairline p-3.5 space-y-1.5">
+                  <span className="text-[11px] font-medium text-ink-strong uppercase tracking-wider block">
                     Manual Verification Steps:
                   </span>
-                  <ul className="space-y-1 text-xs text-slate-300 list-disc list-inside">
+                  <ul className="space-y-1 text-[12px] text-ink-subtle list-disc list-inside">
                     {roadmap.stages.testingStrategy.manualSteps.map((step, idx) => (
                       <li key={idx} className="leading-relaxed">
                         {step}
@@ -759,49 +735,49 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
                   </ul>
                 </div>
 
-                <p className="text-xs text-slate-400 italic">
-                  <strong>How to avoid regressions:</strong> {roadmap.stages.testingStrategy.howToAvoidRegression}
+                <p className="text-[12px] text-ink-subtle italic">
+                  <strong className="text-ink font-medium">How to avoid regressions:</strong> {roadmap.stages.testingStrategy.howToAvoidRegression}
                 </p>
               </div>
             </div>
 
             {/* Stage 6: Git & Pull Request Workflow */}
-            <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-6 space-y-4 shadow-xl">
-              <div className="flex items-center justify-between border-b border-white/5 pb-3">
+            <div className="rounded-xl bg-surface border border-hairline p-5 space-y-3">
+              <div className="flex items-center justify-between border-b border-hairline pb-2.5">
                 <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 flex items-center justify-center text-xs font-bold">
+                  <span className="w-5 h-5 rounded-[4px] bg-surface-2 border border-hairline text-[#0070E0] flex items-center justify-center text-[11px] font-mono font-medium">
                     6
                   </span>
-                  <h3 className="text-base font-bold text-white">
+                  <h3 className="text-[14px] font-medium text-ink-strong">
                     {roadmap.stages.gitAndPrWorkflow.title}
                   </h3>
                 </div>
-                <span className="text-[11px] font-semibold text-cyan-300 bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-500/20">
+                <span className="badge-71 text-[10px]">
                   Branch, Commit & PR
                 </span>
               </div>
 
               {/* Exact Git Commands */}
-              <div className="space-y-2.5">
-                <span className="text-xs font-bold text-slate-300 uppercase tracking-wider block">
+              <div className="space-y-2">
+                <span className="text-[11px] font-medium text-ink-strong uppercase tracking-wider block">
                   Terminal Commands for this PR:
                 </span>
                 {roadmap.stages.gitAndPrWorkflow.commands.map((cmdItem, idx) => (
                   <div
                     key={idx}
-                    className="rounded-xl bg-[#060a14] border border-white/10 p-3 space-y-1.5"
+                    className="rounded-[8px] bg-surface-2 border border-hairline p-2.5 space-y-1"
                   >
                     <div className="flex items-center justify-between gap-2">
-                      <code className="text-xs font-mono text-cyan-300">{cmdItem.cmd}</code>
+                      <code className="text-[12px] font-mono text-[#0070E0] font-medium">{cmdItem.cmd}</code>
                       <button
                         type="button"
                         onClick={() => handleCopy(cmdItem.cmd, `workflow-cmd-${idx}`)}
-                        className="px-2 py-0.5 rounded bg-slate-800 text-xs text-slate-300 hover:text-white border border-white/10"
+                        className="px-2 py-0.5 rounded-[4px] bg-surface text-[11px] font-mono text-ink-subtle hover:text-ink border border-hairline cursor-pointer"
                       >
                         {copiedKey === `workflow-cmd-${idx}` ? 'Copied' : 'Copy'}
                       </button>
                     </div>
-                    <p className="text-[11px] text-slate-400">
+                    <p className="text-[11px] text-ink-subtle">
                       💡 {cmdItem.purpose}
                     </p>
                   </div>
@@ -809,9 +785,9 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
               </div>
 
               {/* Suggested PR Template */}
-              <div className="rounded-xl bg-[#080d1a] border border-white/5 p-4 space-y-3">
+              <div className="rounded-lg bg-surface-2 border border-hairline p-3.5 space-y-2.5">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  <span className="text-[11px] font-medium text-ink-strong uppercase tracking-wider">
                     Recommended PR Title & Description
                   </span>
                   <button
@@ -822,19 +798,19 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
                         'roadmap-pr'
                       )
                     }
-                    className="flex items-center gap-1 text-xs text-cyan-300 hover:text-white px-2 py-1 rounded bg-slate-800 border border-white/10"
+                    className="btn-secondary h-7 px-2.5 rounded-[8px] text-[12px] flex items-center gap-1 cursor-pointer"
                   >
-                    {copiedKey === 'roadmap-pr' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedKey === 'roadmap-pr' ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>Copy PR Markdown</span>
                   </button>
                 </div>
 
-                <div className="font-mono text-xs text-cyan-300 bg-black/40 p-2.5 rounded-lg border border-white/5">
-                  <span className="text-slate-500">Title: </span>
+                <div className="font-mono text-[12px] text-ink bg-surface p-2.5 rounded-[6px] border border-hairline">
+                  <span className="text-ink-subtle">Title: </span>
                   {roadmap.stages.gitAndPrWorkflow.suggestedPrTitle}
                 </div>
 
-                <pre className="text-xs font-mono text-slate-300 bg-black/40 p-3 rounded-lg border border-white/5 overflow-x-auto whitespace-pre-wrap leading-relaxed">
+                <pre className="text-[12px] font-mono text-ink bg-surface p-3 rounded-[6px] border border-hairline overflow-x-auto whitespace-pre-wrap leading-relaxed">
                   <code>{roadmap.stages.gitAndPrWorkflow.suggestedPrBody}</code>
                 </pre>
               </div>

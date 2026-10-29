@@ -186,29 +186,31 @@ export const IssueHelperView: React.FC<IssueHelperViewProps> = ({
     : 0;
 
   return (
-    <div className="space-y-8 pb-16">
+    <div className="space-y-6 pb-16">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-hairline pb-5">
         <div>
-          <div className="inline-flex items-center gap-1.5 text-purple-400 text-xs font-semibold uppercase tracking-wider mb-1">
-            <Sparkles className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-1.5 text-ink-subtle text-[12px] font-medium uppercase tracking-wider mb-1">
+            <Sparkles className="w-3.5 h-3.5 text-[#0070E0]" />
             Issue Deconstruction & Mentorship
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">GitHub Issue Helper</h2>
-          <p className="text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed">
+          <h2 className="text-2xl sm:text-3xl font-normal text-ink-strong tracking-tight">
+            GitHub Issue Helper <span className="text-ink-subtle">· Contributor Blueprint</span>
+          </h2>
+          <p className="text-[13px] text-ink-subtle mt-1 max-w-2xl leading-relaxed">
             Paste any GitHub issue title and description to receive an understandable summary, required skills, investigation checklist, and a ready-to-use PR template.
           </p>
         </div>
 
         {/* Demo Issue Pills */}
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs text-slate-400 font-medium">Sample Issues:</span>
+          <span className="text-[12px] text-ink-subtle font-medium">Sample Issues:</span>
           {DEMO_ISSUES.map((demo, idx) => (
             <button
               key={idx}
               type="button"
               onClick={() => handleLoadDemo(demo)}
-              className="px-2.5 py-1 rounded-lg bg-slate-900 border border-white/10 hover:border-purple-500/40 text-slate-300 hover:text-white text-xs font-medium transition-colors cursor-pointer"
+              className="btn-secondary h-7 px-2.5 rounded-[8px] text-[12px] cursor-pointer"
             >
               Issue #{idx + 1}
             </button>
@@ -217,13 +219,13 @@ export const IssueHelperView: React.FC<IssueHelperViewProps> = ({
       </div>
 
       {/* Main Grid Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Input Form */}
         <div className="lg:col-span-5 space-y-4">
-          <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-5 shadow-xl space-y-4">
+          <div className="rounded-xl bg-surface border border-hairline p-5 space-y-3.5">
             {/* Issue Title Input */}
             <div>
-              <label htmlFor="issue-title" className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label htmlFor="issue-title" className="block text-[12px] font-medium text-ink-strong mb-1.5">
                 GitHub Issue Title:
               </label>
               <input
@@ -232,18 +234,18 @@ export const IssueHelperView: React.FC<IssueHelperViewProps> = ({
                 value={issueTitle}
                 onChange={(e) => setIssueTitle(e.target.value)}
                 placeholder="e.g. Bug: Search modal does not close when pressing ESC"
-                className="w-full bg-[#080d1a] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-cyan-200 placeholder:text-slate-600 focus:outline-none focus:border-purple-500 font-medium"
+                className="input-71 text-[13px]"
               />
             </div>
 
             {/* Optional GitHub Issue URL Field */}
             <div>
-              <label htmlFor="issue-url" className="flex items-center justify-between text-xs font-semibold text-slate-300 mb-1.5">
+              <label htmlFor="issue-url" className="flex items-center justify-between text-[12px] font-medium text-ink-strong mb-1.5">
                 <span className="flex items-center gap-1.5">
-                  <Link className="w-3.5 h-3.5 text-cyan-400" />
+                  <Link className="w-3.5 h-3.5 text-[#0070E0]" />
                   GitHub Issue URL (optional):
                 </span>
-                <span className="text-[11px] font-normal text-slate-500">Links to GitHub</span>
+                <span className="text-[11px] font-normal text-ink-subtle">Links to GitHub</span>
               </label>
               <div className="relative">
                 <input
@@ -252,14 +254,14 @@ export const IssueHelperView: React.FC<IssueHelperViewProps> = ({
                   value={issueUrl}
                   onChange={(e) => setIssueUrl(e.target.value)}
                   placeholder="https://github.com/owner/repo/issues/123"
-                  className="w-full bg-[#080d1a] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-cyan-500 font-mono"
+                  className="input-71 font-mono text-[12px] pr-8"
                 />
                 {issueUrl && issueUrl.startsWith('http') && (
                   <a
                     href={issueUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-cyan-400 hover:text-cyan-300 p-1"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#0070E0] hover:underline p-1"
                     title="Open issue on GitHub"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -270,7 +272,7 @@ export const IssueHelperView: React.FC<IssueHelperViewProps> = ({
 
             {/* Optional Repo Context */}
             <div>
-              <label htmlFor="repo-stack" className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label htmlFor="repo-stack" className="block text-[12px] font-medium text-ink-strong mb-1.5">
                 Repository Tech Stack / Context (optional):
               </label>
               <input
@@ -279,17 +281,17 @@ export const IssueHelperView: React.FC<IssueHelperViewProps> = ({
                 value={repoContext}
                 onChange={(e) => setRepoContext(e.target.value)}
                 placeholder="e.g. Next.js 14, Tailwind CSS, TypeScript"
-                className="w-full bg-[#080d1a] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-cyan-500"
+                className="input-71 text-[12px]"
               />
             </div>
 
             {/* Issue Description Textarea */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label htmlFor="issue-desc" className="text-xs font-semibold text-slate-300">
+                <label htmlFor="issue-desc" className="text-[12px] font-medium text-ink-strong">
                   Issue Description (Markdown / Text):
                 </label>
-                <span className="text-[11px] text-slate-500 font-mono">
+                <span className="text-[11px] text-ink-subtle font-mono tabular-nums">
                   {issueBody.length} characters
                 </span>
               </div>
@@ -299,13 +301,13 @@ export const IssueHelperView: React.FC<IssueHelperViewProps> = ({
                 onChange={(e) => setIssueBody(e.target.value)}
                 placeholder="Paste the GitHub issue markdown or text here..."
                 rows={12}
-                className="w-full bg-[#080d1a] border border-white/10 rounded-xl p-3.5 text-xs sm:text-sm font-mono text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-purple-500 resize-y leading-relaxed"
+                className="w-full bg-surface-2 border border-hairline rounded-lg p-3 text-xs font-mono text-ink placeholder:text-ink-subtle focus:outline-none focus:border-[#0070E0] resize-y leading-relaxed"
               />
             </div>
 
             {/* Action Button: "Analyze Issue" */}
-            <div className="pt-2 flex items-center justify-between gap-3 border-t border-white/10">
-              <span className="text-[11px] text-slate-400 hidden sm:inline">
+            <div className="pt-2 flex items-center justify-between gap-3 border-t border-hairline">
+              <span className="text-[11px] text-ink-subtle hidden sm:inline">
                 Analyzed via server-side Gemini
               </span>
 
@@ -313,16 +315,16 @@ export const IssueHelperView: React.FC<IssueHelperViewProps> = ({
                 type="button"
                 onClick={handleAnalyzeIssue}
                 disabled={loading}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white font-semibold text-sm shadow-lg shadow-purple-600/30 hover:shadow-cyan-600/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
+                className="btn-primary h-9 px-5 rounded-[10px] text-[13px] font-medium w-full sm:w-auto flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 {loading ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     <span>Analyzing Issue...</span>
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-4 h-4 text-cyan-200" />
+                    <Sparkles className="w-3.5 h-3.5" />
                     <span>Analyze Issue</span>
                   </>
                 )}
@@ -332,11 +334,11 @@ export const IssueHelperView: React.FC<IssueHelperViewProps> = ({
 
           {/* Error Banner */}
           {error && (
-            <div className="rounded-xl bg-red-950/40 border border-red-500/40 p-4 text-red-200 text-xs sm:text-sm flex items-start gap-3 animate-fadeIn">
-              <AlertTriangle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <p className="font-semibold text-red-300">Analysis Failed</p>
-                <p className="text-slate-300">{error}</p>
+            <div className="rounded-lg bg-red-500/10 border border-red-500/20 p-4 text-red-600 dark:text-red-400 text-[13px] flex items-start gap-2.5">
+              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+              <div className="space-y-0.5">
+                <p className="font-medium text-red-700 dark:text-red-300">Analysis Failed</p>
+                <p className="text-ink-subtle">{error}</p>
               </div>
             </div>
           )}
@@ -345,18 +347,18 @@ export const IssueHelperView: React.FC<IssueHelperViewProps> = ({
         {/* Right Column: Results Display */}
         <div className="lg:col-span-7 space-y-4">
           {!result && !loading && (
-            <div className="rounded-2xl bg-slate-900/60 border border-dashed border-white/15 p-10 text-center flex flex-col items-center justify-center min-h-[480px]">
-              <div className="w-16 h-16 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-4">
-                <FileCode2 className="w-8 h-8" />
+            <div className="rounded-xl bg-surface border border-dashed border-hairline p-10 text-center flex flex-col items-center justify-center min-h-[480px]">
+              <div className="w-12 h-12 rounded-[10px] bg-surface-2 border border-hairline flex items-center justify-center text-ink-subtle mb-3">
+                <FileCode2 className="w-6 h-6 text-[#0070E0]" />
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">No Issue Analyzed Yet</h3>
-              <p className="text-sm text-slate-400 max-w-sm leading-relaxed mb-6">
+              <h3 className="text-[15px] font-medium text-ink-strong mb-1">No Issue Analyzed Yet</h3>
+              <p className="text-[12px] text-ink-subtle max-w-sm leading-relaxed mb-4">
                 Paste any GitHub issue title and description on the left, then click <strong>"Analyze Issue"</strong> to receive an actionable contributor blueprint.
               </p>
               <button
                 type="button"
                 onClick={handleAnalyzeIssue}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-semibold border border-white/10 transition-colors cursor-pointer"
+                className="btn-secondary h-8 px-3 rounded-[10px] text-[12px] cursor-pointer"
               >
                 Analyze Current Sample Issue &rarr;
               </button>
@@ -364,47 +366,37 @@ export const IssueHelperView: React.FC<IssueHelperViewProps> = ({
           )}
 
           {loading && (
-            <div className="rounded-2xl bg-slate-900/60 border border-white/10 p-10 text-center flex flex-col items-center justify-center min-h-[480px] space-y-4">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-500 to-cyan-500 animate-spin flex items-center justify-center p-[2px]">
-                <div className="w-full h-full bg-[#070a13] rounded-[14px]" />
-              </div>
-              <h3 className="text-base font-bold text-white">Deconstructing GitHub Issue...</h3>
-              <p className="text-xs text-slate-400 max-w-xs leading-relaxed">
+            <div className="rounded-xl bg-surface border border-hairline p-10 text-center flex flex-col items-center justify-center min-h-[480px] space-y-3">
+              <div className="w-10 h-10 border-2 border-[#0070E0] border-t-transparent rounded-full animate-spin" />
+              <h3 className="text-[14px] font-medium text-ink-strong">Deconstructing GitHub Issue...</h3>
+              <p className="text-[12px] text-ink-subtle max-w-xs leading-relaxed">
                 Analyzing the problem, identifying required skills, formulating pre-investigation questions, and building your step-by-step checklist.
               </p>
             </div>
           )}
 
           {result && !loading && (
-            <div className="space-y-4 animate-fadeIn">
-              {/* Mandatory AI Verification Disclaimer Callout (Requirement 10) */}
-              <div className="rounded-xl bg-indigo-950/40 border border-indigo-500/30 p-3.5 flex items-start gap-3 text-xs text-indigo-200">
-                <Info className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+            <div className="space-y-3.5">
+              {/* Mandatory AI Verification Disclaimer Callout */}
+              <div className="rounded-lg bg-surface-2 border border-hairline p-3 flex items-start gap-2.5 text-[12px] text-ink-subtle">
+                <Info className="w-3.5 h-3.5 text-[#0070E0] shrink-0 mt-0.5" />
                 <p className="leading-relaxed">
-                  <strong>Notice:</strong> Suggested solutions are AI-generated based on the issue description provided and have not been verified against the actual repository code unless its contents have been directly retrieved. Always verify against the target codebase before submitting a PR.
+                  <strong className="text-ink font-medium">Notice:</strong> Suggested solutions are AI-generated based on the issue description provided and have not been verified against the actual repository code unless its contents have been directly retrieved. Always verify against the target codebase before submitting a PR.
                 </p>
               </div>
 
               {/* 1. Problem in Plain English & Overview Card */}
-              <div className="rounded-2xl bg-slate-900/90 border border-purple-500/30 p-5 shadow-lg space-y-4">
+              <div className="rounded-xl bg-surface border border-hairline p-5 space-y-3.5">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-purple-400 shadow-sm shadow-purple-400" />
-                    <h3 className="text-sm font-bold text-white tracking-wide uppercase">
+                    <span className="w-2 h-2 rounded-full bg-[#0070E0]" />
+                    <h3 className="text-[12px] font-medium text-ink-strong tracking-wide uppercase">
                       Problem in Plain English
                     </h3>
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <span
-                      className={`text-xs font-bold px-2.5 py-0.5 rounded-full border ${
-                        result.difficultyLevel.toLowerCase().includes('beginner')
-                          ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
-                          : result.difficultyLevel.toLowerCase().includes('intermediate')
-                          ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
-                          : 'bg-rose-500/15 text-rose-300 border-rose-500/30'
-                      }`}
-                    >
+                    <span className="badge-71 text-[10px]">
                       {result.difficultyLevel}
                     </span>
 
@@ -412,16 +404,16 @@ export const IssueHelperView: React.FC<IssueHelperViewProps> = ({
                       <button
                         type="button"
                         onClick={handleSaveToDashboard}
-                        className="flex items-center gap-1 px-2.5 py-0.5 text-xs rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 border border-white/10 transition-colors cursor-pointer"
+                        className="btn-secondary h-7 px-2.5 rounded-[8px] text-[11px] flex items-center gap-1 cursor-pointer"
                       >
                         {saved ? (
                           <>
-                            <BookmarkCheck className="w-3.5 h-3.5 text-emerald-400" />
-                            <span className="text-emerald-400">Saved</span>
+                            <BookmarkCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                            <span className="text-emerald-600 dark:text-emerald-400">Saved</span>
                           </>
                         ) : (
                           <>
-                            <BookmarkPlus className="w-3.5 h-3.5 text-cyan-400" />
+                            <BookmarkPlus className="w-3 h-3 text-[#0070E0]" />
                             <span>Save to Dashboard</span>
                           </>
                         )}
@@ -430,35 +422,35 @@ export const IssueHelperView: React.FC<IssueHelperViewProps> = ({
                   </div>
                 </div>
 
-                <p className="text-sm text-slate-200 leading-relaxed font-sans">
+                <p className="text-[13px] text-ink leading-relaxed">
                   {result.plainEnglishProblem}
                 </p>
 
-                <p className="text-xs text-slate-400 italic">
-                  <strong>Difficulty rationale:</strong> {result.difficultyReason}
+                <p className="text-[12px] text-ink-subtle italic">
+                  <strong className="text-ink font-medium">Difficulty rationale:</strong> {result.difficultyReason}
                 </p>
 
-                {/* Likely Language, Skills & Concepts (Requirement 6) */}
-                <div className="pt-3 border-t border-white/5 space-y-3">
+                {/* Likely Language, Skills & Concepts */}
+                <div className="pt-2.5 border-t border-hairline space-y-2.5">
                   {result.likelyLanguage && (
-                    <div className="flex items-center gap-2 text-xs">
-                      <span className="font-semibold text-slate-400 flex items-center gap-1">
-                        <Code2 className="w-3.5 h-3.5 text-cyan-400" />
+                    <div className="flex items-center gap-2 text-[12px]">
+                      <span className="font-medium text-ink-subtle flex items-center gap-1">
+                        <Code2 className="w-3.5 h-3.5 text-[#0070E0]" />
                         Likely Language / Stack:
                       </span>
-                      <span className="font-mono text-cyan-300 bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-500/20 font-bold">
+                      <span className="font-mono text-[#0070E0] bg-surface-2 px-2 py-0.5 rounded-[4px] border border-hairline font-medium text-[11px]">
                         {result.likelyLanguage}
                       </span>
                     </div>
                   )}
 
                   {result.relevantSkills && result.relevantSkills.length > 0 && (
-                    <div className="flex flex-wrap items-center gap-1.5 text-xs">
-                      <span className="text-slate-400 font-semibold mr-1">Relevant Skills:</span>
+                    <div className="flex flex-wrap items-center gap-1.5 text-[12px]">
+                      <span className="text-ink-subtle font-medium mr-1">Relevant Skills:</span>
                       {result.relevantSkills.map((skill, i) => (
                         <span
                           key={i}
-                          className="px-2 py-0.5 rounded-md bg-purple-500/15 text-purple-300 border border-purple-500/30 text-[11px] font-medium"
+                          className="badge-71 text-[10px]"
                         >
                           {skill}
                         </span>
@@ -467,12 +459,12 @@ export const IssueHelperView: React.FC<IssueHelperViewProps> = ({
                   )}
 
                   {result.importantConcepts && result.importantConcepts.length > 0 && (
-                    <div className="flex flex-wrap items-center gap-1.5 text-xs">
-                      <span className="text-slate-400 font-semibold mr-1">Important Concepts:</span>
+                    <div className="flex flex-wrap items-center gap-1.5 text-[12px]">
+                      <span className="text-ink-subtle font-medium mr-1">Important Concepts:</span>
                       {result.importantConcepts.map((concept, i) => (
                         <span
                           key={i}
-                          className="px-2 py-0.5 rounded-md bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 text-[11px] font-medium"
+                          className="badge-71 text-[10px]"
                         >
                           {concept}
                         </span>
@@ -482,25 +474,25 @@ export const IssueHelperView: React.FC<IssueHelperViewProps> = ({
                 </div>
               </div>
 
-              {/* 2. Questions to Investigate Before Changing Code (Requirement 9) */}
+              {/* 2. Questions to Investigate Before Changing Code */}
               {result.preInvestigationQuestions && result.preInvestigationQuestions.length > 0 && (
-                <div className="rounded-2xl bg-slate-900/90 border border-amber-500/30 p-5 shadow-lg space-y-3">
+                <div className="rounded-xl bg-surface border border-hairline p-5 space-y-3">
                   <div className="flex items-center gap-2">
-                    <Search className="w-4 h-4 text-amber-400" />
-                    <h3 className="text-sm font-bold text-white tracking-wide uppercase">
+                    <Search className="w-4 h-4 text-amber-500" />
+                    <h3 className="text-[12px] font-medium text-ink-strong tracking-wide uppercase">
                       Questions to Investigate Before Changing Code
                     </h3>
                   </div>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-[12px] text-ink-subtle">
                     Maintainers recommend checking these details in the codebase first so you don't break existing logic:
                   </p>
-                  <ul className="space-y-2">
+                  <ul className="space-y-1.5">
                     {result.preInvestigationQuestions.map((q, idx) => (
                       <li
                         key={idx}
-                        className="rounded-xl bg-[#080d1a] border border-amber-500/15 p-3 flex items-start gap-2.5 text-xs text-amber-100"
+                        className="rounded-lg bg-surface-2 border border-hairline p-2.5 flex items-start gap-2 text-[12px] text-ink"
                       >
-                        <HelpCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                        <HelpCircle className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
                         <span className="leading-relaxed">{q}</span>
                       </li>
                     ))}
@@ -508,48 +500,48 @@ export const IssueHelperView: React.FC<IssueHelperViewProps> = ({
                 </div>
               )}
 
-              {/* 3. Interactive Checklist for Users to Tick Off (Requirement 8) */}
+              {/* 3. Interactive Checklist for Users to Tick Off */}
               {result.checklist && result.checklist.length > 0 && (
-                <div className="rounded-2xl bg-slate-900/90 border border-emerald-500/30 p-5 shadow-lg space-y-4">
+                <div className="rounded-xl bg-surface border border-hairline p-5 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <CheckSquare className="w-4 h-4 text-emerald-400" />
-                      <h3 className="text-sm font-bold text-white tracking-wide uppercase">
+                      <CheckSquare className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                      <h3 className="text-[12px] font-medium text-ink-strong tracking-wide uppercase">
                         Interactive Contributor Checklist
                       </h3>
                     </div>
-                    <span className="text-xs font-bold text-emerald-400">
+                    <span className="text-[12px] font-mono font-medium text-[#0070E0] tabular-nums">
                       {completedChecklistItems}/{totalChecklistItems} ({checklistProgressPct}%)
                     </span>
                   </div>
 
                   {/* Progress bar */}
-                  <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden border border-white/5">
+                  <div className="w-full h-1.5 bg-surface-2 rounded-full overflow-hidden border border-hairline">
                     <div
-                      className="h-full bg-gradient-to-r from-emerald-500 to-cyan-400 transition-all duration-300"
+                      className="h-full bg-[#0070E0] transition-all duration-300"
                       style={{ width: `${checklistProgressPct}%` }}
                     />
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     {result.checklist.map((task, idx) => {
                       const isDone = Boolean(checkedTasks[idx]);
                       return (
                         <div
                           key={idx}
                           onClick={() => toggleTask(idx)}
-                          className={`p-3 rounded-xl border flex items-center gap-3 transition-all cursor-pointer select-none ${
+                          className={`h-10 px-3 rounded-[8px] border flex items-center gap-2.5 text-[12px] transition-colors cursor-pointer select-none ${
                             isDone
-                              ? 'bg-emerald-950/25 border-emerald-500/40 text-slate-200'
-                              : 'bg-[#080d1a] border-white/5 text-slate-300 hover:border-white/20'
+                              ? 'bg-surface-2 border-hairline text-ink-subtle'
+                              : 'bg-surface border-hairline text-ink hover:border-hairline-strong'
                           }`}
                         >
                           {isDone ? (
-                            <CheckSquare className="w-4 h-4 text-emerald-400 shrink-0" />
+                            <CheckSquare className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                           ) : (
-                            <Square className="w-4 h-4 text-slate-500 shrink-0" />
+                            <Square className="w-3.5 h-3.5 text-ink-subtle shrink-0" />
                           )}
-                          <span className={`text-xs leading-relaxed ${isDone ? 'line-through text-slate-400' : ''}`}>
+                          <span className={`truncate leading-relaxed ${isDone ? 'line-through text-ink-subtle' : ''}`}>
                             {task}
                           </span>
                         </div>
@@ -559,30 +551,30 @@ export const IssueHelperView: React.FC<IssueHelperViewProps> = ({
                 </div>
               )}
 
-              {/* 4. Step-by-Step Investigation & Resolution Plan (Requirement 7) */}
-              <div className="rounded-2xl bg-slate-900/90 border border-cyan-500/30 p-5 shadow-lg space-y-3">
-                <div className="flex items-center gap-2 mb-2">
-                  <ListOrdered className="w-4 h-4 text-cyan-400" />
-                  <h3 className="text-sm font-bold text-white tracking-wide uppercase">
+              {/* 4. Step-by-Step Investigation & Resolution Plan */}
+              <div className="rounded-xl bg-surface border border-hairline p-5 space-y-3">
+                <div className="flex items-center gap-2">
+                  <ListOrdered className="w-4 h-4 text-[#0070E0]" />
+                  <h3 className="text-[12px] font-medium text-ink-strong tracking-wide uppercase">
                     Step-by-Step Investigation & Resolution Plan
                   </h3>
                 </div>
 
-                <div className="space-y-2.5">
+                <div className="space-y-2">
                   {result.stepByStepPlan.map((step) => (
                     <div
                       key={step.stepNumber}
-                      className="rounded-xl bg-[#080d1a] border border-white/5 p-3.5 flex items-start gap-3 hover:border-cyan-500/30 transition-colors"
+                      className="rounded-lg bg-surface-2 border border-hairline p-3 flex items-start gap-2.5"
                     >
-                      <div className="w-6 h-6 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                      <div className="w-5 h-5 rounded-[4px] bg-surface border border-hairline text-[#0070E0] flex items-center justify-center text-[11px] font-mono font-medium shrink-0 mt-0.5">
                         {step.stepNumber}
                       </div>
-                      <div className="space-y-1 flex-1">
-                        <h4 className="text-xs sm:text-sm font-bold text-white">{step.title}</h4>
-                        <p className="text-xs text-slate-300 leading-relaxed">{step.action}</p>
+                      <div className="space-y-0.5 flex-1">
+                        <h4 className="text-[13px] font-medium text-ink-strong">{step.title}</h4>
+                        <p className="text-[12px] text-ink-subtle leading-relaxed">{step.action}</p>
                         {step.tips && (
-                          <div className="text-[11px] text-cyan-300/80 bg-cyan-950/30 px-2.5 py-1 rounded border border-cyan-500/15 mt-1.5 flex items-center gap-1.5">
-                            <Lightbulb className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                          <div className="text-[11px] text-[#0070E0] bg-surface px-2 py-0.5 rounded-[4px] border border-hairline mt-1 flex items-center gap-1.5">
+                            <Lightbulb className="w-3 h-3 text-[#0070E0] shrink-0" />
                             <span>Tip: {step.tips}</span>
                           </div>
                         )}
@@ -593,48 +585,48 @@ export const IssueHelperView: React.FC<IssueHelperViewProps> = ({
               </div>
 
               {/* 5. How to Test & Verify */}
-              <div className="rounded-2xl bg-slate-900/90 border border-emerald-500/30 p-5 shadow-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <h3 className="text-sm font-bold text-white tracking-wide uppercase">
+              <div className="rounded-xl bg-surface border border-hairline p-5 space-y-2">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <h3 className="text-[12px] font-medium text-ink-strong tracking-wide uppercase">
                     How to Test & Verify Before Submitting
                   </h3>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                <p className="text-[13px] text-ink leading-relaxed">
                   {result.howToVerify}
                 </p>
               </div>
 
               {/* 6. Ready-to-Use PR Template */}
-              <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-5 shadow-lg space-y-3">
+              <div className="rounded-xl bg-surface border border-hairline p-5 space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-white tracking-wide uppercase">
+                  <h3 className="text-[12px] font-medium text-ink-strong tracking-wide uppercase">
                     Recommended PR Title & Description
                   </h3>
                   <button
                     type="button"
                     onClick={() => handleCopy(`${result.samplePrTitle}\n\n${result.samplePrBody}`, 'pr-template')}
-                    className="text-xs text-slate-400 hover:text-cyan-300 flex items-center gap-1 transition-colors px-2.5 py-1 rounded-lg bg-slate-800 border border-white/10 cursor-pointer"
+                    className="btn-secondary h-7 px-2.5 rounded-[8px] text-[11px] flex items-center gap-1 cursor-pointer"
                   >
                     {copiedKey === 'pr-template' ? (
                       <>
-                        <Check className="w-3.5 h-3.5 text-emerald-400" />
-                        <span className="text-emerald-400">Copied Template</span>
+                        <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                        <span>Copied Template</span>
                       </>
                     ) : (
                       <>
-                        <Copy className="w-3.5 h-3.5" />
+                        <Copy className="w-3 h-3" />
                         <span>Copy PR Markdown</span>
                       </>
                     )}
                   </button>
                 </div>
 
-                <div className="bg-[#080d1a] border border-white/5 rounded-xl p-3 text-xs font-mono text-cyan-300">
-                  <span className="text-slate-500 select-none">Title: </span>{result.samplePrTitle}
+                <div className="bg-surface-2 border border-hairline rounded-[6px] p-2.5 text-[12px] font-mono text-ink">
+                  <span className="text-ink-subtle select-none">Title: </span>{result.samplePrTitle}
                 </div>
 
-                <pre className="p-3.5 rounded-xl bg-[#080d1a] border border-white/5 text-xs font-mono text-slate-300 overflow-x-auto whitespace-pre-wrap leading-relaxed">
+                <pre className="p-3 rounded-[6px] bg-surface-2 border border-hairline text-[12px] font-mono text-ink overflow-x-auto whitespace-pre-wrap leading-relaxed">
                   <code>{result.samplePrBody}</code>
                 </pre>
               </div>

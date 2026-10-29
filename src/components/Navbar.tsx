@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Code2,
   GitPullRequest,
@@ -6,10 +6,8 @@ import {
   AlertTriangle,
   Menu,
   X,
-  Sparkles,
   Layers,
   FileCode2,
-  HelpCircle,
   Lightbulb,
   MessageSquare,
   Trophy,
@@ -17,7 +15,10 @@ import {
   Map,
   GraduationCap,
   User,
-  Cloud
+  Cloud,
+  Sun,
+  Moon,
+  Sparkles
 } from 'lucide-react';
 import { ActiveTab, ServerStatus } from '../types.ts';
 import { useAuth } from '../context/AuthContext.tsx';
@@ -41,21 +42,42 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const { user, profile } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isDark, setIsDark] = useState(true);
+
+  useEffect(() => {
+    // Check initial theme from documentElement
+    const isDarkTheme = document.documentElement.classList.contains('dark');
+    setIsDark(isDarkTheme);
+  }, []);
+
+  const toggleTheme = () => {
+    const nextDark = !isDark;
+    setIsDark(nextDark);
+    if (nextDark) {
+      document.documentElement.classList.add('dark');
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('codebridge_theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.setAttribute('data-theme', 'light');
+      localStorage.setItem('codebridge_theme', 'light');
+    }
+  };
 
   const navItems: { id: ActiveTab; label: string; icon: React.ReactNode; badge?: string }[] = [
-    { id: 'dashboard', label: 'My Dashboard', icon: <Layers className="w-4 h-4" /> },
-    { id: 'learning-center', label: 'Learning Center', icon: <GraduationCap className="w-4 h-4" /> },
-    { id: 'explainer', label: 'Code Explainer', icon: <Code2 className="w-4 h-4" /> },
-    { id: 'issue-helper', label: 'Issue Helper', icon: <FileCode2 className="w-4 h-4" /> },
-    { id: 'pr-guide', label: 'PR Guide', icon: <GitPullRequest className="w-4 h-4" /> },
-    { id: 'idea-generator', label: 'Idea Generator', icon: <Lightbulb className="w-4 h-4" /> },
-    { id: 'repo-finder', label: 'Repo Finder', icon: <Compass className="w-4 h-4" /> },
-    { id: 'roadmap', label: 'Roadmap', icon: <Map className="w-4 h-4" /> },
-    { id: 'chat-mentor', label: 'Ask Mentor', icon: <MessageSquare className="w-4 h-4" /> },
+    { id: 'dashboard', label: 'Dashboard', icon: <Layers className="w-3.5 h-3.5" /> },
+    { id: 'learning-center', label: 'Learning Center', icon: <GraduationCap className="w-3.5 h-3.5" /> },
+    { id: 'explainer', label: 'Code Explainer', icon: <Code2 className="w-3.5 h-3.5" /> },
+    { id: 'issue-helper', label: 'Issue Helper', icon: <FileCode2 className="w-3.5 h-3.5" /> },
+    { id: 'pr-guide', label: 'PR Guide', icon: <GitPullRequest className="w-3.5 h-3.5" /> },
+    { id: 'idea-generator', label: 'Ideas', icon: <Lightbulb className="w-3.5 h-3.5" /> },
+    { id: 'repo-finder', label: 'Repositories', icon: <Compass className="w-3.5 h-3.5" /> },
+    { id: 'roadmap', label: 'Roadmap', icon: <Map className="w-3.5 h-3.5" /> },
+    { id: 'chat-mentor', label: 'Mentor AI', icon: <MessageSquare className="w-3.5 h-3.5" /> },
     {
       id: 'tracker',
-      label: 'My Tracker',
-      icon: <Trophy className="w-4 h-4" />,
+      label: 'Tracker',
+      icon: <Trophy className="w-3.5 h-3.5" />,
       badge: savedCount > 0 ? String(savedCount) : undefined,
     },
   ];
@@ -66,52 +88,47 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-[#070a13]/85 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 w-full border-b border-hairline bg-surface/90 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Brand */}
+        <div className="flex items-center justify-between h-14 sm:h-16 gap-3">
+          {/* Zone 1: 71UI Brand Wordmark */}
           <div
             onClick={() => handleNavClick('dashboard')}
-            className="flex items-center gap-3 cursor-pointer group shrink-0"
+            className="flex items-center gap-2.5 cursor-pointer shrink-0 group select-none"
           >
-            <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-cyan-400 p-[1px] shadow-lg shadow-purple-500/20 group-hover:shadow-purple-500/35 transition-all">
-              <div className="w-full h-full bg-[#070a13] rounded-[11px] flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-cyan-400 group-hover:scale-110 transition-transform" />
-              </div>
+            <div className="w-7 h-7 rounded-[8px] bg-[#0070E0] flex items-center justify-center text-white shadow-sm">
+              <Sparkles className="w-4 h-4" />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-lg sm:text-xl tracking-tight text-white font-sans">
-                  CodeBridge<span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">AI</span>
-                </span>
-                <span className="hidden sm:inline-flex items-center px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30">
-                  Hacktoberfest
-                </span>
-              </div>
-              <p className="hidden md:block text-[11px] text-slate-400 -mt-0.5">
-                Your AI Mentor for Open Source
-              </p>
+            <div className="flex items-center gap-2">
+              <span className="font-medium text-[16px] sm:text-[17px] text-ink-strong tracking-[-0.02em]">
+                CodeBridge <span className="text-[#0070E0]">AI</span>
+              </span>
+              <span className="hidden lg:inline-flex items-center h-5 px-1.5 rounded-[4px] text-[11px] font-mono text-ink-subtle bg-surface-2 border border-hairline">
+                Open Source
+              </span>
             </div>
           </div>
 
-          {/* Desktop Nav Links */}
-          <nav className="hidden xl:flex items-center gap-1 bg-slate-900/60 p-1.5 rounded-xl border border-white/5">
+          {/* Zone 2: 71UI 32px Nav Items with 10px Radius */}
+          <nav className="hidden xl:flex items-center gap-1 overflow-x-auto py-1">
             {navItems.map((item) => {
               const isActive = activeTab === item.id;
               return (
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 ${
+                  className={`h-8 px-2.5 rounded-[10px] text-[13px] font-medium inline-flex items-center gap-1.5 transition-all duration-150 whitespace-nowrap cursor-pointer ${
                     isActive
-                      ? 'bg-purple-600/30 text-cyan-300 border border-purple-500/40 shadow-sm shadow-purple-500/20'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                      ? 'bg-surface-2 text-ink-strong border border-hairline shadow-sm'
+                      : 'text-ink-subtle hover:text-ink hover:bg-surface-2/60 border border-transparent'
                   }`}
                 >
-                  {item.icon}
+                  <span className={isActive ? 'text-[#0070E0]' : 'text-ink-subtle'}>
+                    {item.icon}
+                  </span>
                   <span>{item.label}</span>
                   {item.badge && (
-                    <span className="ml-0.5 px-1.5 py-0.2 rounded-full text-[10px] bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                    <span className="inline-flex items-center justify-center h-4 px-1 rounded-[4px] text-[11px] font-mono bg-surface-2 text-ink-subtle border border-hairline tabular-nums">
                       {item.badge}
                     </span>
                   )}
@@ -120,124 +137,130 @@ export const Navbar: React.FC<NavbarProps> = ({
             })}
           </nav>
 
-          {/* Status & Actions */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          {/* Zone 3: 71UI Actions (Theme toggle, Status, Account) */}
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Status indicator */}
             {status ? (
               status.configured ? (
                 <div
-                  title={`Gemini AI Active (${status.model}${status.fallbackModels?.length ? ` with ${status.fallbackModels.join(', ')} fallback` : ''})`}
-                  className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-xs font-medium cursor-help"
+                  title={`Gemini AI Active (${status.model})`}
+                  className="hidden md:inline-flex items-center gap-1.5 h-6 px-2 rounded-[6px] text-[12px] font-medium bg-[var(--color-success-fill)] text-[var(--color-on-success)]"
                 >
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                  </span>
-                  <span className="hidden sm:inline">Gemini AI Active</span>
-                  <span className="sm:hidden">Active</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-success)]" />
+                  <span>Gemini 3.8</span>
                 </div>
               ) : (
                 <button
                   onClick={onOpenKeyInfo}
-                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-medium hover:bg-amber-500/25 transition-colors cursor-pointer"
-                  title="GEMINI_API_KEY is not configured"
+                  className="inline-flex items-center gap-1.5 h-6 px-2 rounded-[6px] text-[12px] font-medium bg-[var(--color-warning-fill)] text-[var(--color-on-warning)] cursor-pointer"
+                  title="Configure Gemini API Key"
                 >
-                  <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
-                  <span className="hidden sm:inline">Key Setup</span>
-                  <span className="sm:hidden">Key</span>
+                  <AlertTriangle className="w-3 h-3" />
+                  <span>Key Setup</span>
                 </button>
               )
-            ) : (
-              <div className="h-6 w-16 bg-slate-800 animate-pulse rounded-full" />
-            )}
+            ) : null}
+
+            {/* Theme Switcher Toggle (71UI Light / Dark) */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="h-8 w-8 rounded-[10px] border border-hairline bg-surface hover:bg-surface-2 text-ink-subtle hover:text-ink-strong inline-flex items-center justify-center transition-colors cursor-pointer"
+              title={isDark ? 'Switch to 71UI Light Mode' : 'Switch to 71UI Dark Mode'}
+              aria-label="Toggle theme"
+            >
+              {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
+            </button>
 
             {/* Auth Profile / Sign In Button */}
             {user ? (
               <button
                 type="button"
                 onClick={() => handleNavClick('account')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
+                className={`h-8 px-2.5 rounded-[10px] border text-[13px] font-medium inline-flex items-center gap-1.5 transition-all cursor-pointer ${
                   activeTab === 'account'
-                    ? 'bg-purple-600/30 text-cyan-300 border-purple-500/50'
-                    : 'bg-slate-900/90 text-slate-200 border-white/10 hover:border-cyan-500/40'
+                    ? 'bg-surface-2 border-[#0070E0] text-ink-strong'
+                    : 'bg-surface border-hairline text-ink hover:bg-surface-2'
                 }`}
-                title={`Signed in as ${user.email} (Click for Account & Sync)`}
+                title={`Signed in as ${user.email}`}
               >
-                <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-purple-500 to-cyan-500 flex items-center justify-center text-[10px] text-white font-bold shrink-0">
+                <div className="w-4.5 h-4.5 rounded-full bg-[#0070E0] flex items-center justify-center text-[10px] text-white font-medium shrink-0">
                   {profile?.avatarUrl ? (
                     <img src={profile.avatarUrl} alt="Avatar" className="w-full h-full rounded-full object-cover" />
                   ) : (
                     user.email?.[0]?.toUpperCase() || 'U'
                   )}
                 </div>
-                <span className="hidden md:inline truncate max-w-[100px]">
+                <span className="hidden md:inline truncate max-w-[90px]">
                   {profile?.fullName || user.email?.split('@')[0]}
                 </span>
-                <Cloud className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <Cloud className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
               </button>
             ) : (
               <button
                 type="button"
                 onClick={onOpenAuthModal}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white text-xs font-semibold shadow-md shadow-purple-600/20 transition-all cursor-pointer"
+                className="btn-primary"
               >
                 <User className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Sign In / Sync</span>
-                <span className="sm:hidden">Sign In</span>
+                <span className="hidden sm:inline">Sign In</span>
               </button>
             )}
 
-            {/* Mobile menu toggle */}
+            {/* Mobile menu hamburger */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="xl:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+              className="xl:hidden h-8 w-8 rounded-[10px] border border-hairline bg-surface hover:bg-surface-2 text-ink flex items-center justify-center cursor-pointer"
               aria-label="Toggle navigation"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
             </button>
           </div>
         </div>
 
         {/* Mobile dropdown navigation */}
         {mobileMenuOpen && (
-          <div className="xl:hidden py-3 px-2 border-t border-white/5 space-y-1 bg-[#070a13]">
-            {navItems.map((item) => {
-              const isActive = activeTab === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => handleNavClick(item.id)}
-                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                    isActive
-                      ? 'bg-purple-600/25 text-cyan-300 border border-purple-500/40 font-semibold'
-                      : 'text-slate-400 hover:text-white hover:bg-white/5'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    {item.icon}
-                    <span>{item.label}</span>
-                  </div>
-                  {item.badge && (
-                    <span className="px-2 py-0.5 rounded-full text-xs bg-cyan-500/20 text-cyan-300">
-                      {item.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
+          <div className="xl:hidden py-3 border-t border-hairline space-y-1">
+            <div className="grid grid-cols-2 gap-1.5 mb-2">
+              {navItems.map((item) => {
+                const isActive = activeTab === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => handleNavClick(item.id)}
+                    className={`h-9 px-3 rounded-[10px] text-[13px] font-medium flex items-center justify-between transition-all ${
+                      isActive
+                        ? 'bg-surface-2 text-ink-strong border border-hairline'
+                        : 'text-ink-subtle hover:text-ink hover:bg-surface-2/60 border border-transparent'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className={isActive ? 'text-[#0070E0]' : ''}>{item.icon}</span>
+                      <span className="truncate">{item.label}</span>
+                    </div>
+                    {item.badge && (
+                      <span className="text-[11px] font-mono text-ink-subtle tabular-nums">
+                        {item.badge}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
 
             {/* Mobile Account link */}
-            <div className="pt-2 border-t border-white/5">
+            <div className="pt-2 border-t border-hairline flex items-center justify-between gap-2">
               {user ? (
                 <button
                   type="button"
                   onClick={() => handleNavClick('account')}
-                  className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-sm font-medium bg-slate-900 border border-white/10 text-cyan-300"
+                  className="btn-secondary w-full justify-between"
                 >
-                  <div className="flex items-center gap-3">
-                    <User className="w-4 h-4 text-cyan-400" />
-                    <span>Account & Cloud Sync ({user.email?.split('@')[0]})</span>
+                  <div className="flex items-center gap-2">
+                    <User className="w-3.5 h-3.5 text-[#0070E0]" />
+                    <span>Account ({user.email?.split('@')[0]})</span>
                   </div>
-                  <Cloud className="w-4 h-4 text-emerald-400" />
+                  <Cloud className="w-3.5 h-3.5 text-emerald-500" />
                 </button>
               ) : (
                 <button
@@ -246,10 +269,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                     setMobileMenuOpen(false);
                     onOpenAuthModal();
                   }}
-                  className="w-full flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-lg text-sm font-semibold bg-gradient-to-r from-purple-600 to-cyan-600 text-white"
+                  className="btn-primary w-full"
                 >
-                  <User className="w-4 h-4" />
-                  <span>Sign In / Create Account</span>
+                  <User className="w-3.5 h-3.5" />
+                  <span>Sign In / Sync</span>
                 </button>
               )}
             </div>

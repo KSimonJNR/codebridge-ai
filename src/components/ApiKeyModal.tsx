@@ -15,59 +15,59 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fadeIn">
-      <div className="relative w-full max-w-lg rounded-2xl bg-gradient-to-b from-slate-900 to-slate-950 border border-purple-500/30 p-6 sm:p-7 shadow-2xl space-y-5">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-fadeIn">
+      <div className="relative w-full max-w-lg card-71 p-6 sm:p-7 space-y-4 text-ink rounded-[16px]">
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-white/5 transition-colors"
+          className="absolute top-4 right-4 text-ink-subtle hover:text-ink p-1 rounded-[8px] transition-colors cursor-pointer"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4" />
         </button>
 
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400">
-            <Key className="w-6 h-6" />
+          <div className="w-10 h-10 rounded-[10px] bg-surface-2 border border-hairline flex items-center justify-center text-accent">
+            <Key className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white">Server-Side Gemini API Key</h3>
-            <p className="text-xs text-slate-400">Secure configuration notice</p>
+            <h3 className="text-base font-medium text-ink-strong">Server-Side Gemini API Key</h3>
+            <p className="text-[12px] text-ink-subtle">Secure configuration notice</p>
           </div>
         </div>
 
-        <div className="space-y-3 text-xs sm:text-sm text-slate-300 leading-relaxed">
+        <div className="space-y-3 text-[13px] text-ink leading-relaxed">
           <p>
-            CodeBridge AI connects to Google's <strong>Gemini 3.8 Flash</strong> via the backend server to ensure API keys are never exposed in browser network requests or client JavaScript bundles.
+            CodeBridge AI connects to Google's <strong>Gemini 2.5 Flash</strong> via the backend server proxy to ensure API keys are never exposed in browser network requests or client JavaScript bundles.
           </p>
 
-          <div className="rounded-xl bg-[#080d1a] border border-white/10 p-3.5 space-y-2">
-            <div className="flex items-center gap-2 text-cyan-300 font-semibold text-xs">
-              <ShieldCheck className="w-4 h-4 text-cyan-400" />
-              How to configure:
+          <div className="rounded-[10px] bg-surface-2 border border-hairline p-3.5 space-y-2">
+            <div className="flex items-center gap-2 text-ink font-medium text-[12px]">
+              <ShieldCheck className="w-4 h-4 text-accent" />
+              <span>How to configure:</span>
             </div>
-            <ol className="list-decimal list-inside space-y-1 text-xs text-slate-300">
+            <ol className="list-decimal list-inside space-y-1 text-[12px] text-ink-subtle">
               <li>
                 In Google AI Studio, open the <strong>Settings &gt; Secrets</strong> panel.
               </li>
               <li>
-                Add a secret named <code className="text-cyan-300 font-mono">GEMINI_API_KEY</code> with your Gemini key.
+                Add a secret named <code className="text-ink font-mono bg-surface px-1.5 py-0.5 rounded-[4px] border border-hairline">GEMINI_API_KEY</code> with your Gemini key.
               </li>
               <li>
-                For local development, add <code className="text-cyan-300 font-mono">GEMINI_API_KEY=your_key</code> in your <code className="text-purple-300 font-mono">.env</code> file.
+                For local development, add <code className="text-ink font-mono bg-surface px-1.5 py-0.5 rounded-[4px] border border-hairline">GEMINI_API_KEY=your_key</code> in your <code className="text-ink font-mono bg-surface px-1.5 py-0.5 rounded-[4px] border border-hairline">.env</code> file.
               </li>
             </ol>
           </div>
 
-          <p className="text-xs text-slate-400">
-            Once configured, the live status indicator in the top navbar turns green (<span className="text-emerald-400 font-semibold">Gemini AI Active</span>) and all AI features unlock automatically.
+          <p className="text-[12px] text-ink-subtle">
+            Once configured, the live status indicator in the top navbar turns green (<span className="text-emerald-500 font-medium">Gemini AI Active</span>) and all AI features unlock automatically.
           </p>
         </div>
 
-        <div className="pt-2 flex items-center justify-end gap-3 border-t border-white/10">
+        <div className="pt-3 flex items-center justify-end gap-2 border-t border-hairline">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-xs font-semibold rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+            className="h-8 px-3 rounded-[10px] text-[12px] font-medium bg-surface-2 hover:bg-surface text-ink border border-hairline transition-colors cursor-pointer"
           >
             Close
           </button>
@@ -77,7 +77,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
               onRecheck();
               onClose();
             }}
-            className="px-5 py-2 text-xs font-semibold rounded-xl bg-purple-600 hover:bg-purple-500 text-white shadow-md shadow-purple-600/30 transition-all"
+            className="h-8 px-4 rounded-[10px] bg-accent hover:bg-accent-hover text-white text-[13px] font-medium transition-colors cursor-pointer shadow-xs"
           >
             Check Status Again
           </button>

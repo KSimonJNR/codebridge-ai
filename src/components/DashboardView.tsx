@@ -177,153 +177,152 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const totalSavedCount = savedItems.length + savedReposCount;
 
   return (
-    <div className="space-y-12 pb-20">
+    <div className="space-y-8 pb-16">
       {/* Hero & Activity Summary Header */}
-      <div className="relative text-center max-w-3xl mx-auto pt-4 sm:pt-8">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl pointer-events-none -z-10" />
-        <div className="absolute top-1/3 left-1/3 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
-
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-purple-500/15 via-indigo-500/15 to-cyan-500/15 border border-purple-500/30 text-purple-300 text-xs sm:text-sm font-medium mb-4 shadow-sm">
-          <Sparkles className="w-4 h-4 text-cyan-300" />
-          <span>CodeBridge AI • Contributor Activity Center</span>
+      <div className="text-center max-w-3xl mx-auto pt-2 sm:pt-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[6px] bg-surface-2 border border-hairline text-[12px] text-ink-subtle mb-3">
+          <Sparkles className="w-3.5 h-3.5 text-[#0070E0]" />
+          <span>CodeBridge AI · Contributor Activity Center</span>
         </div>
 
-        <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-3 leading-tight">
-          My Dashboard
+        <h1 className="text-3xl sm:text-4xl font-normal tracking-tight text-ink-strong mb-2">
+          My Dashboard <span className="text-ink-subtle">· Contributor Command</span>
         </h1>
 
-        <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed mb-6">
+        <p className="text-sm text-ink-subtle max-w-2xl mx-auto leading-relaxed mb-6">
           Your open-source command center. Review real-time progress on your pull request guide, active contribution roadmaps, and saved project ideas.
         </p>
 
-        {/* Quick Launch Return Buttons (Requirement 7) */}
-        <div className="flex flex-wrap items-center justify-center gap-2.5">
+        {/* Quick Launch Return Buttons (71UI standard 32px controls, rounded-[10px]) */}
+        <div className="flex flex-wrap items-center justify-center gap-2">
           <button
             type="button"
             onClick={() => onNavigate('learning-center')}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-cyan-300 border border-white/10 text-xs font-semibold hover:border-cyan-500/40 transition-all cursor-pointer"
+            className="btn-secondary h-8 px-3 rounded-[10px] text-[13px] flex items-center gap-1.5 cursor-pointer"
           >
-            <GraduationCap className="w-3.5 h-3.5" />
+            <GraduationCap className="w-3.5 h-3.5 text-[#0070E0]" />
             Learning Center
           </button>
 
           <button
             type="button"
             onClick={() => onNavigate('explainer')}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-cyan-300 border border-white/10 text-xs font-semibold hover:border-cyan-500/40 transition-all cursor-pointer"
+            className="btn-secondary h-8 px-3 rounded-[10px] text-[13px] flex items-center gap-1.5 cursor-pointer"
           >
-            <Code2 className="w-3.5 h-3.5" />
+            <Code2 className="w-3.5 h-3.5 text-[#0070E0]" />
             Code Explainer
           </button>
 
           <button
             type="button"
             onClick={() => onNavigate('issue-helper')}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-purple-300 border border-white/10 text-xs font-semibold hover:border-purple-500/40 transition-all cursor-pointer"
+            className="btn-secondary h-8 px-3 rounded-[10px] text-[13px] flex items-center gap-1.5 cursor-pointer"
           >
-            <FileCode2 className="w-3.5 h-3.5" />
+            <FileCode2 className="w-3.5 h-3.5 text-[#0070E0]" />
             Issue Helper
           </button>
 
           <button
             type="button"
             onClick={() => onNavigate('pr-guide')}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-cyan-300 border border-white/10 text-xs font-semibold hover:border-cyan-500/40 transition-all cursor-pointer"
+            className="btn-secondary h-8 px-3 rounded-[10px] text-[13px] flex items-center gap-1.5 cursor-pointer"
           >
-            <GitPullRequest className="w-3.5 h-3.5" />
+            <GitPullRequest className="w-3.5 h-3.5 text-[#0070E0]" />
             PR Guide
           </button>
 
           <button
             type="button"
             onClick={() => onNavigate('idea-generator')}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-amber-300 border border-white/10 text-xs font-semibold hover:border-amber-500/40 transition-all cursor-pointer"
+            className="btn-secondary h-8 px-3 rounded-[10px] text-[13px] flex items-center gap-1.5 cursor-pointer"
           >
-            <Lightbulb className="w-3.5 h-3.5" />
+            <Lightbulb className="w-3.5 h-3.5 text-[#0070E0]" />
             Idea Generator
           </button>
 
           <button
             type="button"
             onClick={() => onNavigate('repo-finder')}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-emerald-300 border border-white/10 text-xs font-semibold hover:border-emerald-500/40 transition-all cursor-pointer"
+            className="btn-secondary h-8 px-3 rounded-[10px] text-[13px] flex items-center gap-1.5 cursor-pointer"
           >
-            <Compass className="w-3.5 h-3.5" />
+            <Compass className="w-3.5 h-3.5 text-[#0070E0]" />
             Repo Finder
           </button>
 
           <button
             type="button"
             onClick={() => onNavigate('roadmap')}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-indigo-300 border border-white/10 text-xs font-semibold hover:border-indigo-500/40 transition-all cursor-pointer"
+            className="btn-secondary h-8 px-3 rounded-[10px] text-[13px] flex items-center gap-1.5 cursor-pointer"
           >
-            <Map className="w-3.5 h-3.5" />
-            Contribution Roadmap
+            <Map className="w-3.5 h-3.5 text-[#0070E0]" />
+            Roadmap
           </button>
         </div>
       </div>
 
-      {/* Progress Statistics (Requirements 4 & 6 - Computed strictly from actual stored data) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Progress Statistics (71UI Stat Cards) */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Stat 1: Completed Checklist Items */}
-        <div className="rounded-2xl bg-gradient-to-b from-slate-900/90 to-slate-950/90 border border-white/10 p-5 shadow-lg space-y-1">
-          <div className="flex items-center justify-between text-cyan-400">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-              Completed Checklist Items
+        <div className="rounded-xl bg-surface border border-hairline p-4 space-y-1">
+          <div className="flex items-center justify-between text-ink-subtle">
+            <span className="text-[11px] font-medium uppercase tracking-wider text-ink-subtle">
+              Completed Items
             </span>
-            <CheckCircle2 className="w-4 h-4" />
+            <CheckCircle2 className="w-4 h-4 text-[#0070E0]" />
           </div>
-          <div className="text-2xl sm:text-3xl font-extrabold text-white">
+          <div className="text-2xl sm:text-3xl font-medium text-ink-strong tabular-nums">
             {totalChecklistItemsCompleted}
           </div>
-          <p className="text-[11px] text-slate-400">
-            Across PR Guide ({prGuideFinishedCount}), Learning Center ({learningFinishedCount}), Roadmap ({roadmapFinishedCount}), and Milestones ({tasksFinishedCount})
+          <p className="text-[11px] text-ink-subtle leading-tight">
+            PR ({prGuideFinishedCount}) · Learning ({learningFinishedCount}) · Roadmap ({roadmapFinishedCount}) · Milestones ({tasksFinishedCount})
           </p>
         </div>
 
         {/* Stat 2: Active Roadmaps */}
-        <div className="rounded-2xl bg-gradient-to-b from-slate-900/90 to-slate-950/90 border border-white/10 p-5 shadow-lg space-y-1">
-          <div className="flex items-center justify-between text-indigo-400">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+        <div className="rounded-xl bg-surface border border-hairline p-4 space-y-1">
+          <div className="flex items-center justify-between text-ink-subtle">
+            <span className="text-[11px] font-medium uppercase tracking-wider text-ink-subtle">
               Active Roadmaps
             </span>
-            <Map className="w-4 h-4" />
+            <Map className="w-4 h-4 text-[#0070E0]" />
           </div>
-          <div className="text-2xl sm:text-3xl font-extrabold text-white">
+          <div className="text-2xl sm:text-3xl font-medium text-ink-strong tabular-nums">
             {activeRoadmapsCount}
           </div>
-          <p className="text-[11px] text-slate-400">
+          <p className="text-[11px] text-ink-subtle truncate">
             {activeRoadmap ? activeRoadmap.verifiedRepo.fullName : 'No active roadmap'}
           </p>
         </div>
 
         {/* Stat 3: Hacktoberfest PR Goal */}
-        <div className="rounded-2xl bg-gradient-to-b from-slate-900/90 to-slate-950/90 border border-white/10 p-5 shadow-lg space-y-1">
-          <div className="flex items-center justify-between text-amber-400">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+        <div className="rounded-xl bg-surface border border-hairline p-4 space-y-1">
+          <div className="flex items-center justify-between text-ink-subtle">
+            <span className="text-[11px] font-medium uppercase tracking-wider text-ink-subtle">
               Hacktoberfest Goal
             </span>
-            <Trophy className="w-4 h-4" />
+            <Trophy className="w-4 h-4 text-[#0070E0]" />
           </div>
           <div className="flex items-baseline gap-1.5">
-            <span className="text-2xl sm:text-3xl font-extrabold text-white">{prCount}</span>
-            <span className="text-xs text-slate-400">/ 4 PRs</span>
+            <span className="text-2xl sm:text-3xl font-medium text-ink-strong tabular-nums">{prCount}</span>
+            <span className="text-xs text-ink-subtle font-normal">/ 4 PRs</span>
           </div>
           {onUpdatePrCount && (
             <div className="flex items-center justify-between pt-1 text-[11px]">
-              <span className="text-slate-400">Adjust count:</span>
+              <span className="text-ink-subtle">Adjust count:</span>
               <div className="flex items-center gap-1.5">
                 <button
                   type="button"
                   onClick={() => onUpdatePrCount(Math.max(0, prCount - 1))}
-                  className="w-5 h-5 rounded bg-slate-800 hover:bg-slate-700 text-white flex items-center justify-center font-bold cursor-pointer"
+                  className="w-5 h-5 rounded-[4px] bg-surface-2 hover:bg-hairline text-ink flex items-center justify-center font-medium border border-hairline cursor-pointer"
+                  aria-label="Decrease PR count"
                 >
                   -
                 </button>
                 <button
                   type="button"
                   onClick={() => onUpdatePrCount(prCount + 1)}
-                  className="w-5 h-5 rounded bg-slate-800 hover:bg-slate-700 text-white flex items-center justify-center font-bold cursor-pointer"
+                  className="w-5 h-5 rounded-[4px] bg-surface-2 hover:bg-hairline text-ink flex items-center justify-center font-medium border border-hairline cursor-pointer"
+                  aria-label="Increase PR count"
                 >
                   +
                 </button>
@@ -333,35 +332,35 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
 
         {/* Stat 4: Saved Resources */}
-        <div className="rounded-2xl bg-gradient-to-b from-slate-900/90 to-slate-950/90 border border-white/10 p-5 shadow-lg space-y-1">
-          <div className="flex items-center justify-between text-purple-400">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+        <div className="rounded-xl bg-surface border border-hairline p-4 space-y-1">
+          <div className="flex items-center justify-between text-ink-subtle">
+            <span className="text-[11px] font-medium uppercase tracking-wider text-ink-subtle">
               Saved Bookmarks
             </span>
-            <Bookmark className="w-4 h-4" />
+            <Bookmark className="w-4 h-4 text-[#0070E0]" />
           </div>
-          <div className="text-2xl sm:text-3xl font-extrabold text-white">
+          <div className="text-2xl sm:text-3xl font-medium text-ink-strong tabular-nums">
             {totalSavedCount}
           </div>
-          <p className="text-[11px] text-slate-400">
-            {savedItems.length} code/issues/ideas + {savedReposCount} bookmarked repos
+          <p className="text-[11px] text-ink-subtle truncate">
+            {savedItems.length} items · {savedReposCount} repos
           </p>
         </div>
       </div>
 
-      {/* Main Activity Breakdown Grid (Requirements 2 & 3) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Section 1: First Pull Request Guide Checklist Progress (Requirement 2) */}
-        <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-6 shadow-xl flex flex-col justify-between space-y-5">
+      {/* Main Activity Breakdown Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Section 1: First Pull Request Guide Checklist Progress */}
+        <div className="rounded-xl bg-surface border border-hairline p-5 flex flex-col justify-between space-y-4">
           <div className="space-y-4">
-            <div className="flex items-center justify-between border-b border-white/5 pb-4">
+            <div className="flex items-center justify-between border-b border-hairline pb-3.5">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-[8px] bg-surface-2 border border-hairline text-[#0070E0] flex items-center justify-center">
                   <GitPullRequest className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-white">First Pull Request Guide</h3>
-                  <p className="text-xs text-slate-400">
+                  <h3 className="text-[15px] font-medium text-ink-strong">First Pull Request Guide</h3>
+                  <p className="text-[12px] text-ink-subtle">
                     {prGuideFinishedCount} of 10 stages completed ({Math.round((prGuideFinishedCount / 10) * 100)}%)
                   </p>
                 </div>
@@ -370,7 +369,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <button
                 type="button"
                 onClick={() => onNavigate('pr-guide')}
-                className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1 font-semibold cursor-pointer"
+                className="btn-secondary h-7 px-2.5 rounded-[8px] text-[12px] flex items-center gap-1 cursor-pointer"
               >
                 <span>Open Guide</span>
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -378,16 +377,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
 
             {/* Visual Progress Bar */}
-            <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden border border-white/5">
+            <div className="w-full h-1.5 bg-surface-2 rounded-full overflow-hidden border border-hairline">
               <div
-                className="h-full bg-gradient-to-r from-cyan-500 to-purple-500 transition-all duration-300"
+                className="h-full bg-[#0070E0] transition-all duration-300"
                 style={{ width: `${(prGuideFinishedCount / 10) * 100}%` }}
               />
             </div>
 
             {/* Completed Stages List (or Empty State) */}
             {prGuideFinishedCount > 0 ? (
-              <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+              <div className="space-y-1.5 max-h-64 overflow-y-auto pr-1">
                 {Object.keys(PR_GUIDE_STAGE_NAMES).map((stageNumStr) => {
                   const stageNum = parseInt(stageNumStr, 10);
                   const isDone = Boolean(prCompletedSteps[stageNum]);
@@ -396,10 +395,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   return (
                     <div
                       key={stageNum}
-                      className="p-2.5 rounded-xl bg-[#080d1a] border border-emerald-500/30 flex items-center gap-2.5 text-xs text-slate-200"
+                      className="h-10 px-3 rounded-[8px] bg-surface-2 border border-hairline flex items-center gap-2.5 text-[13px] text-ink"
                     >
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                      <span className="font-mono text-emerald-300 text-[11px] font-bold shrink-0">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                      <span className="font-mono text-[11px] font-medium text-ink-subtle shrink-0">
                         Stage {stageNum}
                       </span>
                       <span className="truncate">{PR_GUIDE_STAGE_NAMES[stageNum]}</span>
@@ -408,17 +407,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 })}
               </div>
             ) : (
-              /* Requirement 5: Clear empty state */
-              <div className="rounded-xl bg-[#080d1a] border border-dashed border-white/10 p-6 text-center space-y-2">
-                <GitPullRequest className="w-8 h-8 text-slate-600 mx-auto" />
-                <h4 className="text-xs sm:text-sm font-bold text-slate-300">No PR Guide Stages Completed Yet</h4>
-                <p className="text-xs text-slate-400 max-w-xs mx-auto leading-relaxed">
+              <div className="rounded-lg bg-surface-2 border border-dashed border-hairline p-6 text-center space-y-2">
+                <GitPullRequest className="w-7 h-7 text-ink-subtle mx-auto" />
+                <h4 className="text-[13px] font-medium text-ink-strong">No PR Guide Stages Completed Yet</h4>
+                <p className="text-[12px] text-ink-subtle max-w-xs mx-auto leading-relaxed">
                   Work through the 10-stage guide covering forking, branching, committing, and opening your first pull request.
                 </p>
                 <button
                   type="button"
                   onClick={() => onNavigate('pr-guide')}
-                  className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-semibold border border-white/10 transition-colors cursor-pointer"
+                  className="btn-secondary h-8 px-3 rounded-[8px] text-[12px] mt-1 cursor-pointer"
                 >
                   Start PR Guide &rarr;
                 </button>
@@ -426,29 +424,29 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             )}
           </div>
 
-          <div className="pt-3 border-t border-white/5 flex items-center justify-between text-xs text-slate-400">
-            <span>Progress automatically saved in local browser storage</span>
+          <div className="pt-3 border-t border-hairline flex items-center justify-between text-[12px] text-ink-subtle">
+            <span>Saved locally in browser</span>
             <button
               type="button"
               onClick={() => onNavigate('pr-guide')}
-              className="text-cyan-400 hover:underline"
+              className="text-[#0070E0] hover:underline font-medium cursor-pointer"
             >
               Continue from Stage {Math.min(10, prGuideFinishedCount + 1)} &rarr;
             </button>
           </div>
         </div>
 
-        {/* Section 2: AI Contribution Roadmap Checklist Progress (Requirements 2 & 3) */}
-        <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-6 shadow-xl flex flex-col justify-between space-y-5">
+        {/* Section 2: AI Contribution Roadmap Checklist Progress */}
+        <div className="rounded-xl bg-surface border border-hairline p-5 flex flex-col justify-between space-y-4">
           <div className="space-y-4">
-            <div className="flex items-center justify-between border-b border-white/5 pb-4">
+            <div className="flex items-center justify-between border-b border-hairline pb-3.5">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-300 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-[8px] bg-surface-2 border border-hairline text-[#0070E0] flex items-center justify-center">
                   <Map className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-white">Active Contribution Roadmap</h3>
-                  <p className="text-xs text-slate-400">
+                  <h3 className="text-[15px] font-medium text-ink-strong">Active Contribution Roadmap</h3>
+                  <p className="text-[12px] text-ink-subtle">
                     {activeRoadmap
                       ? `${roadmapFinishedCount} of ${activeRoadmap.interactiveChecklist?.length || 0} checklist tasks finished`
                       : 'No roadmap generated yet'}
@@ -459,7 +457,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <button
                 type="button"
                 onClick={() => onNavigate('roadmap')}
-                className="text-xs text-purple-300 hover:text-purple-200 flex items-center gap-1 font-semibold cursor-pointer"
+                className="btn-secondary h-7 px-2.5 rounded-[8px] text-[12px] flex items-center gap-1 cursor-pointer"
               >
                 <span>{activeRoadmap ? 'View Roadmap' : 'Create Roadmap'}</span>
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -469,19 +467,19 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             {/* Active Roadmap Card or Empty State */}
             {activeRoadmap ? (
               <div className="space-y-3">
-                <div className="p-3.5 rounded-xl bg-[#080d1a] border border-purple-500/30 space-y-1.5">
+                <div className="p-3.5 rounded-lg bg-surface-2 border border-hairline space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-purple-300 font-mono">
+                    <span className="text-[11px] font-mono font-medium text-[#0070E0]">
                       {activeRoadmap.verifiedRepo.fullName}
                     </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+                    <span className="badge-71">
                       {activeRoadmap.verifiedRepo.verified ? 'Verified Repo' : 'Custom Input'}
                     </span>
                   </div>
-                  <h4 className="text-xs sm:text-sm font-bold text-white truncate">
+                  <h4 className="text-[13px] font-medium text-ink-strong truncate">
                     {activeRoadmap.verifiedIssue.title}
                   </h4>
-                  <p className="text-xs text-slate-400 line-clamp-2">
+                  <p className="text-[12px] text-ink-subtle line-clamp-2">
                     {activeRoadmap.overview}
                   </p>
                 </div>
@@ -494,18 +492,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       return (
                         <div
                           key={task.id}
-                          className={`p-2.5 rounded-lg border flex items-center gap-2.5 text-xs ${
+                          className={`h-10 px-3 rounded-[8px] border flex items-center gap-2.5 text-[12px] ${
                             isDone
-                              ? 'bg-emerald-950/20 border-emerald-500/30 text-slate-200'
-                              : 'bg-black/30 border-white/5 text-slate-400'
+                              ? 'bg-surface-2 border-hairline text-ink-subtle'
+                              : 'bg-surface border-hairline text-ink'
                           }`}
                         >
                           {isDone ? (
-                            <CheckSquare className="w-4 h-4 text-emerald-400 shrink-0" />
+                            <CheckSquare className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                           ) : (
-                            <Square className="w-4 h-4 text-slate-600 shrink-0" />
+                            <Square className="w-3.5 h-3.5 text-ink-subtle shrink-0" />
                           )}
-                          <span className={`truncate ${isDone ? 'line-through text-slate-400' : ''}`}>
+                          <span className={`truncate ${isDone ? 'line-through text-ink-subtle' : ''}`}>
                             {task.text}
                           </span>
                         </div>
@@ -515,30 +513,29 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 )}
               </div>
             ) : (
-              /* Requirement 5: Clear empty state */
-              <div className="rounded-xl bg-[#080d1a] border border-dashed border-white/10 p-6 text-center space-y-2">
-                <Map className="w-8 h-8 text-slate-600 mx-auto" />
-                <h4 className="text-xs sm:text-sm font-bold text-slate-300">No Contribution Roadmap Active</h4>
-                <p className="text-xs text-slate-400 max-w-xs mx-auto leading-relaxed">
+              <div className="rounded-lg bg-surface-2 border border-dashed border-hairline p-6 text-center space-y-2">
+                <Map className="w-7 h-7 text-ink-subtle mx-auto" />
+                <h4 className="text-[13px] font-medium text-ink-strong">No Contribution Roadmap Active</h4>
+                <p className="text-[12px] text-ink-subtle max-w-xs mx-auto leading-relaxed">
                   Enter a target repository and issue URL to generate a personalized 6-stage roadmap and checklist.
                 </p>
                 <button
                   type="button"
                   onClick={() => onNavigate('roadmap')}
-                  className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-purple-300 text-xs font-semibold border border-white/10 transition-colors cursor-pointer"
+                  className="btn-secondary h-8 px-3 rounded-[8px] text-[12px] mt-1 cursor-pointer"
                 >
-                  Create Contribution Roadmap &rarr;
+                  Create Roadmap &rarr;
                 </button>
               </div>
             )}
           </div>
 
-          <div className="pt-3 border-t border-white/5 flex items-center justify-between text-xs text-slate-400">
+          <div className="pt-3 border-t border-hairline flex items-center justify-between text-[12px] text-ink-subtle">
             <span>{activeRoadmap ? 'Roadmap saved locally' : 'No active roadmap in browser'}</span>
             <button
               type="button"
               onClick={() => onNavigate('roadmap')}
-              className="text-purple-300 hover:underline"
+              className="text-[#0070E0] hover:underline font-medium cursor-pointer"
             >
               Go to Roadmap Planner &rarr;
             </button>
@@ -546,16 +543,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
       </div>
 
-      {/* Section 3: Recently Generated Project Ideas (Requirement 3) */}
-      <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-6 sm:p-7 shadow-xl space-y-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/5 pb-4">
+      {/* Section 3: Recently Generated Project Ideas */}
+      <div className="rounded-xl bg-surface border border-hairline p-5 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-hairline pb-3.5">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-300 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-[8px] bg-surface-2 border border-hairline text-[#0070E0] flex items-center justify-center">
               <Lightbulb className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">Recently Generated Project Ideas</h3>
-              <p className="text-xs text-slate-400">
+              <h3 className="text-[15px] font-medium text-ink-strong">Recently Generated Project Ideas</h3>
+              <p className="text-[12px] text-ink-subtle">
                 {recentIdeas.length > 0
                   ? `Displaying ${recentIdeas.length} project blueprints generated with Gemini`
                   : 'No project ideas generated yet'}
@@ -566,39 +563,39 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <button
             type="button"
             onClick={() => onNavigate('idea-generator')}
-            className="self-start sm:self-auto flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-white/10 text-xs font-semibold transition-colors cursor-pointer"
+            className="btn-secondary h-8 px-3 rounded-[10px] text-[13px] self-start sm:self-auto flex items-center gap-1.5 cursor-pointer"
           >
-            <Lightbulb className="w-3.5 h-3.5" />
+            <Lightbulb className="w-3.5 h-3.5 text-[#0070E0]" />
             <span>Generate New Ideas</span>
           </button>
         </div>
 
         {recentIdeas.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
             {recentIdeas.slice(0, 3).map((idea, idx) => (
               <div
                 key={idx}
-                className="rounded-xl bg-[#080d1a] border border-white/5 hover:border-amber-500/30 p-4 space-y-3 flex flex-col justify-between transition-all"
+                className="rounded-lg bg-surface-2 border border-hairline hover:border-hairline-strong p-4 space-y-3 flex flex-col justify-between transition-colors"
               >
                 <div className="space-y-1.5">
                   <div className="flex items-center gap-1.5">
-                    <span className="w-5 h-5 rounded-md bg-amber-500/20 text-amber-300 flex items-center justify-center text-[10px] font-bold">
+                    <span className="w-5 h-5 rounded-[4px] bg-surface border border-hairline text-ink-subtle flex items-center justify-center text-[11px] font-mono font-medium">
                       {idx + 1}
                     </span>
-                    <h4 className="text-sm font-bold text-white truncate">{idea.title}</h4>
+                    <h4 className="text-[13px] font-medium text-ink-strong truncate">{idea.title}</h4>
                   </div>
-                  <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
+                  <p className="text-[12px] text-ink-subtle line-clamp-2 leading-relaxed">
                     {idea.shortDescription}
                   </p>
                 </div>
 
-                <div className="space-y-2 pt-2 border-t border-white/5">
+                <div className="space-y-2 pt-2 border-t border-hairline">
                   {idea.skillsToPractice && idea.skillsToPractice.length > 0 && (
                     <div className="flex flex-wrap gap-1">
                       {idea.skillsToPractice.slice(0, 2).map((s, sIdx) => (
                         <span
                           key={sIdx}
-                          className="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-purple-300 border border-white/5 truncate"
+                          className="badge-71 truncate text-[11px]"
                         >
                           {s}
                         </span>
@@ -609,7 +606,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   <button
                     type="button"
                     onClick={() => onNavigate('idea-generator')}
-                    className="w-full text-center text-[11px] text-amber-400 hover:text-amber-300 py-1 font-semibold cursor-pointer"
+                    className="w-full text-center text-[12px] text-[#0070E0] hover:underline py-1 font-medium cursor-pointer"
                   >
                     View Full Specification &rarr;
                   </button>
@@ -618,17 +615,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             ))}
           </div>
         ) : (
-          /* Requirement 5: Clear empty state */
-          <div className="rounded-xl bg-[#080d1a] border border-dashed border-white/10 p-8 text-center space-y-2">
-            <Lightbulb className="w-8 h-8 text-slate-600 mx-auto" />
-            <h4 className="text-xs sm:text-sm font-bold text-slate-300">No Project Ideas Generated Yet</h4>
-            <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
+          <div className="rounded-lg bg-surface-2 border border-dashed border-hairline p-8 text-center space-y-2">
+            <Lightbulb className="w-7 h-7 text-ink-subtle mx-auto" />
+            <h4 className="text-[13px] font-medium text-ink-strong">No Project Ideas Generated Yet</h4>
+            <p className="text-[12px] text-ink-subtle max-w-sm mx-auto leading-relaxed">
               Use the AI Project Idea Generator to discover custom open-source project ideas tailored to your programming language and domain.
             </p>
             <button
               type="button"
               onClick={() => onNavigate('idea-generator')}
-              className="mt-2 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs font-semibold border border-white/10 transition-colors cursor-pointer"
+              className="btn-secondary h-8 px-3 rounded-[8px] text-[12px] mt-1 cursor-pointer"
             >
               Generate Project Ideas &rarr;
             </button>
@@ -638,49 +634,49 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
       {/* Section 4: Saved Bookmarks & Explanations */}
       {savedItems.length > 0 && (
-        <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-6 sm:p-7 shadow-xl space-y-4">
-          <div className="flex items-center justify-between border-b border-white/5 pb-4">
+        <div className="rounded-xl bg-surface border border-hairline p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-hairline pb-3.5">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-300 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-[8px] bg-surface-2 border border-hairline text-[#0070E0] flex items-center justify-center">
                 <Bookmark className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-white">Saved Resources & Bookmarks</h3>
-                <p className="text-xs text-slate-400">{savedItems.length} items saved locally</p>
+                <h3 className="text-[15px] font-medium text-ink-strong">Saved Resources & Bookmarks</h3>
+                <p className="text-[12px] text-ink-subtle">{savedItems.length} items saved locally</p>
               </div>
             </div>
 
             <button
               type="button"
               onClick={() => onNavigate('tracker')}
-              className="text-xs text-purple-300 hover:text-white flex items-center gap-1 font-semibold cursor-pointer"
+              className="btn-secondary h-7 px-2.5 rounded-[8px] text-[12px] flex items-center gap-1 cursor-pointer"
             >
               <span>Manage in Tracker</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {savedItems.slice(0, 4).map((item) => (
               <div
                 key={item.id}
-                className="p-3.5 rounded-xl bg-[#080d1a] border border-white/5 flex items-start justify-between gap-3 text-xs"
+                className="p-3 rounded-lg bg-surface-2 border border-hairline flex items-start justify-between gap-3 text-[12px]"
               >
                 <div className="space-y-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded text-[10px] uppercase font-mono bg-purple-500/15 text-purple-300 border border-purple-500/30">
+                    <span className="badge-71 uppercase font-mono text-[10px]">
                       {item.type}
                     </span>
-                    <h4 className="font-bold text-white truncate">{item.title}</h4>
+                    <h4 className="font-medium text-ink-strong truncate">{item.title}</h4>
                   </div>
-                  <p className="text-slate-400 line-clamp-2 leading-relaxed">{item.summary}</p>
+                  <p className="text-ink-subtle line-clamp-2 leading-relaxed">{item.summary}</p>
                 </div>
 
                 {onRemoveSavedItem && (
                   <button
                     type="button"
                     onClick={() => onRemoveSavedItem(item.id)}
-                    className="text-slate-500 hover:text-red-400 p-1 shrink-0"
+                    className="text-ink-subtle hover:text-red-500 p-1 shrink-0 cursor-pointer"
                     title="Remove item"
                   >
                     &times;
@@ -692,17 +688,17 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
       )}
 
-      {/* Local Storage & Privacy Transparency Notice (Requirement 6 & prompt instruction) */}
-      <div className="rounded-2xl bg-[#060a14] border border-white/10 p-5 sm:p-6 space-y-3">
-        <div className="flex items-center gap-2 text-xs font-bold text-cyan-300 uppercase tracking-wider">
-          <ShieldCheck className="w-4 h-4 text-cyan-400" />
+      {/* Local Storage & Privacy Transparency Notice */}
+      <div className="rounded-xl bg-surface border border-hairline p-5 space-y-3">
+        <div className="flex items-center gap-2 text-[12px] font-medium text-ink-strong uppercase tracking-wider">
+          <ShieldCheck className="w-4 h-4 text-[#0070E0]" />
           Local Storage & Data Privacy Transparency
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300 leading-relaxed">
-          <div className="rounded-xl bg-[#080d1a] p-3.5 border border-white/5 space-y-1">
-            <span className="font-semibold text-emerald-300 block">✓ What is saved locally in your browser:</span>
-            <ul className="space-y-1 text-slate-400 list-disc list-inside">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-[12px] text-ink-subtle leading-relaxed">
+          <div className="rounded-lg bg-surface-2 p-3.5 border border-hairline space-y-1">
+            <span className="font-medium text-ink-strong block">✓ Stored locally in your browser:</span>
+            <ul className="space-y-1 text-ink-subtle list-disc list-inside">
               <li>Completed stages from the First Pull Request Guide</li>
               <li>Active Contribution Roadmap plan and checked tasks</li>
               <li>Recently generated project ideas & bookmarks</li>
@@ -710,12 +706,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </ul>
           </div>
 
-          <div className="rounded-xl bg-[#080d1a] p-3.5 border border-white/5 space-y-1">
-            <span className="font-semibold text-cyan-300 block">🔒 What is NOT stored or shared:</span>
-            <ul className="space-y-1 text-slate-400 list-disc list-inside">
-              <li>No personal database accounts or cloud user profiles required</li>
-              <li>No GitHub credentials or tokens are stored in the frontend</li>
-              <li>All Gemini AI analysis is processed securely via server-side routes</li>
+          <div className="rounded-lg bg-surface-2 p-3.5 border border-hairline space-y-1">
+            <span className="font-medium text-ink-strong block">🔒 Data security:</span>
+            <ul className="space-y-1 text-ink-subtle list-disc list-inside">
+              <li>No personal credentials required to use features</li>
+              <li>No GitHub access tokens stored in frontend</li>
+              <li>All Gemini AI analysis routed through secure server endpoints</li>
               <li>You can reset or clear stored data at any time</li>
             </ul>
           </div>
@@ -726,7 +722,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <button
               type="button"
               onClick={onResetProgress}
-              className="text-xs text-slate-500 hover:text-red-400 flex items-center gap-1 transition-colors cursor-pointer"
+              className="text-[12px] text-ink-subtle hover:text-red-500 flex items-center gap-1 transition-colors cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               Reset Local Progress & Counters

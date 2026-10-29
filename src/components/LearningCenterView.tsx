@@ -124,73 +124,75 @@ export const LearningCenterView: React.FC<LearningCenterViewProps> = ({
   const categories = ['All', 'Git', 'GitHub', 'Workflow', 'Etiquette'];
 
   return (
-    <div className="space-y-8 pb-16">
+    <div className="space-y-6 pb-16">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-hairline pb-5">
         <div>
-          <div className="inline-flex items-center gap-1.5 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-1">
-            <GraduationCap className="w-4 h-4" />
+          <div className="inline-flex items-center gap-1.5 text-ink-subtle text-[12px] font-medium uppercase tracking-wider mb-1">
+            <GraduationCap className="w-3.5 h-3.5 text-[#0070E0]" />
             Practical Skills for Open Source
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Open-Source Learning Center</h2>
-          <p className="text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed">
+          <h2 className="text-2xl sm:text-3xl font-normal text-ink-strong tracking-tight">
+            Open-Source Learning Center <span className="text-ink-subtle">· Guided Modules</span>
+          </h2>
+          <p className="text-[13px] text-ink-subtle mt-1 max-w-2xl leading-relaxed">
             Master the core concepts, mental models, and safe Git workflows needed to confidently contribute to open-source software.
           </p>
         </div>
 
-        {/* Tab Switcher: Modules vs Glossary */}
-        <div className="flex items-center gap-1.5 bg-slate-900/90 p-1.5 rounded-xl border border-white/10 self-start sm:self-auto">
+        {/* Tab Switcher: Modules vs Glossary (71UI 32px controls) */}
+        <div className="flex items-center gap-1.5 bg-surface-2 p-1 rounded-[10px] border border-hairline self-start sm:self-auto">
           <button
             type="button"
             onClick={() => setActiveSection('modules')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+            className={`flex items-center gap-2 h-7 px-3 rounded-[8px] text-[12px] font-medium transition-colors cursor-pointer ${
               activeSection === 'modules'
-                ? 'bg-gradient-to-r from-purple-600 to-cyan-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-surface text-ink-strong border border-hairline shadow-sm'
+                : 'text-ink-subtle hover:text-ink'
             }`}
           >
-            <BookOpen className="w-3.5 h-3.5" />
+            <BookOpen className="w-3.5 h-3.5 text-[#0070E0]" />
             <span>Modules ({totalModules})</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveSection('glossary')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+            className={`flex items-center gap-2 h-7 px-3 rounded-[8px] text-[12px] font-medium transition-colors cursor-pointer ${
               activeSection === 'glossary'
-                ? 'bg-gradient-to-r from-purple-600 to-cyan-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-surface text-ink-strong border border-hairline shadow-sm'
+                : 'text-ink-subtle hover:text-ink'
             }`}
           >
-            <BookMarked className="w-3.5 h-3.5" />
+            <BookMarked className="w-3.5 h-3.5 text-[#0070E0]" />
             <span>Glossary ({GLOSSARY_TERMS.length})</span>
           </button>
         </div>
       </div>
 
-      {/* Progress Indicator Card (Requirement 3) */}
-      <div className="rounded-2xl bg-gradient-to-r from-slate-900/95 via-purple-950/20 to-slate-900/95 border border-purple-500/30 p-5 sm:p-6 shadow-xl space-y-3">
+      {/* Progress Indicator Card */}
+      <div className="rounded-xl bg-surface border border-hairline p-5 space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-300 flex items-center justify-center font-bold shrink-0">
-              <Award className="w-5 h-5 text-cyan-400" />
+            <div className="w-9 h-9 rounded-[8px] bg-surface-2 border border-hairline text-[#0070E0] flex items-center justify-center font-medium shrink-0">
+              <Award className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-sm sm:text-base font-bold text-white">
+              <h3 className="text-[14px] font-medium text-ink-strong">
                 Learning Progress
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-[12px] text-ink-subtle">
                 {completedCount} of {totalModules} modules completed ({progressPct}%)
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-cyan-300">{progressPct}%</span>
-              <div className="w-32 sm:w-44 h-2.5 bg-slate-800 rounded-full overflow-hidden border border-white/5">
+              <span className="text-[12px] font-mono font-medium text-[#0070E0] tabular-nums">{progressPct}%</span>
+              <div className="w-32 sm:w-44 h-1.5 bg-surface-2 rounded-full overflow-hidden border border-hairline">
                 <div
-                  className="h-full bg-gradient-to-r from-purple-500 to-cyan-400 transition-all duration-300"
+                  className="h-full bg-[#0070E0] transition-all duration-300"
                   style={{ width: `${progressPct}%` }}
                 />
               </div>
@@ -201,7 +203,7 @@ export const LearningCenterView: React.FC<LearningCenterViewProps> = ({
                 type="button"
                 onClick={handleResetProgress}
                 title="Reset module completion progress"
-                className="text-xs text-slate-500 hover:text-red-400 transition-colors p-1"
+                className="text-[12px] text-ink-subtle hover:text-red-500 transition-colors p-1 cursor-pointer"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
               </button>
@@ -212,7 +214,7 @@ export const LearningCenterView: React.FC<LearningCenterViewProps> = ({
 
       {/* Section 1: Learning Modules View */}
       {activeSection === 'modules' && (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {LEARNING_MODULES.map((module) => {
             const isCompleted = Boolean(completedModules[module.id]);
             const isExpanded = expandedModuleId === module.id;
@@ -223,107 +225,107 @@ export const LearningCenterView: React.FC<LearningCenterViewProps> = ({
             return (
               <div
                 key={module.id}
-                className={`rounded-2xl border transition-all duration-200 overflow-hidden shadow-lg ${
+                className={`rounded-xl border transition-colors overflow-hidden ${
                   isExpanded
-                    ? 'bg-slate-900/95 border-purple-500/40'
-                    : 'bg-slate-900/70 border-white/10 hover:border-white/20'
+                    ? 'bg-surface border-hairline-strong'
+                    : 'bg-surface border-hairline hover:border-hairline-strong'
                 }`}
               >
                 {/* Module Header Bar (Click to toggle expansion) */}
                 <div
                   onClick={() => setExpandedModuleId(isExpanded ? null : module.id)}
-                  className="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer select-none"
+                  className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer select-none"
                 >
-                  <div className="flex items-start sm:items-center gap-3.5 min-w-0">
+                  <div className="flex items-start sm:items-center gap-3 min-w-0">
                     <button
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
                         toggleModuleComplete(module.id);
                       }}
-                      className="mt-0.5 sm:mt-0 shrink-0 text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer"
+                      className="mt-0.5 sm:mt-0 shrink-0 text-ink-subtle hover:text-emerald-500 transition-colors cursor-pointer"
                       title={isCompleted ? 'Mark as Incomplete' : 'Mark as Complete'}
                     >
                       {isCompleted ? (
-                        <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+                        <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                       ) : (
-                        <Circle className="w-6 h-6 text-slate-600 hover:text-slate-400" />
+                        <Circle className="w-5 h-5 text-ink-subtle" />
                       )}
                     </button>
 
-                    <div className="space-y-1 min-w-0">
+                    <div className="space-y-0.5 min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-[11px] font-mono font-bold text-cyan-400 uppercase tracking-wider">
+                        <span className="text-[11px] font-mono font-medium text-[#0070E0]">
                           Module {module.moduleNumber}
                         </span>
-                        <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-white/5 border border-white/5 text-purple-300">
+                        <span className="badge-71 text-[10px]">
                           {module.badge}
                         </span>
-                        <span className="text-[11px] text-slate-500">
-                          • {module.readTime}
+                        <span className="text-[11px] text-ink-subtle">
+                          · {module.readTime}
                         </span>
                       </div>
-                      <h3 className="text-base sm:text-lg font-bold text-white truncate">
+                      <h3 className="text-[15px] font-medium text-ink-strong truncate">
                         {module.title}
                       </h3>
-                      <p className="text-xs text-slate-400 line-clamp-1">
+                      <p className="text-[12px] text-ink-subtle line-clamp-1">
                         {module.summary}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-white/5">
+                  <div className="flex items-center justify-between sm:justify-end gap-2.5 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-hairline">
                     <button
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
                         toggleModuleComplete(module.id);
                       }}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+                      className={`h-8 px-3 rounded-[10px] text-[12px] font-medium border transition-colors cursor-pointer ${
                         isCompleted
-                          ? 'bg-emerald-950/40 text-emerald-300 border-emerald-500/40'
-                          : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-white/10'
+                          ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+                          : 'btn-secondary'
                       }`}
                     >
                       {isCompleted ? (
                         <span className="flex items-center gap-1.5">
-                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                          <Check className="w-3.5 h-3.5" />
                           <span>Completed</span>
                         </span>
                       ) : (
-                        <span>Mark as Complete</span>
+                        <span>Mark Done</span>
                       )}
                     </button>
 
-                    <div className="w-8 h-8 rounded-lg bg-slate-800 border border-white/5 flex items-center justify-center text-slate-400">
-                      {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                    <div className="w-7 h-7 rounded-[6px] bg-surface-2 border border-hairline flex items-center justify-center text-ink-subtle">
+                      {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                     </div>
                   </div>
                 </div>
 
-                {/* Expanded Module Content (Requirement 2) */}
+                {/* Expanded Module Content */}
                 {isExpanded && (
-                  <div className="px-5 sm:px-6 pb-6 pt-2 border-t border-white/5 space-y-6 animate-fadeIn">
+                  <div className="px-4 sm:px-5 pb-5 pt-2 border-t border-hairline space-y-4">
                     {/* Part A: Human Explanation & Deep Dive */}
-                    <div className="space-y-4">
-                      <div className="rounded-xl bg-[#080d1a] border border-white/5 p-4 sm:p-5 space-y-2.5">
-                        <span className="text-xs font-bold text-cyan-400 uppercase tracking-wider block">
+                    <div className="space-y-3">
+                      <div className="rounded-lg bg-surface-2 border border-hairline p-4 space-y-2">
+                        <span className="text-[11px] font-medium text-[#0070E0] uppercase tracking-wider block">
                           Core Concept
                         </span>
-                        <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium">
+                        <p className="text-[13px] text-ink-strong leading-relaxed font-medium">
                           {module.explanation.coreConcept}
                         </p>
-                        <p className="text-xs text-slate-400 leading-relaxed pt-1">
+                        <p className="text-[12px] text-ink-subtle leading-relaxed pt-1">
                           {module.explanation.deepDive}
                         </p>
                       </div>
 
                       {/* Key Takeaways */}
-                      <div className="rounded-xl bg-purple-950/20 border border-purple-500/20 p-4 space-y-2">
-                        <span className="text-xs font-bold text-purple-300 uppercase tracking-wider block">
+                      <div className="rounded-lg bg-surface-2 border border-hairline p-4 space-y-2">
+                        <span className="text-[11px] font-medium text-ink-strong uppercase tracking-wider block">
                           Key Takeaways
                         </span>
-                        <ul className="space-y-1.5 text-xs text-slate-300 list-disc list-inside">
+                        <ul className="space-y-1 text-[12px] text-ink-subtle list-disc list-inside">
                           {module.explanation.keyTakeaways.map((point, idx) => (
                             <li key={idx} className="leading-relaxed">
                               {point}
@@ -334,55 +336,55 @@ export const LearningCenterView: React.FC<LearningCenterViewProps> = ({
                     </div>
 
                     {/* Part B: Practical Example & Real Commands */}
-                    <div className="rounded-xl bg-[#080d1a] border border-white/5 p-4 sm:p-5 space-y-3">
-                      <div className="flex items-center gap-2 text-xs font-bold text-emerald-400 uppercase tracking-wider">
-                        <Terminal className="w-4 h-4" />
+                    <div className="rounded-lg bg-surface-2 border border-hairline p-4 space-y-3">
+                      <div className="flex items-center gap-2 text-[12px] font-medium text-ink-strong">
+                        <Terminal className="w-4 h-4 text-[#0070E0]" />
                         <span>Practical Example: {module.practicalExample.title}</span>
                       </div>
 
-                      <p className="text-xs text-slate-300 italic">
+                      <p className="text-[12px] text-ink-subtle italic">
                         Scenario: {module.practicalExample.scenario}
                       </p>
 
-                      {/* Code/Commands with Explanations (Requirement 8 - Safe, explained commands) */}
+                      {/* Code/Commands with Explanations */}
                       {module.practicalExample.codeOrCommands && (
                         <div className="space-y-2 pt-1">
                           {module.practicalExample.codeOrCommands.map((item, idx) => (
                             <div
                               key={idx}
-                              className="rounded-lg bg-[#060a14] border border-white/10 p-3 space-y-1"
+                              className="rounded-[8px] bg-surface border border-hairline p-3 space-y-1.5"
                             >
                               <div className="flex items-center justify-between gap-2">
-                                <code className="text-xs font-mono text-cyan-300">{item.cmd}</code>
+                                <code className="text-[12px] font-mono text-[#0070E0] font-medium">{item.cmd}</code>
                                 <button
                                   type="button"
                                   onClick={() => handleCopy(item.cmd)}
-                                  className="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white border border-white/10"
+                                  className="text-[11px] font-mono px-2 py-0.5 rounded-[4px] bg-surface-2 text-ink-subtle hover:text-ink border border-hairline cursor-pointer"
                                 >
                                   {copiedCmd === item.cmd ? 'Copied' : 'Copy'}
                                 </button>
                               </div>
-                              <p className="text-[11px] text-slate-400">
-                                💡 <strong>Explanation:</strong> {item.explanation}
+                              <p className="text-[12px] text-ink-subtle">
+                                <strong className="font-medium text-ink">Explanation:</strong> {item.explanation}
                               </p>
                             </div>
                           ))}
                         </div>
                       )}
 
-                      <div className="text-xs text-slate-300 leading-relaxed whitespace-pre-line pt-1">
+                      <div className="text-[12px] text-ink-subtle leading-relaxed whitespace-pre-line pt-1">
                         {module.practicalExample.explanation}
                       </div>
                     </div>
 
-                    {/* Part C: Small Interactive Exercise (Requirement 2) */}
-                    <div className="rounded-xl bg-gradient-to-r from-slate-900 via-indigo-950/30 to-slate-900 border border-indigo-500/30 p-4 sm:p-5 space-y-3">
-                      <div className="flex items-center gap-2 text-xs font-bold text-indigo-300 uppercase tracking-wider">
-                        <HelpCircle className="w-4 h-4 text-cyan-400" />
+                    {/* Part C: Small Interactive Exercise */}
+                    <div className="rounded-lg bg-surface-2 border border-hairline p-4 space-y-3">
+                      <div className="flex items-center gap-2 text-[12px] font-medium text-ink-strong">
+                        <HelpCircle className="w-4 h-4 text-[#0070E0]" />
                         <span>Quick Check Exercise</span>
                       </div>
 
-                      <p className="text-xs sm:text-sm font-semibold text-white leading-relaxed">
+                      <p className="text-[13px] font-medium text-ink-strong leading-relaxed">
                         {module.exercise.prompt}
                       </p>
 
@@ -396,24 +398,24 @@ export const LearningCenterView: React.FC<LearningCenterViewProps> = ({
                             <div
                               key={optIdx}
                               onClick={() => handleSelectOption(module.id, optIdx)}
-                              className={`p-3 rounded-xl border text-xs flex items-center justify-between gap-3 transition-all cursor-pointer ${
+                              className={`p-3 rounded-[8px] border text-[12px] flex items-center justify-between gap-3 transition-colors cursor-pointer ${
                                 showCorrect
-                                  ? 'bg-emerald-950/40 border-emerald-500/50 text-emerald-200'
+                                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
                                   : showWrong
-                                  ? 'bg-red-950/40 border-red-500/50 text-red-200'
+                                  ? 'bg-red-500/10 border-red-500/30 text-red-600 dark:text-red-400'
                                   : isSelected
-                                  ? 'bg-purple-950/40 border-purple-500/50 text-white'
-                                  : 'bg-[#080d1a] border-white/5 text-slate-300 hover:border-white/20'
+                                  ? 'bg-[#0070E0]/10 border-[#0070E0] text-ink-strong'
+                                  : 'bg-surface border-hairline text-ink hover:border-hairline-strong'
                               }`}
                             >
                               <div className="flex items-center gap-2.5">
-                                <span className="w-5 h-5 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-[10px] font-bold shrink-0">
+                                <span className="w-5 h-5 rounded-[4px] bg-surface-2 text-ink-subtle flex items-center justify-center text-[10px] font-mono font-medium shrink-0">
                                   {String.fromCharCode(65 + optIdx)}
                                 </span>
                                 <span className="leading-relaxed">{opt}</span>
                               </div>
 
-                              {showCorrect && <Check className="w-4 h-4 text-emerald-400 shrink-0" />}
+                              {showCorrect && <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />}
                             </div>
                           );
                         })}
@@ -421,31 +423,31 @@ export const LearningCenterView: React.FC<LearningCenterViewProps> = ({
 
                       {hasAnswered && (
                         <div
-                          className={`p-3 rounded-xl border text-xs leading-relaxed animate-fadeIn ${
+                          className={`p-3 rounded-[8px] border text-[12px] leading-relaxed ${
                             isCorrect
-                              ? 'bg-emerald-950/30 border-emerald-500/30 text-emerald-200'
-                              : 'bg-amber-950/30 border-amber-500/30 text-amber-200'
+                              ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-300'
+                              : 'bg-amber-500/10 border-amber-500/20 text-amber-700 dark:text-amber-300'
                           }`}
                         >
-                          <p className="font-semibold mb-1">
-                            {isCorrect ? '🎉 Correct!' : '🤔 Not quite. Here is why:'}
+                          <p className="font-medium mb-1">
+                            {isCorrect ? '✓ Correct!' : 'Not quite. Here is why:'}
                           </p>
                           <p>{module.exercise.explanation}</p>
                         </div>
                       )}
                     </div>
 
-                    {/* Part D: Contextual Feature Navigation (Requirement 6) */}
+                    {/* Part D: Contextual Feature Navigation */}
                     {module.relatedFeature && (
-                      <div className="p-4 rounded-xl bg-slate-800/80 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div className="p-3.5 rounded-lg bg-surface border border-hairline flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div className="space-y-0.5">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-400 font-mono">
+                          <span className="text-[10px] font-medium uppercase tracking-wider text-[#0070E0]">
                             Put this into practice
                           </span>
-                          <h4 className="text-xs sm:text-sm font-bold text-white">
+                          <h4 className="text-[13px] font-medium text-ink-strong">
                             {module.relatedFeature.label}
                           </h4>
-                          <p className="text-xs text-slate-400">
+                          <p className="text-[12px] text-ink-subtle">
                             {module.relatedFeature.description}
                           </p>
                         </div>
@@ -453,7 +455,7 @@ export const LearningCenterView: React.FC<LearningCenterViewProps> = ({
                         <button
                           type="button"
                           onClick={() => onNavigateTab(module.relatedFeature!.tab)}
-                          className="self-start sm:self-auto flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white text-xs font-semibold shrink-0 shadow-md transition-all cursor-pointer"
+                          className="btn-primary h-8 px-3 rounded-[10px] text-[12px] self-start sm:self-auto flex items-center gap-1.5 shrink-0 cursor-pointer"
                         >
                           <span>Launch Feature</span>
                           <ArrowRight className="w-3.5 h-3.5" />
@@ -468,34 +470,34 @@ export const LearningCenterView: React.FC<LearningCenterViewProps> = ({
         </div>
       )}
 
-      {/* Section 2: Open-Source Glossary View (Requirement 5) */}
+      {/* Section 2: Open-Source Glossary View */}
       {activeSection === 'glossary' && (
-        <div className="space-y-6">
+        <div className="space-y-4">
           {/* Search & Category Filter Bar */}
-          <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-5 shadow-xl space-y-4">
-            <div className="flex flex-col sm:flex-row gap-3">
+          <div className="rounded-xl bg-surface border border-hairline p-4 space-y-3">
+            <div className="flex flex-col sm:flex-row gap-2.5">
               <div className="relative flex-1">
-                <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Search className="w-4 h-4 text-ink-subtle absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={glossarySearch}
                   onChange={(e) => setGlossarySearch(e.target.value)}
                   placeholder="Search open-source terms, analogies, or definitions..."
-                  className="w-full bg-[#080d1a] border border-white/10 rounded-xl pl-9 pr-3.5 py-2.5 text-xs sm:text-sm text-cyan-200 placeholder:text-slate-600 focus:outline-none focus:border-cyan-400 font-mono"
+                  className="input-71 pl-9 font-mono text-[13px]"
                 />
               </div>
 
-              {/* Category Pills */}
+              {/* Category Pills (71UI 32px height buttons, 10px radius) */}
               <div className="flex flex-wrap items-center gap-1.5">
                 {categories.map((cat) => (
                   <button
                     key={cat}
                     type="button"
                     onClick={() => setGlossaryCategory(cat)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
+                    className={`h-8 px-3 rounded-[10px] text-[12px] font-medium border transition-colors cursor-pointer ${
                       glossaryCategory === cat
-                        ? 'bg-purple-600 text-white border-purple-500 shadow-sm'
-                        : 'bg-slate-800 text-slate-300 border-white/5 hover:border-white/20'
+                        ? 'bg-surface-2 text-ink-strong border-hairline-strong shadow-xs'
+                        : 'bg-surface text-ink-subtle border-hairline hover:text-ink'
                     }`}
                   >
                     {cat}
@@ -504,13 +506,13 @@ export const LearningCenterView: React.FC<LearningCenterViewProps> = ({
               </div>
             </div>
 
-            <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
-              <span>Showing <strong>{filteredGlossary.length}</strong> open-source terms</span>
+            <div className="flex items-center justify-between text-[12px] text-ink-subtle pt-1">
+              <span>Showing <strong className="text-ink font-medium">{filteredGlossary.length}</strong> open-source terms</span>
               {glossarySearch && (
                 <button
                   type="button"
                   onClick={() => setGlossarySearch('')}
-                  className="text-cyan-400 hover:underline"
+                  className="text-[#0070E0] hover:underline cursor-pointer"
                 >
                   Clear search
                 </button>
@@ -519,37 +521,37 @@ export const LearningCenterView: React.FC<LearningCenterViewProps> = ({
           </div>
 
           {/* Glossary Terms Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
             {filteredGlossary.map((term, idx) => (
               <div
                 key={idx}
-                className="rounded-2xl bg-gradient-to-b from-slate-900/90 to-[#080d1a] border border-white/10 p-5 space-y-3 shadow-lg hover:border-purple-500/30 transition-all flex flex-col justify-between"
+                className="rounded-xl bg-surface border border-hairline p-4 space-y-3 flex flex-col justify-between"
               >
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <div className="flex items-center justify-between gap-2">
-                    <h3 className="text-base font-bold text-white tracking-tight">
+                    <h3 className="text-[14px] font-medium text-ink-strong">
                       {term.term}
                     </h3>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-purple-500/15 text-purple-300 border border-purple-500/30">
+                    <span className="badge-71 text-[10px] font-mono uppercase">
                       {term.category}
                     </span>
                   </div>
 
-                  <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium">
+                  <p className="text-[13px] text-ink leading-relaxed">
                     {term.definition}
                   </p>
                 </div>
 
-                <div className="space-y-2 pt-2 border-t border-white/5 text-xs">
+                <div className="space-y-2 pt-2 border-t border-hairline text-[12px]">
                   {term.analogy && (
-                    <div className="p-2.5 rounded-lg bg-indigo-950/30 border border-indigo-500/20 text-indigo-200 leading-relaxed">
-                      💡 <strong>Mental Model:</strong> {term.analogy}
+                    <div className="p-2.5 rounded-[6px] bg-surface-2 border border-hairline text-ink-subtle leading-relaxed">
+                      💡 <strong className="font-medium text-ink">Mental Model:</strong> {term.analogy}
                     </div>
                   )}
 
                   {term.example && (
-                    <div className="font-mono text-[11px] text-slate-400 bg-black/40 p-2 rounded-lg border border-white/5">
-                      <span className="text-slate-500">Example: </span>
+                    <div className="font-mono text-[11px] text-ink-subtle bg-surface-2 p-2 rounded-[6px] border border-hairline">
+                      <span className="text-ink-subtle">Example: </span>
                       {term.example}
                     </div>
                   )}

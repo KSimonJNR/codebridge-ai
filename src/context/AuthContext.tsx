@@ -1,6 +1,20 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode, useRef } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
-import { supabase, isSupabaseConfigured, getSupabaseAnonKey } from '../lib/supabase.ts';
+import {
+  supabase,
+  isSupabaseConfigured,
+  getSupabaseAnonKey,
+  reconfigureSupabase,
+  getAuthCallbackUrl,
+  getRuntimeOrigin
+} from '../lib/supabase.ts';
+import {
+  loadCloudProgress,
+  saveCloudProgressItem,
+  getLocalProgressSnapshot,
+  mergeProgressData,
+  applyMergedProgressToLocal
+} from '../lib/progressSync.ts';
 import { UserProfile } from '../types.ts';
 
 interface AuthContextType {
@@ -9,6 +23,7 @@ interface AuthContextType {
   session: Session | null;
   loading: boolean;
   isConfigured: boolean;
+  callbackUrl: string;
   signInWithEmail: (email: string, password: string) => Promise<{ error: AuthError | null }>;
   signUpWithEmail: (email: string, password: string, fullName?: string) => Promise<{ error: AuthError | null; user: User | null }>;
   signInWithProvider: (provider: 'google' | 'github') => Promise<{ error: AuthError | null }>;
@@ -26,10 +41,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const configured = isSupabaseConfigured();
+  const [configured, setConfigured] = useState<boolean>(isSupabaseConfigured());
+  const initialSyncAttempted = useRef<string | null>(null);
 
   const fetchProfile = useCallback(async (userId: string, email?: string) => {
-    if (!configured) return;
+    if (!isSupabaseConfigured()) return;
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -61,7 +77,40 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         createdAt: new Date().toISOString(),
       });
     }
-  }, [configured]);
+  }, []);
+
+  // Automatically merges cloud and local progress non-destructively upon sign-in
+  const syncUserProgress = useCallback(async (userId: string) => {
+    if (!userId || initialSyncAttempted.current === userId) return;
+    initialSyncAttempted.current = userId;
+
+    try {
+      const { data: cloudData, error } = await loadCloudProgress(userId);
+      if (error) {
+        console.warn('[CloudSync] Could not fetch remote progress:', error);
+        return;
+      }
+
+      const localData = getLocalProgressSnapshot();
+      const merged = mergeProgressData(cloudData || {}, localData);
+      applyMergedProgressToLocal(merged);
+
+      // Backfill any non-empty local fields that are missing in cloud
+      for (const [key, val] of Object.entries(localData)) {
+        const cloudVal = cloudData ? cloudData[key] : undefined;
+        const shouldBackfill =
+          (val && !cloudVal) ||
+          (Array.isArray(val) && val.length > 0 && (!Array.isArray(cloudVal) || val.length > cloudVal.length)) ||
+          (typeof val === 'object' && val !== null && Object.keys(val).length > 0 && (!cloudVal || Object.keys(cloudVal).length === 0));
+
+        if (shouldBackfill) {
+          saveCloudProgressItem(userId, key, val).catch(() => {});
+        }
+      }
+    } catch (e) {
+      console.warn('[CloudSync] Background sync encountered a transient issue:', e);
+    }
+  }, []);
 
   // Clean OAuth hash/query parameters from URL after exchange
   const cleanUrlTokens = () => {
@@ -71,6 +120,141 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  // Self-heal configuration if server has env vars not yet visible to client bundle
+  useEffect(() => {
+    if (!configured) {
+      fetch('/api/supabase/config')
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.configured && data.supabaseUrl && data.supabaseAnonKey) {
+            reconfigureSupabase(data.supabaseUrl, data.supabaseAnonKey);
+            setConfigured(true);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [configured]);
+
+  // Dynamic callback URL based on actual runtime origin
+  const callbackUrl = getAuthCallbackUrl();
+
+  // Centralized OAuth payload processor for tokens and PKCE codes
+  const handleAuthCallbackPayload = useCallback(async (payload: { hash?: string; search?: string; error?: string | null }) => {
+    if (!payload) return;
+
+    if (payload.error) {
+      console.warn('[Supabase OAuth] Received error from callback:', payload.error);
+      return;
+    }
+
+    const hash = payload.hash || '';
+    const search = payload.search || '';
+
+    // Check for error in query or hash
+    const searchParams = new URLSearchParams(search.replace(/^\?/, ''));
+    const hashParams = new URLSearchParams(hash.replace(/^#/, ''));
+    const errorDesc = searchParams.get('error_description') || searchParams.get('error') || hashParams.get('error_description') || hashParams.get('error');
+
+    if (errorDesc) {
+      console.warn('[Supabase OAuth] OAuth error in URL parameters:', errorDesc);
+      return;
+    }
+
+    // 1. Implicit tokens (hash fragments): access_token & refresh_token
+    const accessToken = hashParams.get('access_token');
+    const refreshToken = hashParams.get('refresh_token');
+    if (accessToken && refreshToken) {
+      try {
+        const { data, error } = await supabase.auth.setSession({
+          access_token: accessToken,
+          refresh_token: refreshToken,
+        });
+        if (data?.session && !error) {
+          setSession(data.session);
+          setUser(data.session.user);
+          await fetchProfile(data.session.user.id, data.session.user.email);
+          syncUserProgress(data.session.user.id);
+          cleanUrlTokens();
+        }
+      } catch (e) {
+        console.warn('Failed to restore session from OAuth hash tokens:', e);
+      }
+      return;
+    }
+
+    // 2. PKCE authorization code (?code=...)
+    const code = searchParams.get('code');
+    if (code) {
+      try {
+        const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+        if (data?.session && !error) {
+          setSession(data.session);
+          setUser(data.session.user);
+          await fetchProfile(data.session.user.id, data.session.user.email);
+          syncUserProgress(data.session.user.id);
+          cleanUrlTokens();
+        }
+      } catch (e) {
+        console.warn('Failed to exchange authorization code from OAuth callback:', e);
+      }
+    }
+  }, [fetchProfile, syncUserProgress]);
+
+  // Multi-channel listener for popup/redirect completion
+  useEffect(() => {
+    // 1. PostMessage handler (popups)
+    const handleAuthMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === 'SUPABASE_OAUTH_CALLBACK') {
+        handleAuthCallbackPayload(event.data);
+      }
+    };
+    window.addEventListener('message', handleAuthMessage);
+
+    // 2. BroadcastChannel handler (cross-tab/cross-window in modern browsers)
+    let bc: BroadcastChannel | null = null;
+    try {
+      if (typeof BroadcastChannel !== 'undefined') {
+        bc = new BroadcastChannel('codebridge_oauth_channel');
+        bc.onmessage = (event) => {
+          if (event.data && event.data.type === 'SUPABASE_OAUTH_CALLBACK') {
+            handleAuthCallbackPayload(event.data);
+          }
+        };
+      }
+    } catch {}
+
+    // 3. Storage event listener (syncs across tabs even when window.opener is stripped)
+    const handleStorageEvent = (event: StorageEvent) => {
+      if (event.key === 'codebridge_oauth_callback' && event.newValue) {
+        try {
+          const parsed = JSON.parse(event.newValue);
+          handleAuthCallbackPayload(parsed);
+        } catch {}
+      }
+    };
+    window.addEventListener('storage', handleStorageEvent);
+
+    // 4. Direct URL inspection on mount (for mobile single-tab direct redirects)
+    if (typeof window !== 'undefined') {
+      const currentHash = window.location.hash || '';
+      const currentSearch = window.location.search || '';
+      if (currentHash.includes('access_token') || currentSearch.includes('code=')) {
+        handleAuthCallbackPayload({ hash: currentHash, search: currentSearch });
+      }
+    }
+
+    return () => {
+      window.removeEventListener('message', handleAuthMessage);
+      window.removeEventListener('storage', handleStorageEvent);
+      if (bc) {
+        try {
+          bc.close();
+        } catch {}
+      }
+    };
+  }, [handleAuthCallbackPayload]);
+
+  // Supabase Auth lifecycle
   useEffect(() => {
     if (!configured) {
       setLoading(false);
@@ -86,6 +270,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setSession(initialSession);
         setUser(initialSession.user);
         fetchProfile(initialSession.user.id, initialSession.user.email);
+        syncUserProgress(initialSession.user.id);
         cleanUrlTokens();
       }
       setLoading(false);
@@ -95,7 +280,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     // 2. Auth State Change Listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, newSession) => {
+      async (_event, newSession) => {
         if (!isMounted) return;
 
         setSession(newSession);
@@ -103,13 +288,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
         if (newSession?.user) {
           await fetchProfile(newSession.user.id, newSession.user.email);
+          syncUserProgress(newSession.user.id);
           cleanUrlTokens();
         } else {
           setProfile(null);
-        }
-
-        if (event === 'PASSWORD_RECOVERY') {
-          // Flag recovery mode
+          initialSyncAttempted.current = null;
         }
 
         setLoading(false);
@@ -120,10 +303,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       isMounted = false;
       subscription.unsubscribe();
     };
-  }, [configured, fetchProfile]);
+  }, [configured, fetchProfile, syncUserProgress]);
 
   const signInWithEmail = async (email: string, password: string) => {
-    if (!configured) {
+    if (!isSupabaseConfigured()) {
       return {
         error: new Error(
           'Supabase credentials are not configured. Please add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your environment.'
@@ -138,7 +321,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const signUpWithEmail = async (email: string, password: string, fullName?: string) => {
-    if (!configured) {
+    if (!isSupabaseConfigured()) {
       return {
         error: new Error(
           'Supabase credentials are not configured. Please add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your environment.'
@@ -161,7 +344,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const signInWithProvider = async (provider: 'google' | 'github') => {
-    if (!configured) {
+    if (!isSupabaseConfigured()) {
       return {
         error: new Error(
           'Supabase credentials are not configured. Please add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your environment variables or AI Studio Secrets.'
@@ -187,13 +370,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       // Continue if server status check is unreachable
     }
 
-    const redirectTo = typeof window !== 'undefined' ? window.location.origin : undefined;
+    const redirectTo = callbackUrl;
     const anonKey = getSupabaseAnonKey();
 
+    // Use skipBrowserRedirect: true so iframe navigation is not blocked
     const res = await supabase.auth.signInWithOAuth({
       provider,
       options: {
         redirectTo,
+        skipBrowserRedirect: true,
         // GitHub: request only read user profile identity without repository access
         scopes: provider === 'github' ? 'read:user user:email' : undefined,
         // Explicitly attach apikey parameter to the authorization URL query
@@ -214,32 +399,56 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       };
     }
 
+    if (res.data?.url) {
+      const width = 600;
+      const height = 720;
+      const left = window.screenX + (window.outerWidth - width) / 2;
+      const top = window.screenY + (window.outerHeight - height) / 2;
+      const popup = window.open(
+        res.data.url,
+        `supabase_oauth_${provider}`,
+        `width=${width},height=${height},left=${left},top=${top},status=no,resizable=yes,scrollbars=yes`
+      );
+
+      if (!popup || popup.closed || typeof popup.closed === 'undefined') {
+        // Popup was blocked by browser
+        return {
+          error: new Error(
+            'The sign-in popup was blocked by your browser. Please allow popups for this site and try again.'
+          ) as unknown as AuthError,
+        };
+      }
+    }
+
     return { error: null };
   };
 
   const signOut = async () => {
-    if (!configured) {
+    if (!isSupabaseConfigured()) {
       setUser(null);
       setProfile(null);
       setSession(null);
+      initialSyncAttempted.current = null;
       return { error: null };
     }
     const res = await supabase.auth.signOut();
     setUser(null);
     setProfile(null);
     setSession(null);
+    initialSyncAttempted.current = null;
     return { error: res.error };
   };
 
   const sendPasswordReset = async (email: string) => {
-    if (!configured) {
+    if (!isSupabaseConfigured()) {
       return {
         error: new Error('Supabase credentials are not configured.') as unknown as AuthError,
       };
     }
 
-    const redirectTo = typeof window !== 'undefined'
-      ? `${window.location.origin}/?tab=account&reset=true`
+    const runtimeOrigin = getRuntimeOrigin();
+    const redirectTo = runtimeOrigin
+      ? `${runtimeOrigin}/?tab=account&reset=true`
       : undefined;
 
     const res = await supabase.auth.resetPasswordForEmail(email.trim(), {
@@ -250,7 +459,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const updatePassword = async (newPassword: string) => {
-    if (!configured) {
+    if (!isSupabaseConfigured()) {
       return {
         error: new Error('Supabase credentials are not configured.') as unknown as AuthError,
       };
@@ -264,7 +473,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const resendVerificationEmail = async (email: string) => {
-    if (!configured) {
+    if (!isSupabaseConfigured()) {
       return {
         error: new Error('Supabase credentials are not configured.') as unknown as AuthError,
       };
@@ -292,6 +501,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         session,
         loading,
         isConfigured: configured,
+        callbackUrl,
         signInWithEmail,
         signUpWithEmail,
         signInWithProvider,

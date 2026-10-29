@@ -204,29 +204,31 @@ export const CodeExplainerView: React.FC<CodeExplainerViewProps> = ({
   };
 
   return (
-    <div className="space-y-8 pb-16">
+    <div className="space-y-6 pb-16">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-hairline pb-5">
         <div>
-          <div className="inline-flex items-center gap-1.5 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-1">
-            <Sparkles className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-1.5 text-ink-subtle text-[12px] font-medium uppercase tracking-wider mb-1">
+            <Sparkles className="w-3.5 h-3.5 text-[#0070E0]" />
             Gemini 3.8 Flash Powered
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">AI Code Explainer</h2>
-          <p className="text-sm text-slate-400 mt-1">
+          <h2 className="text-2xl sm:text-3xl font-normal text-ink-strong tracking-tight">
+            AI Code Explainer <span className="text-ink-subtle">· Deep Breakdown</span>
+          </h2>
+          <p className="text-[13px] text-ink-subtle mt-1 max-w-2xl leading-relaxed">
             Paste confusing code from open-source repos and receive a gentle, line-by-line breakdown with potential pitfalls.
           </p>
         </div>
 
         {/* Preset sample buttons */}
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs text-slate-400 font-medium">Quick Presets:</span>
+          <span className="text-[12px] text-ink-subtle font-medium">Quick Presets:</span>
           {SAMPLE_SNIPPETS.map((sample, i) => (
             <button
               key={i}
               type="button"
               onClick={() => handleSelectSample(sample)}
-              className="px-2.5 py-1 rounded-lg bg-slate-900 border border-white/10 hover:border-cyan-500/40 text-slate-300 hover:text-white text-xs font-medium transition-colors cursor-pointer"
+              className="btn-secondary h-7 px-2.5 rounded-[8px] text-[12px] cursor-pointer"
             >
               {sample.language}
             </button>
@@ -235,21 +237,21 @@ export const CodeExplainerView: React.FC<CodeExplainerViewProps> = ({
       </div>
 
       {/* Editor & Output Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Input Box */}
         <div className="lg:col-span-6 space-y-4">
-          <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-4 sm:p-5 shadow-xl">
+          <div className="rounded-xl bg-surface border border-hairline p-5 space-y-3.5">
             {/* Controls Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-white/10">
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-hairline">
               <div className="flex items-center gap-2">
-                <label htmlFor="lang-select" className="text-xs font-semibold text-slate-300">
+                <label htmlFor="lang-select" className="text-[12px] font-medium text-ink-strong">
                   Language:
                 </label>
                 <select
                   id="lang-select"
                   value={language}
                   onChange={(e) => setLanguage(e.target.value as ProgrammingLanguage)}
-                  className="bg-slate-950 border border-white/10 text-cyan-300 text-xs font-medium rounded-lg px-3 py-1.5 focus:outline-none focus:border-cyan-400"
+                  className="bg-surface-2 border border-hairline text-ink text-[12px] font-medium rounded-[8px] px-2.5 py-1 focus:outline-none focus:border-[#0070E0]"
                 >
                   <option value="Python">Python</option>
                   <option value="JavaScript">JavaScript</option>
@@ -266,7 +268,7 @@ export const CodeExplainerView: React.FC<CodeExplainerViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setCode('')}
-                  className="flex items-center gap-1 text-xs text-slate-400 hover:text-slate-200 transition-colors px-2 py-1"
+                  className="btn-secondary h-7 px-2 rounded-[6px] text-[11px] flex items-center gap-1 cursor-pointer"
                 >
                   <RotateCcw className="w-3 h-3" />
                   Clear
@@ -282,16 +284,16 @@ export const CodeExplainerView: React.FC<CodeExplainerViewProps> = ({
                 placeholder="// Paste code here... (e.g. from GitHub PR, issue comment, or repo file)"
                 rows={16}
                 spellCheck={false}
-                className="w-full bg-[#080d1a] border border-white/10 rounded-xl p-4 text-xs sm:text-sm font-mono text-cyan-100 placeholder:text-slate-600 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 resize-y leading-relaxed"
+                className="w-full bg-surface-2 border border-hairline rounded-lg p-3.5 text-xs font-mono text-ink placeholder:text-ink-subtle focus:outline-none focus:border-[#0070E0] resize-y leading-relaxed"
               />
-              <div className="absolute bottom-3 right-3 text-[11px] text-slate-500 bg-slate-900/90 px-2 py-0.5 rounded border border-white/5">
+              <div className="absolute bottom-3 right-3 text-[11px] text-ink-subtle bg-surface px-2 py-0.5 rounded-[4px] border border-hairline font-mono tabular-nums">
                 {code.split('\n').length} lines
               </div>
             </div>
 
             {/* Optional Context */}
-            <div className="mt-3">
-              <label htmlFor="repo-context" className="block text-[11px] font-semibold text-slate-400 mb-1">
+            <div>
+              <label htmlFor="repo-context" className="block text-[11px] font-medium text-ink-subtle mb-1">
                 Repository or File Context (optional):
               </label>
               <input
@@ -300,30 +302,30 @@ export const CodeExplainerView: React.FC<CodeExplainerViewProps> = ({
                 value={context}
                 onChange={(e) => setContext(e.target.value)}
                 placeholder="e.g. In an open-source React dashboard inside utils/auth.ts"
-                className="w-full bg-[#080d1a] border border-white/10 rounded-lg px-3 py-2 text-xs text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-cyan-500"
+                className="input-71 text-[12px]"
               />
             </div>
 
             {/* Action Bar */}
-            <div className="mt-5 flex items-center justify-between gap-4 pt-3 border-t border-white/10">
-              <span className="text-xs text-slate-400 hidden sm:inline">
-                Analyzed on server via <code className="text-purple-300 font-mono text-[11px]">@google/genai</code>
+            <div className="flex items-center justify-between gap-3 pt-3 border-t border-hairline">
+              <span className="text-[12px] text-ink-subtle hidden sm:inline">
+                Analyzed on server via <code className="text-[#0070E0] font-mono text-[11px]">@google/genai</code>
               </span>
 
               <button
                 type="button"
                 onClick={handleExplain}
                 disabled={loading}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-lg shadow-purple-600/30 hover:shadow-purple-600/40 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
+                className="btn-primary h-9 px-5 rounded-[10px] text-[13px] font-medium w-full sm:w-auto flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 {loading ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     <span>Analyzing Code...</span>
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-4 h-4 text-cyan-300" />
+                    <Sparkles className="w-3.5 h-3.5" />
                     <span>Explain My Code</span>
                   </>
                 )}
@@ -333,31 +335,31 @@ export const CodeExplainerView: React.FC<CodeExplainerViewProps> = ({
 
           {/* Friendly Error Box */}
           {error && (
-            <div className="rounded-xl bg-red-950/40 border border-red-500/40 p-4 text-red-200 text-xs sm:text-sm flex items-start gap-3 animate-fadeIn">
-              <AlertTriangle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <p className="font-semibold text-red-300">Analysis Failed</p>
-                <p className="text-slate-300">{error}</p>
+            <div className="rounded-lg bg-red-500/10 border border-red-500/20 p-4 text-red-600 dark:text-red-400 text-[13px] flex items-start gap-2.5">
+              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+              <div className="space-y-0.5">
+                <p className="font-medium text-red-700 dark:text-red-300">Analysis Failed</p>
+                <p className="text-ink-subtle">{error}</p>
               </div>
             </div>
           )}
         </div>
 
         {/* Right Column: Structured Output Display */}
-        <div className="lg:col-span-6 space-y-5">
+        <div className="lg:col-span-6 space-y-4">
           {!result && !loading && (
-            <div className="rounded-2xl bg-slate-900/60 border border-dashed border-white/15 p-10 text-center flex flex-col items-center justify-center min-h-[460px]">
-              <div className="w-16 h-16 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-4">
-                <Code2 className="w-8 h-8" />
+            <div className="rounded-xl bg-surface border border-dashed border-hairline p-10 text-center flex flex-col items-center justify-center min-h-[460px]">
+              <div className="w-12 h-12 rounded-[10px] bg-surface-2 border border-hairline flex items-center justify-center text-ink-subtle mb-3">
+                <Code2 className="w-6 h-6 text-[#0070E0]" />
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">Ready to Explain</h3>
-              <p className="text-sm text-slate-400 max-w-sm leading-relaxed mb-6">
+              <h3 className="text-[15px] font-medium text-ink-strong mb-1">Ready to Explain</h3>
+              <p className="text-[12px] text-ink-subtle max-w-sm leading-relaxed mb-4">
                 Paste your code snippet on the left and click <strong>"Explain My Code"</strong>. We will unpack the logic, key lines, and potential gotchas.
               </p>
               <button
                 type="button"
                 onClick={handleExplain}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-semibold border border-white/10 transition-colors"
+                className="btn-secondary h-8 px-3 rounded-[10px] text-[12px] cursor-pointer"
               >
                 Explain Current Sample Code &rarr;
               </button>
@@ -365,67 +367,62 @@ export const CodeExplainerView: React.FC<CodeExplainerViewProps> = ({
           )}
 
           {loading && (
-            <div className="rounded-2xl bg-slate-900/60 border border-white/10 p-10 text-center flex flex-col items-center justify-center min-h-[460px] space-y-4">
-              <div className="relative">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-500 to-cyan-500 animate-spin flex items-center justify-center p-[2px]">
-                  <div className="w-full h-full bg-[#070a13] rounded-[14px]" />
-                </div>
-                <Sparkles className="w-6 h-6 text-cyan-300 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
-              </div>
-              <h3 className="text-base font-bold text-white">Gemini is Mentoring You...</h3>
-              <p className="text-xs text-slate-400 max-w-xs leading-relaxed">
+            <div className="rounded-xl bg-surface border border-hairline p-10 text-center flex flex-col items-center justify-center min-h-[460px] space-y-3">
+              <div className="w-10 h-10 border-2 border-[#0070E0] border-t-transparent rounded-full animate-spin" />
+              <h3 className="text-[14px] font-medium text-ink-strong">Gemini is Mentoring You...</h3>
+              <p className="text-[12px] text-ink-subtle max-w-xs leading-relaxed">
                 Examining logic, edge cases, open-source best practices, and drafting a plain-English explanation.
               </p>
             </div>
           )}
 
           {result && !loading && (
-            <div className="space-y-4 animate-fadeIn">
+            <div className="space-y-3.5">
               {/* 1. Summary Card */}
-              <div className="rounded-2xl bg-slate-900/90 border border-cyan-500/30 p-5 shadow-lg">
-                <div className="flex items-center justify-between mb-3">
+              <div className="rounded-xl bg-surface border border-hairline p-5 space-y-2">
+                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400" />
-                    <h3 className="text-sm font-bold text-white tracking-wide uppercase">
+                    <span className="w-2 h-2 rounded-full bg-[#0070E0]" />
+                    <h3 className="text-[12px] font-medium text-ink-strong tracking-wide uppercase">
                       Plain English Explanation
                     </h3>
                   </div>
-                  <span className="text-[11px] font-semibold text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded-full border border-cyan-500/20">
+                  <span className="badge-71 text-[10px]">
                     High-Level Concept
                   </span>
                 </div>
-                <p className="text-sm text-slate-200 leading-relaxed font-sans">
+                <p className="text-[13px] text-ink leading-relaxed">
                   {result.summary}
                 </p>
               </div>
 
               {/* 2. Important Lines & What They Do */}
-              <div className="rounded-2xl bg-slate-900/90 border border-purple-500/30 p-5 shadow-lg">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="w-2.5 h-2.5 rounded-full bg-purple-400 shadow-sm shadow-purple-400" />
-                  <h3 className="text-sm font-bold text-white tracking-wide uppercase">
+              <div className="rounded-xl bg-surface border border-hairline p-5 space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#0070E0]" />
+                  <h3 className="text-[12px] font-medium text-ink-strong tracking-wide uppercase">
                     Important Lines & Mechanics
                   </h3>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   {result.importantLines.map((line, idx) => (
                     <div
                       key={idx}
-                      className="rounded-xl bg-[#080d1a] border border-white/5 p-3 space-y-1.5"
+                      className="rounded-lg bg-surface-2 border border-hairline p-3 space-y-1.5"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-mono font-bold text-purple-400 uppercase tracking-wider">
+                        <span className="text-[10px] font-mono font-medium text-[#0070E0] uppercase tracking-wider">
                           Key Block #{idx + 1}
                         </span>
                         <button
                           type="button"
                           onClick={() => handleCopy(line.codeSnippet, `line-${idx}`)}
-                          className="text-[11px] text-slate-400 hover:text-cyan-300 flex items-center gap-1 transition-colors"
+                          className="text-[11px] text-ink-subtle hover:text-ink flex items-center gap-1 cursor-pointer"
                         >
                           {copiedKey === `line-${idx}` ? (
                             <>
-                              <Check className="w-3 h-3 text-emerald-400" />
-                              <span className="text-emerald-400">Copied</span>
+                              <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                              <span>Copied</span>
                             </>
                           ) : (
                             <>
@@ -435,10 +432,10 @@ export const CodeExplainerView: React.FC<CodeExplainerViewProps> = ({
                           )}
                         </button>
                       </div>
-                      <pre className="text-xs font-mono text-cyan-300 overflow-x-auto py-1 px-2 rounded bg-black/40 border border-white/5">
+                      <pre className="text-[12px] font-mono text-[#0070E0] overflow-x-auto py-1 px-2 rounded-[6px] bg-surface border border-hairline font-medium">
                         <code>{line.codeSnippet}</code>
                       </pre>
-                      <p className="text-xs text-slate-300 leading-relaxed pt-1">
+                      <p className="text-[12px] text-ink-subtle leading-relaxed pt-0.5">
                         {line.explanation}
                       </p>
                     </div>
@@ -447,28 +444,28 @@ export const CodeExplainerView: React.FC<CodeExplainerViewProps> = ({
               </div>
 
               {/* 3. Potential Bugs & Edge Cases */}
-              <div className="rounded-2xl bg-slate-900/90 border border-amber-500/30 p-5 shadow-lg">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-sm shadow-amber-400" />
-                  <h3 className="text-sm font-bold text-white tracking-wide uppercase">
+              <div className="rounded-xl bg-surface border border-hairline p-5 space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-amber-500" />
+                  <h3 className="text-[12px] font-medium text-ink-strong tracking-wide uppercase">
                     Potential Bugs & Edge Cases
                   </h3>
                 </div>
-                <div className="space-y-2.5">
+                <div className="space-y-2">
                   {result.potentialBugs.map((bug, idx) => (
                     <div
                       key={idx}
-                      className="rounded-xl bg-amber-500/5 border border-amber-500/20 p-3 flex items-start gap-3"
+                      className="rounded-lg bg-amber-500/10 border border-amber-500/20 p-3 flex items-start gap-2.5"
                     >
-                      <Bug className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                      <Bug className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                       <div>
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="text-xs font-bold text-amber-300">{bug.title}</span>
-                          <span className="text-[10px] uppercase font-semibold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-200">
+                          <span className="text-[12px] font-medium text-amber-700 dark:text-amber-300">{bug.title}</span>
+                          <span className="badge-71 text-[9px] uppercase">
                             {bug.severity || 'Notice'}
                           </span>
                         </div>
-                        <p className="text-xs text-slate-300 leading-relaxed">{bug.explanation}</p>
+                        <p className="text-[12px] text-amber-700 dark:text-amber-200 leading-relaxed">{bug.explanation}</p>
                       </div>
                     </div>
                   ))}
@@ -476,45 +473,45 @@ export const CodeExplainerView: React.FC<CodeExplainerViewProps> = ({
               </div>
 
               {/* 4. Working Example / Demonstration */}
-              <div className="rounded-2xl bg-slate-900/90 border border-cyan-500/30 p-5 shadow-lg">
-                <div className="flex items-center justify-between mb-3">
+              <div className="rounded-xl bg-surface border border-hairline p-5 space-y-3">
+                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400" />
-                    <h3 className="text-sm font-bold text-white tracking-wide uppercase">
+                    <span className="w-2 h-2 rounded-full bg-[#0070E0]" />
+                    <h3 className="text-[12px] font-medium text-ink-strong tracking-wide uppercase">
                       Working Usage Example
                     </h3>
                   </div>
                   <button
                     type="button"
                     onClick={() => handleCopy(result.example, 'example')}
-                    className="text-xs text-slate-400 hover:text-cyan-300 flex items-center gap-1 transition-colors px-2 py-1 rounded bg-slate-800 border border-white/5"
+                    className="btn-secondary h-7 px-2.5 rounded-[8px] text-[11px] flex items-center gap-1 cursor-pointer"
                   >
                     {copiedKey === 'example' ? (
                       <>
-                        <Check className="w-3.5 h-3.5 text-emerald-400" />
-                        <span className="text-emerald-400">Copied</span>
+                        <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                        <span>Copied</span>
                       </>
                     ) : (
                       <>
-                        <Copy className="w-3.5 h-3.5" />
+                        <Copy className="w-3 h-3" />
                         <span>Copy Code</span>
                       </>
                     )}
                   </button>
                 </div>
-                <pre className="p-3.5 rounded-xl bg-[#080d1a] border border-white/10 text-xs font-mono text-cyan-200 overflow-x-auto leading-relaxed">
+                <pre className="p-3 rounded-lg bg-surface-2 border border-hairline text-[12px] font-mono text-ink overflow-x-auto leading-relaxed">
                   <code>{result.example}</code>
                 </pre>
               </div>
 
               {/* Mentor Open Source Tips */}
               {result.mentorTips && result.mentorTips.length > 0 && (
-                <div className="rounded-2xl bg-indigo-950/40 border border-indigo-500/30 p-4">
-                  <div className="flex items-center gap-2 mb-2 text-indigo-300 text-xs font-bold uppercase tracking-wider">
-                    <Lightbulb className="w-4 h-4 text-indigo-400" />
+                <div className="rounded-xl bg-surface border border-hairline p-4 space-y-2">
+                  <div className="flex items-center gap-2 text-[12px] font-medium text-ink-strong uppercase tracking-wider">
+                    <Lightbulb className="w-3.5 h-3.5 text-[#0070E0]" />
                     Maintainer's Perspective
                   </div>
-                  <ul className="space-y-1.5 list-disc list-inside text-xs text-slate-300">
+                  <ul className="space-y-1 list-disc list-inside text-[12px] text-ink-subtle">
                     {result.mentorTips.map((tip, idx) => (
                       <li key={idx} className="leading-relaxed">
                         {tip}

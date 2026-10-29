@@ -174,16 +174,19 @@ ${(idea.suggestedTechnologies || []).join(', ')}
   };
 
   return (
-    <div className="space-y-8 pb-16">
+    <div className="space-y-6 pb-16">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-hairline pb-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-1">
-            <Sparkles className="w-3.5 h-3.5" />
-            Open Source Project Matchmaker
+          <div className="text-[11px] font-medium text-ink-subtle uppercase tracking-wider mb-1 flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5 text-accent" />
+            <span>Open Source Project Matchmaker</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">AI Project Idea Generator</h2>
-          <p className="text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed">
+          <h2 className="text-xl sm:text-2xl font-normal tracking-tight">
+            <span className="font-medium text-ink-strong">AI Project Idea Generator</span>{' '}
+            <span className="font-normal text-ink-subtle">· Tailored blueprints</span>
+          </h2>
+          <p className="text-[13px] text-ink-subtle mt-1 max-w-2xl leading-relaxed">
             Find realistic, beginner-friendly open-source project ideas tailored to your programming language, experience, and interests.
           </p>
         </div>
@@ -193,28 +196,28 @@ ${(idea.suggestedTechnologies || []).join(', ')}
             type="button"
             onClick={handleGenerate}
             disabled={loading}
-            className="self-start sm:self-auto flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-white/10 text-xs font-semibold shadow-sm transition-all cursor-pointer"
+            className="self-start sm:self-auto h-8 px-3 rounded-[10px] text-[12px] font-medium bg-surface-2 hover:bg-surface text-ink border border-hairline transition-colors flex items-center gap-2 cursor-pointer"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 text-ink-subtle ${loading ? 'animate-spin' : ''}`} />
             <span>Generate New Ideas</span>
           </button>
         )}
       </div>
 
       {/* Input Selection Card */}
-      <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-5 sm:p-7 shadow-xl space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div className="card-71 p-5 sm:p-6 space-y-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* 1. Programming Language */}
-          <div>
-            <label htmlFor="lang-select" className="block text-xs font-semibold text-slate-300 mb-2 flex items-center gap-1.5">
-              <Code2 className="w-3.5 h-3.5 text-cyan-400" />
-              Programming Language:
+          <div className="space-y-1.5">
+            <label htmlFor="lang-select" className="text-[12px] font-medium text-ink-subtle flex items-center gap-1.5">
+              <Code2 className="w-3.5 h-3.5 text-accent" />
+              <span>Programming Language</span>
             </label>
             <select
               id="lang-select"
               value={language}
               onChange={(e) => setLanguage(e.target.value as any)}
-              className="w-full bg-[#080d1a] border border-white/10 text-cyan-300 text-xs sm:text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-400 font-medium cursor-pointer"
+              className="w-full h-8 px-3 rounded-[10px] text-[13px] bg-surface-2 border border-hairline text-ink font-medium focus:outline-none focus:border-accent cursor-pointer"
             >
               <option value="Python">Python</option>
               <option value="JavaScript">JavaScript</option>
@@ -224,34 +227,34 @@ ${(idea.suggestedTechnologies || []).join(', ')}
           </div>
 
           {/* 2. Experience Level */}
-          <div>
-            <label htmlFor="exp-select" className="block text-xs font-semibold text-slate-300 mb-2 flex items-center gap-1.5">
-              <Compass className="w-3.5 h-3.5 text-purple-400" />
-              Experience Level:
+          <div className="space-y-1.5">
+            <label htmlFor="exp-select" className="text-[12px] font-medium text-ink-subtle flex items-center gap-1.5">
+              <Compass className="w-3.5 h-3.5 text-accent" />
+              <span>Experience Level</span>
             </label>
             <select
               id="exp-select"
               value={experience}
               onChange={(e) => setExperience(e.target.value as any)}
-              className="w-full bg-[#080d1a] border border-white/10 text-cyan-300 text-xs sm:text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-400 font-medium cursor-pointer"
+              className="w-full h-8 px-3 rounded-[10px] text-[13px] bg-surface-2 border border-hairline text-ink font-medium focus:outline-none focus:border-accent cursor-pointer"
             >
-              <option value="Beginner">Beginner (Learning syntax & basics)</option>
-              <option value="Intermediate">Intermediate (Building complete apps)</option>
-              <option value="Advanced">Advanced (Architecture & performance)</option>
+              <option value="Beginner">Beginner (learning syntax & basics)</option>
+              <option value="Intermediate">Intermediate (building complete apps)</option>
+              <option value="Advanced">Advanced (architecture & performance)</option>
             </select>
           </div>
 
           {/* 3. Interest */}
-          <div>
-            <label htmlFor="interest-select" className="block text-xs font-semibold text-slate-300 mb-2 flex items-center gap-1.5">
-              <Target className="w-3.5 h-3.5 text-cyan-400" />
-              Interest Domain:
+          <div className="space-y-1.5">
+            <label htmlFor="interest-select" className="text-[12px] font-medium text-ink-subtle flex items-center gap-1.5">
+              <Target className="w-3.5 h-3.5 text-accent" />
+              <span>Interest Domain</span>
             </label>
             <select
               id="interest-select"
               value={interest}
               onChange={(e) => setInterest(e.target.value as any)}
-              className="w-full bg-[#080d1a] border border-white/10 text-cyan-300 text-xs sm:text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-400 font-medium cursor-pointer"
+              className="w-full h-8 px-3 rounded-[10px] text-[13px] bg-surface-2 border border-hairline text-ink font-medium focus:outline-none focus:border-accent cursor-pointer"
             >
               <option value="Web Development">Web Development</option>
               <option value="AI and Machine Learning">AI and Machine Learning</option>
@@ -263,8 +266,8 @@ ${(idea.suggestedTechnologies || []).join(', ')}
         </div>
 
         {/* Action Button: "Generate Project Ideas" */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-3 border-t border-white/10">
-          <span className="text-xs text-slate-400 hidden sm:inline">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-hairline">
+          <span className="text-[12px] text-ink-subtle hidden sm:inline">
             Generates 3 practical, realistic projects tailored to your level
           </span>
 
@@ -272,16 +275,16 @@ ${(idea.suggestedTechnologies || []).join(', ')}
             type="button"
             onClick={handleGenerate}
             disabled={loading}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-7 py-3 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white font-bold text-sm shadow-lg shadow-purple-600/30 hover:shadow-cyan-600/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
+            className="w-full sm:w-auto h-8 px-5 rounded-[10px] bg-accent hover:bg-accent-hover text-white text-[13px] font-medium transition-colors shadow-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
           >
             {loading ? (
               <>
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 <span>Crafting Ideas with Gemini...</span>
               </>
             ) : (
               <>
-                <Sparkles className="w-4 h-4 text-cyan-200" />
+                <Sparkles className="w-3.5 h-3.5" />
                 <span>Generate Project Ideas</span>
               </>
             )}
@@ -291,29 +294,29 @@ ${(idea.suggestedTechnologies || []).join(', ')}
 
       {/* Error state */}
       {error && (
-        <div className="rounded-xl bg-red-950/40 border border-red-500/40 p-4 text-red-200 text-xs sm:text-sm flex items-start gap-3 animate-fadeIn">
-          <AlertTriangle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
-          <div className="space-y-1">
-            <p className="font-semibold text-red-300">Generation Failed</p>
-            <p className="text-slate-300">{error}</p>
+        <div className="card-71 p-4 border-rose-500/25 bg-rose-500/5 text-[13px] flex items-start gap-3">
+          <AlertTriangle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+          <div className="space-y-0.5">
+            <p className="font-medium text-rose-500">Generation Failed</p>
+            <p className="text-ink-subtle">{error}</p>
           </div>
         </div>
       )}
 
       {/* Empty State */}
       {ideas.length === 0 && !loading && (
-        <div className="rounded-2xl bg-slate-900/60 border border-dashed border-white/15 p-12 text-center flex flex-col items-center justify-center min-h-[360px]">
-          <div className="w-16 h-16 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-4">
-            <Lightbulb className="w-8 h-8" />
+        <div className="card-71 p-12 text-center flex flex-col items-center justify-center min-h-[300px]">
+          <div className="w-12 h-12 rounded-[12px] bg-surface-2 border border-hairline flex items-center justify-center text-ink-subtle mb-3">
+            <Lightbulb className="w-6 h-6 text-accent" />
           </div>
-          <h3 className="text-lg font-bold text-white mb-2">No Ideas Generated Yet</h3>
-          <p className="text-sm text-slate-400 max-w-md leading-relaxed mb-6">
+          <h3 className="text-base font-medium text-ink-strong mb-1">No Ideas Generated Yet</h3>
+          <p className="text-[13px] text-ink-subtle max-w-md leading-relaxed mb-5">
             Choose your language, experience, and domain above, then click <strong>"Generate Project Ideas"</strong> to get 3 structured projects complete with skills to practice and a clear first step.
           </p>
           <button
             type="button"
             onClick={handleGenerate}
-            className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-semibold border border-white/10 transition-colors cursor-pointer"
+            className="h-8 px-4 rounded-[10px] text-[12px] font-medium bg-surface-2 hover:bg-surface text-ink border border-hairline transition-colors cursor-pointer"
           >
             Generate Ideas for {language} &rarr;
           </button>
@@ -322,15 +325,10 @@ ${(idea.suggestedTechnologies || []).join(', ')}
 
       {/* Loading Skeleton Indicator */}
       {loading && (
-        <div className="rounded-2xl bg-slate-900/60 border border-white/10 p-12 text-center flex flex-col items-center justify-center min-h-[380px] space-y-4">
-          <div className="relative">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-500 to-cyan-500 animate-spin flex items-center justify-center p-[2px]">
-              <div className="w-full h-full bg-[#070a13] rounded-[14px]" />
-            </div>
-            <Sparkles className="w-6 h-6 text-cyan-300 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
-          </div>
-          <h3 className="text-base font-bold text-white">Generating Open-Source Ideas...</h3>
-          <p className="text-xs text-slate-400 max-w-xs leading-relaxed">
+        <div className="card-71 p-12 text-center flex flex-col items-center justify-center min-h-[300px] space-y-3">
+          <div className="w-8 h-8 border-2 border-hairline border-t-accent rounded-full animate-spin" />
+          <h3 className="text-[14px] font-medium text-ink-strong">Generating Open-Source Ideas...</h3>
+          <p className="text-[12px] text-ink-subtle max-w-xs leading-relaxed">
             Formulating beginner-friendly features, skills to practice, and actionable first steps with Gemini.
           </p>
         </div>
@@ -338,36 +336,36 @@ ${(idea.suggestedTechnologies || []).join(', ')}
 
       {/* Results Display */}
       {ideas.length > 0 && !loading && (
-        <div className="space-y-6 animate-fadeIn">
+        <div className="space-y-5">
           {/* Disclaimer badge */}
-          <div className="rounded-xl bg-indigo-950/30 border border-indigo-500/25 p-3 flex items-start gap-2.5 text-xs text-indigo-200">
-            <Info className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+          <div className="card-71 p-3.5 flex items-start gap-2.5 text-[12px] text-ink-subtle">
+            <Info className="w-4 h-4 text-accent shrink-0 mt-0.5" />
             <p className="leading-relaxed">
-              These suggestions are AI-generated open-source concepts designed to practice real coding skills. You can adapt the scope, libraries, or features to match your exact goals!
+              These suggestions are AI-generated open-source concepts designed to practice real coding skills. You can adapt the scope, libraries, or features to match your exact goals.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 gap-4">
             {ideas.map((idea, index) => {
               const isSaved = Boolean(savedIdeas[idea.title]);
 
               return (
                 <div
                   key={index}
-                  className="rounded-2xl bg-gradient-to-b from-slate-900/95 to-slate-950/95 border border-white/10 p-6 sm:p-7 shadow-xl space-y-5 hover:border-purple-500/40 transition-all"
+                  className="card-71 p-5 sm:p-6 space-y-4 hover:border-hairline transition-all"
                 >
                   {/* Top Bar: Title & Actions */}
-                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 border-b border-white/10 pb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 border-b border-hairline pb-4">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <span className="w-6 h-6 rounded-lg bg-gradient-to-tr from-purple-500 to-cyan-500 text-white flex items-center justify-center text-xs font-black">
+                        <span className="w-5 h-5 rounded-[6px] bg-surface-2 border border-hairline text-ink-subtle font-mono text-[11px] font-medium flex items-center justify-center tabular-nums">
                           {index + 1}
                         </span>
-                        <h3 className="text-lg sm:text-xl font-black text-white tracking-tight">
+                        <h3 className="text-base font-medium text-ink-strong tracking-tight">
                           {idea.title}
                         </h3>
                       </div>
-                      <p className="text-xs sm:text-sm text-cyan-300 font-medium">
+                      <p className="text-[13px] text-ink-subtle font-normal">
                         {idea.shortDescription}
                       </p>
                     </div>
@@ -376,20 +374,20 @@ ${(idea.suggestedTechnologies || []).join(', ')}
                       <button
                         type="button"
                         onClick={() => handleSave(idea)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl border transition-all cursor-pointer ${
+                        className={`h-8 px-3 rounded-[10px] text-[12px] font-medium border transition-colors flex items-center gap-1.5 cursor-pointer ${
                           isSaved
-                            ? 'bg-emerald-950/40 text-emerald-300 border-emerald-500/40'
-                            : 'bg-slate-800 text-slate-300 hover:text-white border-white/10 hover:border-purple-400'
+                            ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/25'
+                            : 'bg-surface-2 text-ink hover:bg-surface border-hairline'
                         }`}
                       >
                         {isSaved ? (
                           <>
-                            <BookmarkCheck className="w-3.5 h-3.5 text-emerald-400" />
+                            <BookmarkCheck className="w-3.5 h-3.5 text-emerald-500" />
                             <span>Saved</span>
                           </>
                         ) : (
                           <>
-                            <BookmarkPlus className="w-3.5 h-3.5 text-cyan-400" />
+                            <BookmarkPlus className="w-3.5 h-3.5 text-ink-subtle" />
                             <span>Save Idea</span>
                           </>
                         )}
@@ -398,17 +396,17 @@ ${(idea.suggestedTechnologies || []).join(', ')}
                       <button
                         type="button"
                         onClick={() => handleCopy(idea, index)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-white/10 transition-colors cursor-pointer"
+                        className="h-8 px-3 rounded-[10px] text-[12px] font-medium bg-surface-2 hover:bg-surface text-ink border border-hairline transition-colors flex items-center gap-1.5 cursor-pointer"
                         title="Copy project specification"
                       >
                         {copiedIndex === index ? (
                           <>
-                            <Check className="w-3.5 h-3.5 text-emerald-400" />
-                            <span className="text-emerald-400">Copied</span>
+                            <Check className="w-3.5 h-3.5 text-emerald-500" />
+                            <span className="text-emerald-500">Copied</span>
                           </>
                         ) : (
                           <>
-                            <Copy className="w-3.5 h-3.5" />
+                            <Copy className="w-3.5 h-3.5 text-ink-subtle" />
                             <span>Copy</span>
                           </>
                         )}
@@ -417,31 +415,28 @@ ${(idea.suggestedTechnologies || []).join(', ')}
                   </div>
 
                   {/* Problem Solved & Tech Stack */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {idea.problemSolved && (
-                      <div className="rounded-xl bg-[#080d1a] border border-white/5 p-4 space-y-1">
-                        <span className="text-[11px] font-bold text-purple-400 uppercase tracking-wider flex items-center gap-1">
-                          <Target className="w-3.5 h-3.5" />
-                          The Problem It Solves
+                      <div className="rounded-[10px] bg-surface-2 border border-hairline p-3.5 space-y-1">
+                        <span className="text-[11px] font-medium text-ink-subtle uppercase tracking-wider flex items-center gap-1.5">
+                          <Target className="w-3.5 h-3.5 text-accent" />
+                          <span>The Problem It Solves</span>
                         </span>
-                        <p className="text-xs text-slate-300 leading-relaxed">
+                        <p className="text-[12px] text-ink leading-relaxed">
                           {idea.problemSolved}
                         </p>
                       </div>
                     )}
 
                     {idea.suggestedTechnologies && idea.suggestedTechnologies.length > 0 && (
-                      <div className="rounded-xl bg-[#080d1a] border border-white/5 p-4 space-y-2">
-                        <span className="text-[11px] font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1">
-                          <Code2 className="w-3.5 h-3.5" />
-                          Suggested Tech Stack
+                      <div className="rounded-[10px] bg-surface-2 border border-hairline p-3.5 space-y-2">
+                        <span className="text-[11px] font-medium text-ink-subtle uppercase tracking-wider flex items-center gap-1.5">
+                          <Code2 className="w-3.5 h-3.5 text-accent" />
+                          <span>Suggested Tech Stack</span>
                         </span>
-                        <div className="flex flex-wrap gap-1.5">
+                        <div className="flex flex-wrap items-center gap-1.5 text-[12px] text-ink">
                           {idea.suggestedTechnologies.map((tech, tIdx) => (
-                            <span
-                              key={tIdx}
-                              className="px-2 py-0.5 rounded bg-black/40 border border-white/10 text-xs font-mono text-cyan-200"
-                            >
+                            <span key={tIdx} className="badge-71 font-mono">
                               {tech}
                             </span>
                           ))}
@@ -450,37 +445,37 @@ ${(idea.suggestedTechnologies || []).join(', ')}
                     )}
                   </div>
 
-                  {/* Skills to Practice & Suggested Features (Required) */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Skills to Practice & Suggested Features */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {/* Skills to Practice */}
-                    <div className="rounded-xl bg-[#080d1a] border border-white/5 p-4 space-y-2">
-                      <span className="text-[11px] font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
-                        <Wrench className="w-3.5 h-3.5" />
-                        Skills to Practice
+                    <div className="rounded-[10px] bg-surface-2 border border-hairline p-3.5 space-y-2">
+                      <span className="text-[11px] font-medium text-ink-subtle uppercase tracking-wider flex items-center gap-1.5">
+                        <Wrench className="w-3.5 h-3.5 text-accent" />
+                        <span>Skills to Practice</span>
                       </span>
                       <div className="flex flex-wrap gap-1.5">
                         {idea.skillsToPractice && idea.skillsToPractice.length > 0 ? (
                           idea.skillsToPractice.map((skill, sIdx) => (
                             <span
                               key={sIdx}
-                              className="px-2.5 py-1 rounded-md bg-purple-500/10 text-purple-300 border border-purple-500/25 text-xs font-medium"
+                              className="badge-71 font-medium"
                             >
                               {skill}
                             </span>
                           ))
                         ) : (
-                          <span className="text-xs text-slate-400">Core programming fundamentals</span>
+                          <span className="text-[12px] text-ink-subtle">Core programming fundamentals</span>
                         )}
                       </div>
                     </div>
 
                     {/* Suggested Beginner-Friendly Features */}
-                    <div className="rounded-xl bg-[#080d1a] border border-white/5 p-4 space-y-2">
-                      <span className="text-[11px] font-bold text-purple-400 uppercase tracking-wider flex items-center gap-1.5">
-                        <Layers className="w-3.5 h-3.5" />
-                        Suggested Beginner-Friendly Features
+                    <div className="rounded-[10px] bg-surface-2 border border-hairline p-3.5 space-y-2">
+                      <span className="text-[11px] font-medium text-ink-subtle uppercase tracking-wider flex items-center gap-1.5">
+                        <Layers className="w-3.5 h-3.5 text-accent" />
+                        <span>Suggested Features</span>
                       </span>
-                      <ul className="space-y-1.5 text-xs text-slate-300 list-disc list-inside">
+                      <ul className="space-y-1.5 text-[12px] text-ink list-disc list-inside">
                         {idea.suggestedFeatures && idea.suggestedFeatures.map((feat, fIdx) => (
                           <li key={fIdx} className="leading-relaxed">
                             {feat}
@@ -490,13 +485,13 @@ ${(idea.suggestedTechnologies || []).join(', ')}
                     </div>
                   </div>
 
-                  {/* Clear First Step (Required) */}
-                  <div className="rounded-xl bg-gradient-to-r from-emerald-950/30 to-cyan-950/20 border border-emerald-500/30 p-4 space-y-1.5">
-                    <span className="text-[11px] font-bold text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
-                      <Footprints className="w-4 h-4 text-emerald-400" />
-                      Clear First Step to Start Building
+                  {/* Clear First Step */}
+                  <div className="rounded-[10px] bg-surface-2 border border-hairline p-3.5 space-y-1">
+                    <span className="text-[11px] font-medium text-emerald-500 uppercase tracking-wider flex items-center gap-1.5">
+                      <Footprints className="w-3.5 h-3.5 text-emerald-500" />
+                      <span>Clear First Step to Start Building</span>
                     </span>
-                    <p className="text-xs sm:text-sm text-slate-100 leading-relaxed font-medium">
+                    <p className="text-[13px] text-ink leading-relaxed font-normal">
                       {idea.clearFirstStep}
                     </p>
                   </div>

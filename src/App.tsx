@@ -136,6 +136,15 @@ function AppContent() {
 
   useEffect(() => {
     checkStatus();
+    // Initialize 71UI theme from local storage
+    const storedTheme = localStorage.getItem('codebridge_theme');
+    if (storedTheme === 'light') {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.setAttribute('data-theme', 'light');
+    } else {
+      document.documentElement.classList.add('dark');
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
   }, []);
 
   // Listen for sync events dispatched by cloud sync or local resets
@@ -240,20 +249,20 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070a13] text-slate-100 flex flex-col font-sans">
-      {/* Top Banner if API Key is not configured */}
+    <div className="min-h-screen bg-canvas text-ink flex flex-col font-sans transition-colors duration-150">
+      {/* 71UI Top Banner if API Key is not configured */}
       {status && !status.configured && (
-        <div className="bg-amber-950/70 border-b border-amber-500/30 px-4 py-2.5 text-xs text-amber-200">
+        <div className="bg-[var(--color-warning-fill)] border-b border-[var(--color-hairline)] px-4 py-2 text-[13px] text-[var(--color-on-warning)]">
           <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+              <AlertTriangle className="w-4 h-4 shrink-0" />
               <span>
-                <strong>GEMINI_API_KEY Not Configured:</strong> Add your Gemini API key in the AI Studio <strong>Secrets</strong> panel or server <code className="font-mono text-amber-300">.env</code> to activate live AI answers.
+                <strong>GEMINI_API_KEY Not Configured:</strong> Add your Gemini API key in the AI Studio <strong>Secrets</strong> panel to activate live AI answers.
               </span>
             </div>
             <button
               onClick={() => setKeyModalOpen(true)}
-              className="underline font-semibold hover:text-white shrink-0 cursor-pointer"
+              className="underline font-medium hover:opacity-80 shrink-0 cursor-pointer"
             >
               How to Setup &rarr;
             </button>
@@ -378,19 +387,22 @@ function AppContent() {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-white/10 bg-[#060911]/90 py-8 text-xs text-slate-500 mt-auto">
+      {/* 71UI Footer */}
+      <footer className="border-t border-hairline bg-surface py-6 text-[13px] text-ink-subtle mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-slate-300">CodeBridge AI</span>
-            <span>•</span>
+            <span className="font-medium text-ink-strong">CodeBridge AI</span>
+            <span>·</span>
             <span>Empowering beginners in open source & Hacktoberfest</span>
           </div>
 
-          <div className="flex items-center gap-4">
-            <span className="text-slate-400">Powered by Gemini 3.8 Flash</span>
-            <span className="text-slate-600">|</span>
-            <span className="text-cyan-400/80">Server-Side Protected</span>
+          <div className="flex items-center gap-4 text-[12px] font-mono">
+            <span className="text-ink-subtle">Gemini 3.8 Flash</span>
+            <span className="text-hairline-strong">|</span>
+            <span className="inline-flex items-center gap-1.5 text-[var(--color-on-success)]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-success)]" />
+              All systems operational
+            </span>
           </div>
         </div>
       </footer>

@@ -176,16 +176,19 @@ export const RepoFinderView: React.FC<RepoFinderViewProps> = ({
   };
 
   return (
-    <div className="space-y-8 pb-16">
+    <div className="space-y-6 pb-16">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-hairline pb-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-1">
-            <Compass className="w-3.5 h-3.5" />
-            Live GitHub Explorer
+          <div className="text-[11px] font-medium text-ink-subtle uppercase tracking-wider mb-1 flex items-center gap-1.5">
+            <Compass className="w-3.5 h-3.5 text-accent" />
+            <span>Live GitHub Explorer</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Open-Source Repository Finder</h2>
-          <p className="text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed">
+          <h2 className="text-xl sm:text-2xl font-normal tracking-tight">
+            <span className="font-medium text-ink-strong">Open-Source Repository Finder</span>{' '}
+            <span className="font-normal text-ink-subtle">· Live GitHub directory</span>
+          </h2>
+          <p className="text-[13px] text-ink-subtle mt-1 max-w-2xl leading-relaxed">
             Discover real open-source projects actively looking for contributors, with direct links to beginner-friendly "good first issue" and "help wanted" tickets.
           </p>
         </div>
@@ -195,32 +198,32 @@ export const RepoFinderView: React.FC<RepoFinderViewProps> = ({
             type="button"
             onClick={handleSearch}
             disabled={loading}
-            className="self-start sm:self-auto flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-white/10 text-xs font-semibold shadow-sm transition-all cursor-pointer"
+            className="self-start sm:self-auto h-8 px-3 rounded-[10px] text-[12px] font-medium bg-surface-2 hover:bg-surface text-ink border border-hairline transition-colors flex items-center gap-2 cursor-pointer"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 text-ink-subtle ${loading ? 'animate-spin' : ''}`} />
             <span>Refresh Projects</span>
           </button>
         )}
       </div>
 
       {/* Filter Card */}
-      <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-5 sm:p-7 shadow-xl space-y-5">
-        <div className="flex items-center gap-2 text-xs font-bold text-slate-300 uppercase tracking-wider">
-          <SlidersHorizontal className="w-4 h-4 text-cyan-400" />
-          Filter Real Repositories
+      <div className="card-71 p-5 sm:p-6 space-y-4">
+        <div className="flex items-center gap-2 text-[11px] font-medium text-ink-subtle uppercase tracking-wider">
+          <SlidersHorizontal className="w-3.5 h-3.5 text-accent" />
+          <span>Filter Real Repositories</span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {/* 1. Programming Language */}
-          <div>
-            <label htmlFor="repo-lang" className="block text-xs font-semibold text-slate-300 mb-1.5">
-              Programming Language:
+          <div className="space-y-1.5">
+            <label htmlFor="repo-lang" className="text-[12px] font-medium text-ink-subtle block">
+              Programming Language
             </label>
             <select
               id="repo-lang"
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
-              className="w-full bg-[#080d1a] border border-white/10 text-cyan-300 text-xs sm:text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-400 font-medium cursor-pointer"
+              className="w-full h-8 px-3 rounded-[10px] text-[13px] bg-surface-2 border border-hairline text-ink font-medium focus:outline-none focus:border-accent cursor-pointer"
             >
               {PRESET_LANGUAGES.map((lang) => (
                 <option key={lang} value={lang}>
@@ -231,15 +234,15 @@ export const RepoFinderView: React.FC<RepoFinderViewProps> = ({
           </div>
 
           {/* 2. Topic */}
-          <div>
-            <label htmlFor="repo-topic" className="block text-xs font-semibold text-slate-300 mb-1.5">
-              Topic / Domain:
+          <div className="space-y-1.5">
+            <label htmlFor="repo-topic" className="text-[12px] font-medium text-ink-subtle block">
+              Topic / Domain
             </label>
             <select
               id="repo-topic"
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
-              className="w-full bg-[#080d1a] border border-white/10 text-cyan-300 text-xs sm:text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-400 font-medium cursor-pointer"
+              className="w-full h-8 px-3 rounded-[10px] text-[13px] bg-surface-2 border border-hairline text-ink font-medium focus:outline-none focus:border-accent cursor-pointer"
             >
               {PRESET_TOPICS.map((top) => (
                 <option key={top} value={top}>
@@ -250,15 +253,15 @@ export const RepoFinderView: React.FC<RepoFinderViewProps> = ({
           </div>
 
           {/* 3. Experience Level */}
-          <div>
-            <label htmlFor="repo-exp" className="block text-xs font-semibold text-slate-300 mb-1.5">
-              Experience Level:
+          <div className="space-y-1.5">
+            <label htmlFor="repo-exp" className="text-[12px] font-medium text-ink-subtle block">
+              Experience Level
             </label>
             <select
               id="repo-exp"
               value={experience}
               onChange={(e) => setExperience(e.target.value as any)}
-              className="w-full bg-[#080d1a] border border-white/10 text-cyan-300 text-xs sm:text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-400 font-medium cursor-pointer"
+              className="w-full h-8 px-3 rounded-[10px] text-[13px] bg-surface-2 border border-hairline text-ink font-medium focus:outline-none focus:border-accent cursor-pointer"
             >
               <option value="Beginner">Beginner (Good First Issues)</option>
               <option value="Intermediate">Intermediate (Help Wanted)</option>
@@ -267,9 +270,9 @@ export const RepoFinderView: React.FC<RepoFinderViewProps> = ({
           </div>
 
           {/* 4. Optional Keyword Search */}
-          <div>
-            <label htmlFor="repo-kw" className="block text-xs font-semibold text-slate-300 mb-1.5">
-              Keyword (optional):
+          <div className="space-y-1.5">
+            <label htmlFor="repo-kw" className="text-[12px] font-medium text-ink-subtle block">
+              Keyword (optional)
             </label>
             <input
               id="repo-kw"
@@ -277,14 +280,14 @@ export const RepoFinderView: React.FC<RepoFinderViewProps> = ({
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               placeholder="e.g. react, markdown, cli"
-              className="w-full bg-[#080d1a] border border-white/10 text-cyan-200 text-xs sm:text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-400 font-mono placeholder:text-slate-600"
+              className="w-full h-8 px-3 rounded-[10px] text-[13px] bg-surface-2 border border-hairline text-ink font-mono placeholder:text-ink-subtle/50 focus:outline-none focus:border-accent"
             />
           </div>
         </div>
 
         {/* Action Controls */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-3 border-t border-white/10">
-          <span className="text-xs text-slate-400 hidden sm:inline">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-3 border-t border-hairline">
+          <span className="text-[12px] text-ink-subtle hidden sm:inline">
             Searches GitHub's official search index in real time
           </span>
 
@@ -292,16 +295,16 @@ export const RepoFinderView: React.FC<RepoFinderViewProps> = ({
             type="button"
             onClick={handleSearch}
             disabled={loading}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-7 py-3 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white font-bold text-sm shadow-lg shadow-purple-600/30 hover:shadow-cyan-600/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
+            className="w-full sm:w-auto h-8 px-5 rounded-[10px] bg-accent hover:bg-accent-hover text-white text-[13px] font-medium transition-colors shadow-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
           >
             {loading ? (
               <>
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 <span>Searching GitHub...</span>
               </>
             ) : (
               <>
-                <Search className="w-4 h-4 text-cyan-200" />
+                <Search className="w-3.5 h-3.5" />
                 <span>Find Projects</span>
               </>
             )}
@@ -311,24 +314,24 @@ export const RepoFinderView: React.FC<RepoFinderViewProps> = ({
 
       {/* Error State */}
       {error && (
-        <div className="rounded-xl bg-red-950/40 border border-red-500/40 p-4 text-red-200 text-xs sm:text-sm flex items-start gap-3 animate-fadeIn">
-          <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
-          <div className="space-y-1">
-            <p className="font-semibold text-red-300">GitHub API Search Error</p>
-            <p className="text-slate-300">{error}</p>
+        <div className="card-71 p-4 border-rose-500/25 bg-rose-500/5 text-[13px] flex items-start gap-3">
+          <AlertCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+          <div className="space-y-0.5">
+            <p className="font-medium text-rose-500">GitHub API Search Error</p>
+            <p className="text-ink-subtle">{error}</p>
           </div>
         </div>
       )}
 
       {/* Loading Skeletons */}
       {loading && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 animate-pulse">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-64 rounded-2xl bg-slate-900/60 border border-white/5 p-6 space-y-4">
-              <div className="h-6 bg-slate-800 rounded-lg w-3/4" />
-              <div className="h-16 bg-slate-800/60 rounded-lg w-full" />
-              <div className="h-4 bg-slate-800/40 rounded w-1/2" />
-              <div className="h-8 bg-slate-800/50 rounded-xl w-full mt-4" />
+            <div key={i} className="h-60 card-71 p-5 space-y-3 animate-pulse">
+              <div className="h-5 bg-surface-2 rounded-[6px] w-3/4" />
+              <div className="h-14 bg-surface-2 rounded-[6px] w-full" />
+              <div className="h-4 bg-surface-2 rounded-[6px] w-1/2" />
+              <div className="h-8 bg-surface-2 rounded-[10px] w-full mt-3" />
             </div>
           ))}
         </div>
@@ -336,10 +339,10 @@ export const RepoFinderView: React.FC<RepoFinderViewProps> = ({
 
       {/* Empty State */}
       {!loading && !error && repositories.length === 0 && (
-        <div className="rounded-2xl bg-slate-900/60 border border-dashed border-white/15 p-12 text-center flex flex-col items-center justify-center min-h-[360px]">
-          <FolderGit2 className="w-12 h-12 text-slate-500 mb-3" />
-          <h3 className="text-lg font-bold text-white mb-2">No Repositories Found</h3>
-          <p className="text-sm text-slate-400 max-w-md leading-relaxed mb-6">
+        <div className="card-71 p-12 text-center flex flex-col items-center justify-center min-h-[300px]">
+          <FolderGit2 className="w-10 h-10 text-ink-subtle mb-3" />
+          <h3 className="text-base font-medium text-ink-strong mb-1">No Repositories Found</h3>
+          <p className="text-[13px] text-ink-subtle max-w-md leading-relaxed mb-5">
             Try adjusting your language, topic, or keyword filters to broaden the search scope across GitHub.
           </p>
           <button
@@ -350,7 +353,7 @@ export const RepoFinderView: React.FC<RepoFinderViewProps> = ({
               setKeyword('');
               handleSearch();
             }}
-            className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-semibold border border-white/10 transition-colors cursor-pointer"
+            className="h-8 px-4 rounded-[10px] text-[12px] font-medium bg-surface-2 hover:bg-surface text-ink border border-hairline transition-colors cursor-pointer"
           >
             Clear Filters & Search All Topics &rarr;
           </button>
@@ -360,26 +363,26 @@ export const RepoFinderView: React.FC<RepoFinderViewProps> = ({
       {/* Real Repositories Grid */}
       {!loading && repositories.length > 0 && (
         <div className="space-y-4">
-          <div className="flex items-center justify-between text-xs text-slate-400 px-1">
+          <div className="flex items-center justify-between text-[12px] text-ink-subtle px-1">
             <span>
-              Showing <strong>{repositories.length}</strong> real GitHub repositories matching your criteria
+              Showing <strong className="text-ink-strong tabular-nums">{repositories.length}</strong> real GitHub repositories matching your criteria
             </span>
-            <span className="flex items-center gap-1.5 text-emerald-400 font-medium">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="flex items-center gap-1.5 text-emerald-500 font-medium">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
               Live GitHub API Data
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {repositories.map((repo) => {
               const isSaved = Boolean(savedRepos[repo.fullName]);
 
               return (
                 <div
                   key={repo.id}
-                  className="rounded-2xl bg-gradient-to-b from-slate-900/90 to-[#080d1a] border border-white/10 hover:border-purple-500/40 p-5 sm:p-6 shadow-xl flex flex-col justify-between space-y-4 transition-all duration-200 group"
+                  className="card-71 p-5 flex flex-col justify-between space-y-4 hover:border-hairline transition-colors group"
                 >
-                  <div className="space-y-3">
+                  <div className="space-y-2.5">
                     {/* Top Row: Name, Avatar, Save */}
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex items-center gap-2.5 min-w-0">
@@ -387,19 +390,19 @@ export const RepoFinderView: React.FC<RepoFinderViewProps> = ({
                           <img
                             src={repo.ownerAvatarUrl}
                             alt=""
-                            className="w-7 h-7 rounded-lg border border-white/10 shrink-0"
+                            className="w-6 h-6 rounded-[6px] border border-hairline shrink-0"
                             loading="lazy"
                           />
                         ) : (
-                          <div className="w-7 h-7 rounded-lg bg-slate-800 border border-white/10 flex items-center justify-center shrink-0">
-                            <FolderGit2 className="w-3.5 h-3.5 text-cyan-400" />
+                          <div className="w-6 h-6 rounded-[6px] bg-surface-2 border border-hairline flex items-center justify-center shrink-0">
+                            <FolderGit2 className="w-3 h-3 text-accent" />
                           </div>
                         )}
                         <a
                           href={repo.htmlUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="font-bold text-sm sm:text-base text-white hover:text-cyan-300 truncate transition-colors group-hover:text-cyan-300"
+                          className="font-medium text-[14px] text-ink-strong hover:text-accent truncate transition-colors"
                           title={repo.fullName}
                         >
                           {repo.name}
@@ -410,69 +413,66 @@ export const RepoFinderView: React.FC<RepoFinderViewProps> = ({
                         type="button"
                         onClick={() => handleSave(repo)}
                         title={isSaved ? 'Remove from Saved' : 'Bookmark Repository'}
-                        className={`p-1.5 rounded-lg border transition-all cursor-pointer shrink-0 ${
+                        className={`w-7 h-7 rounded-[8px] border transition-colors flex items-center justify-center cursor-pointer shrink-0 ${
                           isSaved
-                            ? 'bg-emerald-950/40 text-emerald-300 border-emerald-500/40'
-                            : 'bg-slate-800/80 text-slate-400 hover:text-white border-white/10'
+                            ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/25'
+                            : 'bg-surface-2 text-ink-subtle hover:text-ink border-hairline'
                         }`}
                       >
                         {isSaved ? (
-                          <BookmarkCheck className="w-4 h-4 text-emerald-400" />
+                          <BookmarkCheck className="w-3.5 h-3.5 text-emerald-500" />
                         ) : (
-                          <BookmarkPlus className="w-4 h-4 text-cyan-400" />
+                          <BookmarkPlus className="w-3.5 h-3.5" />
                         )}
                       </button>
                     </div>
 
                     {/* Full Name & License */}
-                    <div className="flex items-center gap-2 text-[11px] text-slate-500 font-mono truncate">
+                    <div className="flex items-center gap-1.5 text-[11px] text-ink-subtle font-mono truncate">
                       <span>{repo.fullName}</span>
                       {repo.licenseName && (
                         <>
-                          <span>•</span>
+                          <span>·</span>
                           <span className="truncate">{repo.licenseName}</span>
                         </>
                       )}
                     </div>
 
                     {/* Description */}
-                    <p className="text-xs text-slate-300 line-clamp-3 leading-relaxed">
+                    <p className="text-[12px] text-ink line-clamp-3 leading-relaxed">
                       {repo.description}
                     </p>
 
                     {/* Metrics Bar: Language, Stars, Forks */}
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400 pt-1">
+                    <div className="flex flex-wrap items-center gap-3 text-[12px] text-ink-subtle pt-0.5">
                       {repo.language && (
-                        <span className="flex items-center gap-1.5 font-semibold text-cyan-300">
-                          <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                        <span className="flex items-center gap-1.5 font-medium text-ink">
+                          <span className="w-1.5 h-1.5 rounded-full bg-accent" />
                           {repo.language}
                         </span>
                       )}
 
-                      <span className="flex items-center gap-1" title={`${repo.stars.toLocaleString()} Stars`}>
-                        <Star className="w-3.5 h-3.5 text-amber-400" />
+                      <span className="flex items-center gap-1 font-mono tabular-nums" title={`${repo.stars.toLocaleString()} Stars`}>
+                        <Star className="w-3 h-3 text-amber-500" />
                         <span>{repo.stars.toLocaleString()}</span>
                       </span>
 
-                      <span className="flex items-center gap-1" title={`${repo.forks.toLocaleString()} Forks`}>
-                        <GitFork className="w-3.5 h-3.5 text-purple-400" />
+                      <span className="flex items-center gap-1 font-mono tabular-nums" title={`${repo.forks.toLocaleString()} Forks`}>
+                        <GitFork className="w-3 h-3 text-ink-subtle" />
                         <span>{repo.forks.toLocaleString()}</span>
                       </span>
                     </div>
 
                     {/* Topics Chips */}
                     {repo.topics && repo.topics.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 pt-1">
+                      <div className="flex flex-wrap items-center gap-1 text-[11px] text-ink-subtle">
                         {repo.topics.slice(0, 3).map((t, idx) => (
-                          <span
-                            key={idx}
-                            className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-white/5 border border-white/5 text-slate-400"
-                          >
+                          <span key={idx} className="badge-71 font-mono text-[10px]">
                             #{t}
                           </span>
                         ))}
                         {repo.topics.length > 3 && (
-                          <span className="px-1.5 py-0.5 text-[10px] text-slate-500">
+                          <span className="text-[10px] text-ink-subtle font-mono">
                             +{repo.topics.length - 3}
                           </span>
                         )}
@@ -481,43 +481,43 @@ export const RepoFinderView: React.FC<RepoFinderViewProps> = ({
                   </div>
 
                   {/* Actions Footer */}
-                  <div className="pt-3 border-t border-white/5 space-y-2">
+                  <div className="pt-3 border-t border-hairline space-y-2">
                     {/* Good First Issues Button */}
                     <a
                       href={repo.goodFirstIssuesUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-purple-950/40 hover:bg-purple-900/50 border border-purple-500/30 text-purple-200 text-xs font-semibold transition-all group/btn"
+                      className="w-full h-8 px-3 rounded-[10px] bg-surface-2 hover:bg-surface border border-hairline text-ink text-[12px] font-medium transition-colors flex items-center justify-between group/btn"
                     >
                       <span className="flex items-center gap-1.5">
-                        <Flame className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                        <Flame className="w-3.5 h-3.5 text-accent shrink-0" />
                         <span>View Good First Issues</span>
                       </span>
-                      <ExternalLink className="w-3.5 h-3.5 opacity-60 group-hover/btn:opacity-100 transition-opacity" />
+                      <ExternalLink className="w-3 h-3 text-ink-subtle group-hover/btn:text-ink transition-colors" />
                     </a>
 
-                    {/* GitHub Repo Link */}
+                    {/* GitHub Repo Link & Clone */}
                     <div className="flex items-center gap-2">
                       <a
                         href={repo.htmlUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-white/10 transition-colors"
+                        className="flex-1 h-8 rounded-[10px] bg-surface-2 hover:bg-surface text-ink text-[12px] font-medium border border-hairline transition-colors flex items-center justify-center gap-1.5"
                       >
                         <span>Open on GitHub</span>
-                        <ExternalLink className="w-3 h-3" />
+                        <ExternalLink className="w-3 h-3 text-ink-subtle" />
                       </a>
 
                       <button
                         type="button"
                         onClick={() => handleCopyLink(repo.htmlUrl, `repo-${repo.id}`)}
-                        className="px-2.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-300 text-xs border border-white/10 transition-colors cursor-pointer"
+                        className="h-8 px-2.5 rounded-[10px] bg-surface-2 hover:bg-surface text-ink text-[11px] font-mono border border-hairline transition-colors cursor-pointer flex items-center justify-center"
                         title="Copy Clone URL"
                       >
                         {copiedUrlKey === `repo-${repo.id}` ? (
-                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                          <Check className="w-3.5 h-3.5 text-emerald-500" />
                         ) : (
-                          <span className="font-mono text-[11px]">git clone</span>
+                          <span>git clone</span>
                         )}
                       </button>
                     </div>

@@ -38,16 +38,19 @@ export const PersonalTrackerView: React.FC<PersonalTrackerViewProps> = ({
   const taskPct = Math.round((completedTasks / (tasks.length || 1)) * 100);
 
   return (
-    <div className="space-y-10 pb-16">
+    <div className="space-y-6 pb-16">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-hairline pb-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 text-purple-400 text-xs font-semibold uppercase tracking-wider mb-1">
-            <Sparkles className="w-3.5 h-3.5" />
-            Your Open Source Journey
+          <div className="text-[11px] font-medium text-ink-subtle uppercase tracking-wider mb-1 flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5 text-accent" />
+            <span>Your Open Source Journey</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Personal Dashboard</h2>
-          <p className="text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed">
+          <h2 className="text-xl sm:text-2xl font-normal tracking-tight">
+            <span className="font-medium text-ink-strong">Personal Dashboard</span>{' '}
+            <span className="font-normal text-ink-subtle">· Milestones & tracker</span>
+          </h2>
+          <p className="text-[13px] text-ink-subtle mt-1 max-w-2xl leading-relaxed">
             Track your open-source learning milestones, Hacktoberfest progress, and review saved code explanations and issue breakdowns.
           </p>
         </div>
@@ -55,52 +58,52 @@ export const PersonalTrackerView: React.FC<PersonalTrackerViewProps> = ({
         <button
           type="button"
           onClick={onResetProgress}
-          className="self-start sm:self-auto flex items-center gap-1.5 text-xs text-slate-400 hover:text-red-300 px-3 py-1.5 rounded-lg border border-white/10 hover:border-red-500/30 transition-colors"
+          className="self-start sm:self-auto h-8 px-3 rounded-[10px] text-[12px] font-medium bg-surface-2 hover:bg-surface text-ink-subtle hover:text-rose-500 border border-hairline transition-colors flex items-center gap-1.5 cursor-pointer"
         >
           <RotateCcw className="w-3.5 h-3.5" />
-          Reset Progress
+          <span>Reset Progress</span>
         </button>
       </div>
 
       {/* Top Stats Overview */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* Hacktoberfest Progress Card */}
-        <div className="rounded-2xl bg-gradient-to-br from-purple-900/30 via-slate-900/90 to-slate-900/90 border border-purple-500/30 p-5 shadow-lg flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-purple-300">
+        <div className="card-71 p-5 flex flex-col justify-between space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-medium uppercase tracking-wider text-ink-subtle">
               Hacktoberfest Goal
             </span>
-            <Trophy className="w-5 h-5 text-amber-400" />
+            <Trophy className="w-4 h-4 text-amber-500" />
           </div>
 
           <div className="space-y-2">
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl sm:text-4xl font-extrabold text-white">{prCount}</span>
-              <span className="text-sm text-slate-400">/ 4 PRs Merged or Reviewed</span>
+              <span className="text-3xl font-medium tracking-tight text-ink-strong font-mono tabular-nums">{prCount}</span>
+              <span className="text-[12px] text-ink-subtle font-mono tabular-nums">/ 4 PRs Merged</span>
             </div>
 
-            <div className="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden border border-white/5">
+            <div className="w-full h-1.5 bg-surface-2 rounded-full overflow-hidden border border-hairline">
               <div
-                className="h-full bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 transition-all duration-300"
+                className="h-full bg-accent transition-all duration-300"
                 style={{ width: `${Math.min(100, (prCount / 4) * 100)}%` }}
               />
             </div>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs">
-            <span className="text-slate-400">Update count:</span>
-            <div className="flex items-center gap-2">
+          <div className="pt-3 border-t border-hairline flex items-center justify-between text-[12px]">
+            <span className="text-ink-subtle">Update count:</span>
+            <div className="flex items-center gap-1">
               <button
                 type="button"
                 onClick={() => onUpdatePrCount(Math.max(0, prCount - 1))}
-                className="w-6 h-6 rounded bg-slate-800 hover:bg-slate-700 text-white flex items-center justify-center font-bold"
+                className="w-7 h-7 rounded-[8px] bg-surface-2 hover:bg-surface text-ink border border-hairline flex items-center justify-center font-mono text-[13px] cursor-pointer"
               >
                 -
               </button>
               <button
                 type="button"
                 onClick={() => onUpdatePrCount(Math.min(10, prCount + 1))}
-                className="w-6 h-6 rounded bg-purple-600 hover:bg-purple-500 text-white flex items-center justify-center font-bold"
+                className="w-7 h-7 rounded-[8px] bg-accent hover:bg-accent-hover text-white flex items-center justify-center font-mono text-[13px] cursor-pointer"
               >
                 +
               </button>
@@ -109,66 +112,66 @@ export const PersonalTrackerView: React.FC<PersonalTrackerViewProps> = ({
         </div>
 
         {/* Learning Tasks Completed */}
-        <div className="rounded-2xl bg-slate-900/90 border border-cyan-500/30 p-5 shadow-lg flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-cyan-300">
+        <div className="card-71 p-5 flex flex-col justify-between space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-medium uppercase tracking-wider text-ink-subtle">
               Learning Tasks
             </span>
-            <CheckSquare className="w-5 h-5 text-cyan-400" />
+            <CheckSquare className="w-4 h-4 text-accent" />
           </div>
 
           <div className="space-y-2">
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl sm:text-4xl font-extrabold text-white">{completedTasks}</span>
-              <span className="text-sm text-slate-400">/ {tasks.length} Completed ({taskPct}%)</span>
+              <span className="text-3xl font-medium tracking-tight text-ink-strong font-mono tabular-nums">{completedTasks}</span>
+              <span className="text-[12px] text-ink-subtle font-mono tabular-nums">/ {tasks.length} Completed ({taskPct}%)</span>
             </div>
 
-            <div className="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden border border-white/5">
+            <div className="w-full h-1.5 bg-surface-2 rounded-full overflow-hidden border border-hairline">
               <div
-                className="h-full bg-gradient-to-r from-cyan-500 to-emerald-400 transition-all duration-300"
+                className="h-full bg-accent transition-all duration-300"
                 style={{ width: `${taskPct}%` }}
               />
             </div>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-white/5 text-xs text-slate-400">
-            {completedTasks === tasks.length ? '🎉 All milestones finished!' : 'Keep checking off milestones!'}
+          <div className="pt-3 border-t border-hairline text-[12px] text-ink-subtle">
+            {completedTasks === tasks.length ? 'All milestones finished' : 'Keep checking off milestones'}
           </div>
         </div>
 
         {/* Saved Explanations & Items */}
-        <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-5 shadow-lg flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
+        <div className="card-71 p-5 flex flex-col justify-between space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-medium uppercase tracking-wider text-ink-subtle">
               Saved Bookmarks
             </span>
-            <Bookmark className="w-5 h-5 text-purple-400" />
+            <Bookmark className="w-4 h-4 text-accent" />
           </div>
 
           <div className="space-y-2">
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl sm:text-4xl font-extrabold text-white">{savedItems.length}</span>
-              <span className="text-sm text-slate-400">Notes & Blueprints</span>
+              <span className="text-3xl font-medium tracking-tight text-ink-strong font-mono tabular-nums">{savedItems.length}</span>
+              <span className="text-[12px] text-ink-subtle">Notes & Blueprints</span>
             </div>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-[12px] text-ink-subtle leading-relaxed">
               Items saved from the AI Code Explainer, Issue Helper, or Idea Generator.
             </p>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-white/5 text-xs text-slate-400">
+          <div className="pt-3 border-t border-hairline text-[12px] text-ink-subtle">
             Stored locally in your browser
           </div>
         </div>
       </div>
 
       {/* Learning Milestones Task List */}
-      <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-6 shadow-xl space-y-5">
+      <div className="card-71 p-5 sm:p-6 space-y-4">
         <div>
-          <h3 className="text-lg font-bold text-white flex items-center gap-2">
-            <CheckSquare className="w-5 h-5 text-cyan-400" />
-            Open Source Contributor Milestones
+          <h3 className="text-base font-medium text-ink-strong flex items-center gap-2">
+            <CheckSquare className="w-4 h-4 text-accent" />
+            <span>Open Source Contributor Milestones</span>
           </h3>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-[12px] text-ink-subtle mt-0.5">
             Check each milestone as you progress from learner to recognized open-source contributor.
           </p>
         </div>
@@ -178,27 +181,27 @@ export const PersonalTrackerView: React.FC<PersonalTrackerViewProps> = ({
             <div
               key={task.id}
               onClick={() => onToggleTask(task.id)}
-              className={`p-3.5 rounded-xl border flex items-start gap-3 transition-all cursor-pointer select-none ${
+              className={`p-3.5 rounded-[10px] border flex items-start gap-3 transition-colors cursor-pointer select-none ${
                 task.completed
-                  ? 'bg-purple-950/20 border-purple-500/40 text-slate-200'
-                  : 'bg-[#080d1a] border-white/5 text-slate-400 hover:border-white/20'
+                  ? 'bg-surface-2 border-hairline text-ink-subtle'
+                  : 'bg-surface-2 border-hairline text-ink hover:bg-surface'
               }`}
             >
               {task.completed ? (
-                <CheckSquare className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                <CheckSquare className="w-4 h-4 text-accent shrink-0 mt-0.5" />
               ) : (
-                <Square className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
+                <Square className="w-4 h-4 text-ink-subtle shrink-0 mt-0.5" />
               )}
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <h4 className={`text-xs sm:text-sm font-bold ${task.completed ? 'text-white line-through opacity-80' : 'text-slate-200'}`}>
+                  <h4 className={`text-[13px] font-medium ${task.completed ? 'text-ink-subtle line-through' : 'text-ink-strong'}`}>
                     {task.title}
                   </h4>
-                  <span className="text-[10px] font-semibold px-1.5 py-0.2 rounded bg-black/40 text-purple-300 border border-white/5">
+                  <span className="badge-71 text-[10px]">
                     {task.category}
                   </span>
                 </div>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-[12px] text-ink-subtle leading-relaxed">
                   {task.description}
                 </p>
               </div>
@@ -208,56 +211,57 @@ export const PersonalTrackerView: React.FC<PersonalTrackerViewProps> = ({
       </div>
 
       {/* Saved Blueprints & Explanations */}
-      <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-6 shadow-xl space-y-5">
+      <div className="card-71 p-5 sm:p-6 space-y-4">
         <div>
-          <h3 className="text-lg font-bold text-white flex items-center gap-2">
-            <Bookmark className="w-5 h-5 text-purple-400" />
-            Saved Mentorship Notes & Blueprints ({savedItems.length})
+          <h3 className="text-base font-medium text-ink-strong flex items-center gap-2">
+            <Bookmark className="w-4 h-4 text-accent" />
+            <span>Saved Mentorship Notes & Blueprints</span>
+            <span className="font-mono text-[12px] text-ink-subtle">({savedItems.length})</span>
           </h3>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-[12px] text-ink-subtle mt-0.5">
             Revisit your saved explanations and game plans anytime.
           </p>
         </div>
 
         {savedItems.length === 0 ? (
-          <div className="p-8 text-center text-slate-400 border border-dashed border-white/10 rounded-xl">
-            <Bookmark className="w-8 h-8 text-slate-600 mx-auto mb-2" />
-            <p className="text-xs sm:text-sm font-medium">No saved items yet.</p>
-            <p className="text-xs text-slate-500 mt-1">
+          <div className="p-8 text-center text-ink-subtle border border-hairline border-dashed rounded-[10px]">
+            <Bookmark className="w-6 h-6 text-ink-subtle mx-auto mb-2" />
+            <p className="text-[13px] font-medium text-ink">No saved items yet.</p>
+            <p className="text-[12px] text-ink-subtle mt-1">
               Click the "Save" button in the Issue Helper or Idea Generator to pin blueprints here.
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {savedItems.map((item) => (
               <div
                 key={item.id}
-                className="rounded-xl bg-[#080d1a] border border-white/10 p-4 space-y-2 relative group"
+                className="rounded-[10px] bg-surface-2 border border-hairline p-4 space-y-2 relative group"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    {item.type === 'issue' && <FileCode2 className="w-4 h-4 text-purple-400" />}
-                    {item.type === 'code' && <Code2 className="w-4 h-4 text-cyan-400" />}
-                    {item.type === 'idea' && <Lightbulb className="w-4 h-4 text-amber-400" />}
-                    <h4 className="text-sm font-bold text-white line-clamp-1">{item.title}</h4>
+                    {item.type === 'issue' && <FileCode2 className="w-4 h-4 text-accent" />}
+                    {item.type === 'code' && <Code2 className="w-4 h-4 text-accent" />}
+                    {item.type === 'idea' && <Lightbulb className="w-4 h-4 text-amber-500" />}
+                    <h4 className="text-[13px] font-medium text-ink-strong line-clamp-1">{item.title}</h4>
                   </div>
                   <button
                     type="button"
                     onClick={() => onRemoveSavedItem(item.id)}
-                    className="text-slate-500 hover:text-red-400 p-1 transition-colors"
+                    className="text-ink-subtle hover:text-rose-500 p-1 transition-colors cursor-pointer"
                     title="Remove item"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
 
-                <p className="text-xs text-slate-300 line-clamp-3 leading-relaxed">
+                <p className="text-[12px] text-ink line-clamp-3 leading-relaxed">
                   {item.summary}
                 </p>
 
-                <div className="pt-2 text-[10px] text-slate-500 flex items-center justify-between">
-                  <span>Saved on {item.date}</span>
-                  <span className="uppercase font-semibold tracking-wider text-purple-400">
+                <div className="pt-2 text-[11px] text-ink-subtle flex items-center justify-between border-t border-hairline/60">
+                  <span className="font-mono tabular-nums">Saved on {item.date}</span>
+                  <span className="badge-71 uppercase text-[10px]">
                     {item.type}
                   </span>
                 </div>

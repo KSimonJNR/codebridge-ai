@@ -215,46 +215,47 @@ export const AccountProfileView: React.FC<AccountProfileViewProps> = ({
   // Unauthenticated / Anonymous Guard
   if (!user) {
     return (
-      <div className="max-w-2xl mx-auto space-y-6 pt-4 pb-16">
-        <div className="rounded-2xl bg-gradient-to-b from-[#0c1222] to-[#070a13] border border-white/10 p-8 sm:p-10 shadow-2xl text-center space-y-5">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-500/20 via-indigo-500/20 to-cyan-500/20 border border-purple-500/30 flex items-center justify-center text-cyan-300 mx-auto">
-            <Cloud className="w-8 h-8" />
+      <div className="max-w-xl mx-auto space-y-6 pt-6 pb-16">
+        <div className="card-71 p-8 sm:p-10 text-center space-y-5">
+          <div className="w-12 h-12 rounded-[12px] bg-surface-2 border border-hairline flex items-center justify-center text-ink-subtle mx-auto">
+            <Cloud className="w-6 h-6 text-accent" />
           </div>
 
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-semibold">
-              <ShieldCheck className="w-3.5 h-3.5" />
+          <div className="space-y-1.5">
+            <div className="badge-71 inline-flex items-center gap-1.5 mx-auto">
+              <ShieldCheck className="w-3.5 h-3.5 text-accent" />
               <span>Cross-Device Cloud Sync</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
-              Sign In to Your Contributor Account
+            <h2 className="text-xl sm:text-2xl font-normal tracking-tight">
+              <span className="font-medium text-ink-strong">Sign In</span>{' '}
+              <span className="font-normal text-ink-subtle">· Contributor Account</span>
             </h2>
-            <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
+            <p className="text-[13px] text-ink-subtle max-w-md mx-auto leading-relaxed">
               Create an account or sign in with GitHub or Google to sync your Pull Request guide, completed Learning Center modules, and roadmaps across any computer or mobile browser.
             </p>
           </div>
 
-          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2.5">
             <button
               type="button"
               onClick={onOpenAuthModal}
-              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-purple-600/30 transition-all cursor-pointer flex items-center justify-center gap-2"
+              className="w-full sm:w-auto h-8 px-5 rounded-[10px] bg-accent hover:bg-accent-hover text-white text-[13px] font-medium transition-colors shadow-xs flex items-center justify-center gap-2 cursor-pointer"
             >
-              <User className="w-4 h-4" />
+              <User className="w-3.5 h-3.5" />
               <span>Sign In or Register</span>
             </button>
 
             <button
               type="button"
               onClick={() => onNavigateTab('dashboard')}
-              className="w-full sm:w-auto px-5 py-3 rounded-xl bg-slate-900 border border-white/10 hover:border-white/20 text-slate-300 text-xs sm:text-sm font-semibold transition-all cursor-pointer"
+              className="w-full sm:w-auto h-8 px-4 rounded-[10px] bg-surface-2 hover:bg-surface border border-hairline text-ink text-[12px] font-medium transition-colors cursor-pointer"
             >
               Continue Anonymously &rarr;
             </button>
           </div>
 
-          <div className="pt-4 border-t border-white/5 text-[11px] text-slate-400 leading-relaxed">
-            Anonymous local progress is automatically preserved in your browser's localStorage!
+          <div className="pt-4 border-t border-hairline text-[11px] text-ink-subtle leading-relaxed">
+            Anonymous local progress is automatically preserved in your browser's localStorage.
           </div>
         </div>
       </div>
@@ -271,16 +272,19 @@ export const AccountProfileView: React.FC<AccountProfileViewProps> = ({
     : 'Unknown';
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 pb-16">
+    <div className="max-w-4xl mx-auto space-y-6 pb-16">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-hairline pb-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-1">
-            <ShieldCheck className="w-4 h-4" />
-            Authenticated Contributor Profile
+          <div className="text-[11px] font-medium text-ink-subtle uppercase tracking-wider mb-1 flex items-center gap-1.5">
+            <ShieldCheck className="w-3.5 h-3.5 text-accent" />
+            <span>Authenticated Contributor Profile</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Account & Sync</h2>
-          <p className="text-sm text-slate-400 mt-1">
+          <h2 className="text-xl sm:text-2xl font-normal tracking-tight">
+            <span className="font-medium text-ink-strong">Account & Sync</span>{' '}
+            <span className="font-normal text-ink-subtle">· Cloud preferences</span>
+          </h2>
+          <p className="text-[13px] text-ink-subtle mt-0.5">
             Manage your authenticated profile and cross-device progress synchronization.
           </p>
         </div>
@@ -288,7 +292,7 @@ export const AccountProfileView: React.FC<AccountProfileViewProps> = ({
         <button
           type="button"
           onClick={() => signOut()}
-          className="self-start sm:self-auto flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-red-300 border border-white/10 hover:border-red-500/40 text-xs font-semibold transition-colors cursor-pointer"
+          className="self-start sm:self-auto h-8 px-3 rounded-[10px] bg-surface-2 hover:bg-surface text-ink-subtle hover:text-rose-500 border border-hairline text-[12px] font-medium transition-colors cursor-pointer flex items-center gap-1.5"
         >
           <LogOut className="w-3.5 h-3.5" />
           <span>Sign Out</span>
@@ -296,21 +300,21 @@ export const AccountProfileView: React.FC<AccountProfileViewProps> = ({
       </div>
 
       {/* Sync Status Banner */}
-      <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-purple-950/20 to-slate-900 border border-purple-500/30 p-5 sm:p-6 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3.5">
-          <div className="w-10 h-10 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-300 flex items-center justify-center font-bold shrink-0">
+      <div className="card-71 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-[10px] bg-surface-2 border border-hairline text-ink-subtle flex items-center justify-center font-medium shrink-0">
             {syncStatus === 'syncing' ? (
-              <RefreshCw className="w-5 h-5 text-cyan-400 animate-spin" />
+              <RefreshCw className="w-4 h-4 text-accent animate-spin" />
             ) : syncStatus === 'error' ? (
-              <AlertTriangle className="w-5 h-5 text-amber-400" />
+              <AlertTriangle className="w-4 h-4 text-amber-500" />
             ) : (
-              <Cloud className="w-5 h-5 text-emerald-400" />
+              <Cloud className="w-4 h-4 text-emerald-500" />
             )}
           </div>
 
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm sm:text-base font-bold text-white">
+              <h3 className="text-[14px] font-medium text-ink-strong">
                 {syncStatus === 'syncing'
                   ? 'Synchronizing Progress...'
                   : syncStatus === 'error'
@@ -318,29 +322,29 @@ export const AccountProfileView: React.FC<AccountProfileViewProps> = ({
                   : 'Cloud Progress Synchronized'}
               </h3>
               <span
-                className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border ${
+                className={`badge-71 uppercase text-[10px] ${
                   syncStatus === 'synced'
-                    ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
+                    ? 'text-emerald-500 border-emerald-500/25 bg-emerald-500/10'
                     : syncStatus === 'syncing'
-                    ? 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30'
-                    : 'bg-amber-500/10 text-amber-300 border-amber-500/30'
+                    ? 'text-accent border-accent/25 bg-accent/10'
+                    : 'text-amber-500 border-amber-500/25 bg-amber-500/10'
                 }`}
               >
                 {syncStatus}
               </span>
             </div>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-[12px] text-ink-subtle mt-0.5 font-mono">
               {lastSyncedAt ? `Last synced today at ${lastSyncedAt}` : 'Synchronized with secure Supabase RLS'}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
           {hasLocalToImport && (
             <button
               type="button"
               onClick={handleManualSync}
-              className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-all cursor-pointer shadow-md"
+              className="h-8 px-3.5 rounded-[10px] bg-accent hover:bg-accent-hover text-white text-[12px] font-medium transition-colors cursor-pointer"
             >
               Import Local Progress
             </button>
@@ -350,32 +354,32 @@ export const AccountProfileView: React.FC<AccountProfileViewProps> = ({
             type="button"
             onClick={handleManualSync}
             disabled={syncStatus === 'syncing'}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-white/10 transition-colors disabled:opacity-50 cursor-pointer"
+            className="h-8 px-3 rounded-[10px] bg-surface-2 hover:bg-surface text-ink text-[12px] font-medium border border-hairline transition-colors disabled:opacity-50 cursor-pointer flex items-center gap-1.5"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${syncStatus === 'syncing' ? 'animate-spin text-cyan-400' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${syncStatus === 'syncing' ? 'animate-spin text-accent' : 'text-ink-subtle'}`} />
             <span>Sync Now</span>
           </button>
         </div>
       </div>
 
       {syncMessage && (
-        <div className="p-3.5 rounded-xl bg-[#080d1a] border border-cyan-500/30 text-xs text-cyan-200 flex items-center gap-2 animate-fadeIn">
-          <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
+        <div className="card-71 p-3 text-[12px] text-ink flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
           <span>{syncMessage}</span>
         </div>
       )}
 
       {/* Profile Details & Cloud Metrics */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* User Card */}
-        <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-6 shadow-xl space-y-4">
-          <div className="flex items-center gap-3 border-b border-white/5 pb-4">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-purple-500 to-cyan-500 flex items-center justify-center text-white font-bold text-lg shadow-md shrink-0">
+        <div className="card-71 p-5 space-y-4">
+          <div className="flex items-center gap-3 border-b border-hairline pb-4">
+            <div className="w-10 h-10 rounded-[10px] bg-surface-2 border border-hairline flex items-center justify-center text-ink-strong font-medium text-sm shrink-0">
               {profile?.avatarUrl ? (
                 <img
                   src={profile.avatarUrl}
                   alt="Avatar"
-                  className="w-full h-full rounded-full object-cover"
+                  className="w-full h-full rounded-[10px] object-cover"
                 />
               ) : (
                 user.email?.[0]?.toUpperCase() || 'U'
@@ -383,51 +387,51 @@ export const AccountProfileView: React.FC<AccountProfileViewProps> = ({
             </div>
 
             <div className="min-w-0">
-              <h3 className="text-base font-bold text-white truncate">
+              <h3 className="text-[14px] font-medium text-ink-strong truncate">
                 {profile?.fullName || user.email?.split('@')[0] || 'Contributor'}
               </h3>
-              <p className="text-xs text-slate-400 truncate">{user.email}</p>
+              <p className="text-[12px] text-ink-subtle truncate">{user.email}</p>
             </div>
           </div>
 
-          <div className="space-y-2.5 text-xs">
-            <div className="flex items-center justify-between text-slate-300">
-              <span className="text-slate-500 flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="space-y-2 text-[12px]">
+            <div className="flex items-center justify-between text-ink">
+              <span className="text-ink-subtle flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-accent" />
                 Auth Provider
               </span>
-              <span className="font-semibold text-white capitalize">{authProvider}</span>
+              <span className="font-medium capitalize">{authProvider}</span>
             </div>
 
-            <div className="flex items-center justify-between text-slate-300">
-              <span className="text-slate-500 flex items-center gap-1.5">
-                <Calendar className="w-3.5 h-3.5 text-purple-400" />
+            <div className="flex items-center justify-between text-ink">
+              <span className="text-ink-subtle flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5 text-ink-subtle" />
                 Member Since
               </span>
-              <span className="font-semibold text-white">{creationDate}</span>
+              <span className="font-mono tabular-nums">{creationDate}</span>
             </div>
 
-            <div className="flex items-center justify-between text-slate-300">
-              <span className="text-slate-500 flex items-center gap-1.5">
-                <Database className="w-3.5 h-3.5 text-emerald-400" />
+            <div className="flex items-center justify-between text-ink">
+              <span className="text-ink-subtle flex items-center gap-1.5">
+                <Database className="w-3.5 h-3.5 text-emerald-500" />
                 Row Level Security
               </span>
-              <span className="font-semibold text-emerald-400 font-mono text-[10px]">ACTIVE</span>
+              <span className="font-mono text-[10px] text-emerald-500 font-medium">ACTIVE</span>
             </div>
           </div>
         </div>
 
         {/* Synced Cloud Counts */}
-        <div className="lg:col-span-2 rounded-2xl bg-slate-900/90 border border-white/10 p-6 shadow-xl space-y-4">
-          <div className="flex items-center justify-between border-b border-white/5 pb-4">
+        <div className="lg:col-span-2 card-71 p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-hairline pb-3">
             <div>
-              <h3 className="text-base font-bold text-white">Synced Cloud Data</h3>
-              <p className="text-xs text-slate-400">Stored securely under your Supabase user ID</p>
+              <h3 className="text-[14px] font-medium text-ink-strong">Synced Cloud Data</h3>
+              <p className="text-[12px] text-ink-subtle">Stored securely under your Supabase user ID</p>
             </div>
             <button
               type="button"
               onClick={() => onNavigateTab('dashboard')}
-              className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1 font-semibold cursor-pointer"
+              className="text-[12px] text-accent hover:text-accent-hover flex items-center gap-1 font-medium cursor-pointer"
             >
               <span>View Dashboard</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -435,38 +439,38 @@ export const AccountProfileView: React.FC<AccountProfileViewProps> = ({
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="p-3.5 rounded-xl bg-[#080d1a] border border-white/5 space-y-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+            <div className="p-3 rounded-[10px] bg-surface-2 border border-hairline space-y-1">
+              <span className="text-[10px] font-medium text-ink-subtle uppercase tracking-wider block">
                 PR Guide Stages
               </span>
-              <div className="text-xl font-extrabold text-cyan-400">
+              <div className="text-lg font-medium text-ink-strong font-mono tabular-nums">
                 {cloudCounts.prSteps} / 10
               </div>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-[#080d1a] border border-white/5 space-y-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+            <div className="p-3 rounded-[10px] bg-surface-2 border border-hairline space-y-1">
+              <span className="text-[10px] font-medium text-ink-subtle uppercase tracking-wider block">
                 Learning Modules
               </span>
-              <div className="text-xl font-extrabold text-purple-400">
+              <div className="text-lg font-medium text-ink-strong font-mono tabular-nums">
                 {cloudCounts.learningModules} / 7
               </div>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-[#080d1a] border border-white/5 space-y-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+            <div className="p-3 rounded-[10px] bg-surface-2 border border-hairline space-y-1">
+              <span className="text-[10px] font-medium text-ink-subtle uppercase tracking-wider block">
                 Active Roadmap
               </span>
-              <div className="text-xl font-extrabold text-indigo-400">
+              <div className="text-lg font-medium text-ink-strong font-mono">
                 {cloudCounts.hasRoadmap ? '1 Active' : 'None'}
               </div>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-[#080d1a] border border-white/5 space-y-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+            <div className="p-3 rounded-[10px] bg-surface-2 border border-hairline space-y-1">
+              <span className="text-[10px] font-medium text-ink-subtle uppercase tracking-wider block">
                 Saved Resources
               </span>
-              <div className="text-xl font-extrabold text-amber-400">
+              <div className="text-lg font-medium text-ink-strong font-mono tabular-nums">
                 {cloudCounts.savedItems}
               </div>
             </div>
@@ -476,57 +480,57 @@ export const AccountProfileView: React.FC<AccountProfileViewProps> = ({
 
       {/* Security & Password Update (Only if email provider) */}
       {authProvider === 'email' && (
-        <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-6 shadow-xl space-y-4">
-          <div className="border-b border-white/5 pb-3">
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <Lock className="w-4 h-4 text-cyan-400" />
+        <div className="card-71 p-5 sm:p-6 space-y-4">
+          <div className="border-b border-hairline pb-3">
+            <h3 className="text-[14px] font-medium text-ink-strong flex items-center gap-2">
+              <Lock className="w-3.5 h-3.5 text-accent" />
               <span>Update Password</span>
             </h3>
-            <p className="text-xs text-slate-400">Change your secure account password.</p>
+            <p className="text-[12px] text-ink-subtle">Change your secure account password.</p>
           </div>
 
           {pwdError && (
-            <div className="p-3 rounded-xl bg-red-950/40 border border-red-500/40 text-red-200 text-xs">
+            <div className="p-3 rounded-[8px] bg-rose-500/10 border border-rose-500/25 text-rose-500 text-[12px]">
               {pwdError}
             </div>
           )}
 
           {pwdSuccess && (
-            <div className="p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-200 text-xs">
+            <div className="p-3 rounded-[8px] bg-emerald-500/10 border border-emerald-500/25 text-emerald-500 text-[12px]">
               {pwdSuccess}
             </div>
           )}
 
-          <form onSubmit={handlePasswordUpdate} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">New Password</label>
+          <form onSubmit={handlePasswordUpdate} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <label className="text-[12px] font-medium text-ink-subtle block">New Password</label>
               <input
                 type="password"
                 required
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="At least 6 characters"
-                className="w-full bg-[#080d1a] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-cyan-400 font-mono"
+                className="w-full h-8 px-3 rounded-[10px] bg-surface-2 border border-hairline text-[13px] text-ink placeholder:text-ink-subtle/50 focus:outline-none focus:border-accent font-mono"
               />
             </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Confirm New Password</label>
+            <div className="space-y-1">
+              <label className="text-[12px] font-medium text-ink-subtle block">Confirm New Password</label>
               <input
                 type="password"
                 required
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Repeat new password"
-                className="w-full bg-[#080d1a] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-cyan-400 font-mono"
+                className="w-full h-8 px-3 rounded-[10px] bg-surface-2 border border-hairline text-[13px] text-ink placeholder:text-ink-subtle/50 focus:outline-none focus:border-accent font-mono"
               />
             </div>
 
-            <div className="sm:col-span-2 flex justify-end">
+            <div className="sm:col-span-2 flex justify-end pt-1">
               <button
                 type="submit"
                 disabled={pwdLoading}
-                className="px-5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold transition-all cursor-pointer disabled:opacity-50"
+                className="h-8 px-4 rounded-[10px] bg-accent hover:bg-accent-hover text-white text-[12px] font-medium transition-colors cursor-pointer disabled:opacity-50"
               >
                 {pwdLoading ? 'Updating...' : 'Update Password'}
               </button>
@@ -535,15 +539,15 @@ export const AccountProfileView: React.FC<AccountProfileViewProps> = ({
         </div>
       )}
 
-      {/* Danger Zone: Delete Cloud Progress (Requirement 5) */}
-      <div className="rounded-2xl bg-red-950/20 border border-red-500/30 p-6 shadow-xl space-y-4">
+      {/* Danger Zone: Delete Cloud Progress */}
+      <div className="card-71 p-5 sm:p-6 space-y-3 border-rose-500/25">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <h3 className="text-base font-bold text-red-300 flex items-center gap-2">
-              <Trash2 className="w-4 h-4 text-red-400" />
+          <div className="space-y-0.5">
+            <h3 className="text-[14px] font-medium text-rose-500 flex items-center gap-2">
+              <Trash2 className="w-3.5 h-3.5" />
               <span>Delete Cloud Progress</span>
             </h3>
-            <p className="text-xs text-slate-400 max-w-xl leading-relaxed">
+            <p className="text-[12px] text-ink-subtle max-w-xl leading-relaxed">
               Permanently wipe all user_progress records associated with your account from Supabase. This action is irreversible. Your local browser progress will not be affected.
             </p>
           </div>
@@ -551,7 +555,7 @@ export const AccountProfileView: React.FC<AccountProfileViewProps> = ({
           <button
             type="button"
             onClick={() => setShowDeleteModal(true)}
-            className="self-start sm:self-auto px-4 py-2 rounded-xl bg-red-950/40 hover:bg-red-900/60 border border-red-500/40 text-red-300 text-xs font-semibold transition-colors cursor-pointer"
+            className="self-start sm:self-auto h-8 px-3 rounded-[10px] bg-surface-2 hover:bg-surface text-rose-500 border border-hairline text-[12px] font-medium transition-colors cursor-pointer"
           >
             Delete Cloud Data
           </button>
@@ -560,38 +564,38 @@ export const AccountProfileView: React.FC<AccountProfileViewProps> = ({
 
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-          <div className="w-full max-w-md bg-[#0c1222] border border-red-500/40 rounded-2xl p-6 shadow-2xl space-y-4 text-slate-200">
-            <div className="flex items-center gap-2 text-red-400 font-bold text-base">
-              <AlertTriangle className="w-5 h-5 shrink-0" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-fadeIn">
+          <div className="w-full max-w-md card-71 p-6 space-y-4">
+            <div className="flex items-center gap-2 text-rose-500 font-medium text-[15px]">
+              <AlertTriangle className="w-4 h-4 shrink-0" />
               <span>Confirm Permanent Deletion</span>
             </div>
 
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <p className="text-[12px] text-ink-subtle leading-relaxed">
               Are you absolutely sure? This will delete all your cloud-synced PR guide stages, roadmaps, and completed lessons from the Supabase database.
             </p>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-400">
-                Type <strong className="text-red-400 font-mono">delete</strong> to confirm:
+              <label className="text-[12px] font-medium text-ink-subtle">
+                Type <strong className="text-rose-500 font-mono">delete</strong> to confirm:
               </label>
               <input
                 type="text"
                 value={deleteConfirmText}
                 onChange={(e) => setDeleteConfirmText(e.target.value)}
                 placeholder="delete"
-                className="w-full bg-[#080d1a] border border-red-500/40 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-red-400 font-mono"
+                className="w-full h-8 px-3 rounded-[10px] bg-surface-2 border border-hairline text-[13px] text-ink focus:outline-none focus:border-rose-500 font-mono"
               />
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-2">
+            <div className="flex items-center justify-end gap-2 pt-2">
               <button
                 type="button"
                 onClick={() => {
                   setShowDeleteModal(false);
                   setDeleteConfirmText('');
                 }}
-                className="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold hover:bg-slate-700 cursor-pointer"
+                className="h-8 px-3.5 rounded-[10px] bg-surface-2 text-ink text-[12px] font-medium hover:bg-surface border border-hairline cursor-pointer"
               >
                 Cancel
               </button>
@@ -599,7 +603,7 @@ export const AccountProfileView: React.FC<AccountProfileViewProps> = ({
                 type="button"
                 disabled={deleteConfirmText.toLowerCase() !== 'delete' || deleteLoading}
                 onClick={handleDeleteAllProgress}
-                className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold disabled:opacity-50 cursor-pointer"
+                className="h-8 px-3.5 rounded-[10px] bg-rose-500 hover:bg-rose-600 text-white text-[12px] font-medium disabled:opacity-50 cursor-pointer"
               >
                 {deleteLoading ? 'Deleting...' : 'Permanently Delete'}
               </button>

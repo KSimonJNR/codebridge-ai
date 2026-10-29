@@ -1,3 +1,4 @@
+import fs from 'fs';
 import express from 'express';
 import { createServer as createViteServer } from 'vite';
 import path from 'path';
@@ -9,6 +10,41 @@ dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Ensure VITE_SUPABASE_* env vars from container process.env are written to .env.local
+// so Vite's loadEnv() and dev server can natively populate import.meta.env
+try {
+  const envLocalPath = path.resolve(__dirname, '.env.local');
+  const envLines: string[] = [];
+  const rawUrl = process.env.VITE_SUPABASE_URL;
+  const rawKey = process.env.VITE_SUPABASE_ANON_KEY;
+  if (rawUrl && rawUrl.trim()) {
+    let cleanUrl = rawUrl.trim().replace(/^['"]|['"]$/g, '');
+    if (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://')) {
+      cleanUrl = 'https://' + cleanUrl;
+    }
+    try {
+      cleanUrl = new URL(cleanUrl).origin;
+    } catch {
+      cleanUrl = cleanUrl.replace(/\/rest\/v1\/?$/i, '').replace(/\/+$/, '');
+    }
+    cleanUrl = cleanUrl.replace(/\r/g, '').trim();
+    envLines.push(`VITE_SUPABASE_URL=${cleanUrl}`);
+  }
+  if (rawKey && rawKey.trim()) {
+    const cleanKey = rawKey.trim().replace(/^['"]|['"]$/g, '').replace(/\r/g, '');
+    envLines.push(`VITE_SUPABASE_ANON_KEY=${cleanKey}`);
+  }
+  if (process.env.APP_URL && process.env.APP_URL.trim()) {
+    const cleanAppUrl = process.env.APP_URL.trim().replace(/^['"]|['"]$/g, '').replace(/\/+$/, '');
+    envLines.push(`APP_URL=${cleanAppUrl}`);
+  }
+  if (envLines.length > 0) {
+    fs.writeFileSync(envLocalPath, envLines.join('\n') + '\n', 'utf-8');
+  }
+} catch (e) {
+  console.warn('Could not write .env.local:', e);
+}
 
 // Model fallback cascade: primary model followed by stable flash fallbacks
 const CANDIDATE_MODELS = ['gemini-3.8-flash', 'gemini-flash-latest', 'gemini-3.1-flash-lite'];
@@ -247,6 +283,184 @@ async function startServer() {
       console.warn('Could not verify Supabase provider status', err);
       return res.json({ configured: true, enabled: true });
     }
+  });
+
+  // Client-safe Supabase configuration endpoint (anon key and runtime origin)
+  app.get('/api/supabase/config', (req, res) => {
+    const rawUrl = process.env.VITE_SUPABASE_URL || '';
+    const rawKey = process.env.VITE_SUPABASE_ANON_KEY || '';
+    const cleanUrl = normalizeSupabaseUrl(rawUrl);
+    const cleanKey = rawKey.trim().replace(/^['"]|['"]$/g, '');
+    const configured = Boolean(
+      cleanUrl &&
+      cleanKey &&
+      cleanUrl.startsWith('https://') &&
+      !cleanUrl.includes('your-project-id') &&
+      cleanKey !== 'your_supabase_anon_key_here' &&
+      cleanKey.length >= 20
+    );
+
+    const host = req.get('x-forwarded-host') || req.get('host');
+    const proto = req.get('x-forwarded-proto') || (req.secure ? 'https' : 'http');
+    const dynamicOrigin = host ? `${proto}://${host}` : '';
+    const appUrl = (process.env.APP_URL || dynamicOrigin).replace(/\/+$/, '');
+    const callbackUrl = appUrl ? `${appUrl}/auth/callback` : '';
+
+    res.json({
+      configured,
+      supabaseUrl: cleanUrl,
+      supabaseAnonKey: cleanKey,
+      appUrl,
+      callbackUrl,
+    });
+  });
+
+  // OAuth Callback Route for iframe-safe popup and direct redirect authentication flows
+  app.get(['/auth/callback', '/auth/callback/'], (_req, res) => {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(`<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Authenticating with CodeBridge AI...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin: 0;
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 28px 24px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(56, 189, 248, 0.2);
+      border-top-color: #38bdf8;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 8px 18px;
+      background: #38bdf8;
+      color: #0d1117;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background 0.15s ease;
+    }
+    .btn:hover { background: #7dd3fc; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="card" id="status-card">
+    <div class="spinner" id="spinner"></div>
+    <h3 id="status-title" style="margin: 0 0 8px; font-size: 16px;">Authenticating...</h3>
+    <p id="status-msg" style="margin: 0; font-size: 13px; color: #8b949e;">Connecting your account to CodeBridge AI. This window will close automatically.</p>
+    <div id="action-area" style="display: none;">
+      <a id="return-link" class="btn" href="/">Return to CodeBridge AI</a>
+    </div>
+  </div>
+  <script>
+    (function() {
+      var hash = window.location.hash || '';
+      var search = window.location.search || '';
+      var href = window.location.href;
+
+      var searchParams = new URLSearchParams(search.replace(/^\\?/, ''));
+      var hashParams = new URLSearchParams(hash.replace(/^#/, ''));
+      var errorMsg = searchParams.get('error_description') || searchParams.get('error') || hashParams.get('error_description') || hashParams.get('error');
+
+      var payload = {
+        type: 'SUPABASE_OAUTH_CALLBACK',
+        hash: hash,
+        search: search,
+        href: href,
+        error: errorMsg || null,
+        timestamp: Date.now()
+      };
+
+      // 1. Sync through localStorage for cross-tab listeners
+      try {
+        localStorage.setItem('codebridge_oauth_callback', JSON.stringify(payload));
+      } catch (e) {}
+
+      // 2. Broadcast via BroadcastChannel across tabs/windows
+      try {
+        if (typeof BroadcastChannel !== 'undefined') {
+          var bc = new BroadcastChannel('codebridge_oauth_channel');
+          bc.postMessage(payload);
+          bc.close();
+        }
+      } catch (e) {}
+
+      // 3. Post to window.opener if opened as popup
+      var hasOpener = window.opener && window.opener !== window;
+      if (hasOpener) {
+        try {
+          window.opener.postMessage(payload, '*');
+          if (!errorMsg) {
+            setTimeout(function() {
+              window.close();
+            }, 500);
+          }
+        } catch (e) {
+          hasOpener = false;
+        }
+      }
+
+      // If an error occurred (e.g. user canceled or permission denied)
+      if (errorMsg) {
+        document.getElementById('spinner').style.display = 'none';
+        document.getElementById('status-title').textContent = 'Authentication Issue';
+        document.getElementById('status-title').style.color = '#f87171';
+        document.getElementById('status-msg').textContent = decodeURIComponent(errorMsg.replace(/\\+/g, ' '));
+        document.getElementById('action-area').style.display = 'block';
+        return;
+      }
+
+      // 4. Fallback if no window.opener (e.g. mobile tab or popup was converted to main tab)
+      if (!hasOpener) {
+        var returnPath = '/' + (search || '') + (hash || '');
+        document.getElementById('return-link').href = returnPath;
+        setTimeout(function() {
+          window.location.replace(returnPath);
+        }, 300);
+      } else {
+        // Fallback manual close button if popup wasn't permitted to self-close
+        setTimeout(function() {
+          document.getElementById('action-area').style.display = 'block';
+          var btn = document.getElementById('return-link');
+          btn.textContent = 'Close Window';
+          btn.onclick = function() { window.close(); };
+        }, 1200);
+      }
+    })();
+  </script>
+</body>
+</html>`);
   });
 
   // Feature 1: AI Code Explainer endpoint

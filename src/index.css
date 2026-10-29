@@ -2,14 +2,102 @@
 
 @layer base {
   :root {
-    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+    /* 71UI Core Light Palette */
+    --color-canvas: #FFFFFF;
+    --color-surface: #FAFAFA;
+    --color-surface-2: #F4F4F5;
+    --color-hairline: #EBEBEB;
+    --color-hairline-strong: #D4D4D8;
+    --color-control-border: #8A8A8A;
+    --color-ink-strong: #111111;
+    --color-ink: #333333;
+    --color-ink-subtle: #6B6B6B;
+    --color-primary: #0070E0;
+    --color-primary-hover: #005FC2;
+    --color-on-primary: #FFFFFF;
+    --color-link: #0070E0;
+    --color-inverse: #111111;
+    --color-inverse-hover: #2B2B2B;
+    --color-on-inverse: #FFFFFF;
+
+    --color-success: #15B042;
+    --color-success-fill: #CAFACE;
+    --color-on-success: #0E7A2F;
+
+    --color-warning: #D97706;
+    --color-warning-fill: #FFF1D6;
+    --color-on-warning: #8A4B00;
+
+    --color-danger: #D92D20;
+    --color-danger-fill: #FFE8E6;
+    --color-on-danger: #B42318;
+
+    --color-info-fill: #E6F0FF;
+    --color-on-info: #0058B0;
+
+    /* 71UI Shadows */
+    --shadow-ring: 0 0 0 1px rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06), 0 2px 4px 0 rgb(0 0 0 / 0.04);
+    --shadow-sm: 0 2px 3px -1px rgb(0 0 0 / 0.10), 0 1px 0 0 rgb(25 28 33 / 0.02), 0 0 0 1px rgb(25 28 33 / 0.08);
+    --shadow-md: 0 0 0 1px rgb(0 0 0 / 0.06), 0 1px 1px -0.5px rgb(0 0 0 / 0.06), 0 3px 3px -1.5px rgb(0 0 0 / 0.06), 0 6px 6px -3px rgb(0 0 0 / 0.06);
+
+    /* 71UI Radii */
+    --radius-xs: 4px;
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-control: 10px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-2xl: 24px;
+    --radius-full: 9999px;
+  }
+
+  .dark, :root[data-theme="dark"] {
+    /* 71UI Core Dark Palette */
+    --color-canvas: #0A0A0B;
+    --color-surface: #111113;
+    --color-surface-2: #1A1A1D;
+    --color-hairline: rgb(255 255 255 / 0.08);
+    --color-hairline-strong: rgb(255 255 255 / 0.14);
+    --color-control-border: rgb(255 255 255 / 0.35);
+    --color-ink-strong: #F4F4F2;
+    --color-ink: #D6D6D3;
+    --color-ink-subtle: #8F8F8A;
+    --color-primary: #0070E0;
+    --color-primary-hover: #005FC2;
+    --color-on-primary: #FFFFFF;
+    --color-link: #4193F5;
+    --color-inverse: #F4F4F2;
+    --color-inverse-hover: #DADAD6;
+    --color-on-inverse: #0A0A0B;
+
+    --color-success: #15B042;
+    --color-success-fill: #0F2A19;
+    --color-on-success: #5FD68A;
+
+    --color-warning: #F5B94A;
+    --color-warning-fill: #2E2210;
+    --color-on-warning: #F5B94A;
+
+    --color-danger: #F97066;
+    --color-danger-fill: #3A1512;
+    --color-on-danger: #F97066;
+
+    --color-info-fill: #0E2440;
+    --color-on-info: #6AAEFF;
+
+    --shadow-ring: 0 0 0 1px rgb(255 255 255 / 0.08);
+    --shadow-bevel: inset 0 1px 0 rgb(255 255 255 / 0.08), inset 0 -1px 0 rgb(0 0 0 / 0.7);
   }
 
   body {
     font-family: var(--font-sans);
-    background-color: #070a13;
-    color: #f1f5f9;
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
   }
 
   code, pre, kbd {
@@ -17,33 +105,178 @@
   }
 }
 
-/* Custom sleek scrollbar for code blocks & drawers */
+/* 71UI Structural Component Utilities */
+.bg-canvas { background-color: var(--color-canvas); }
+.bg-surface { background-color: var(--color-surface); }
+.bg-surface-2 { background-color: var(--color-surface-2); }
+.border-hairline { border-color: var(--color-hairline); }
+.border-hairline-strong { border-color: var(--color-hairline-strong); }
+.text-ink-strong { color: var(--color-ink-strong); }
+.text-ink { color: var(--color-ink); }
+.text-ink-subtle { color: var(--color-ink-subtle); }
+.text-primary-71 { color: var(--color-primary); }
+
+/* 71UI 32px Button Controls with 10px Radius */
+.btn-primary {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 16px;
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background-color 150ms ease-out, transform 100ms ease-out;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+}
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+.btn-secondary {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 16px;
+  background-color: var(--color-surface);
+  color: var(--color-ink-strong);
+  border: 1px solid var(--color-hairline);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background-color 150ms ease-out, border-color 150ms ease-out, transform 100ms ease-out;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.btn-secondary:hover {
+  background-color: var(--color-surface-2);
+  border-color: var(--color-hairline-strong);
+}
+.btn-secondary:active {
+  transform: scale(0.97);
+}
+
+.btn-inverse {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 16px;
+  background-color: var(--color-inverse);
+  color: var(--color-on-inverse);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background-color 150ms ease-out, transform 100ms ease-out;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.btn-inverse:hover {
+  background-color: var(--color-inverse-hover);
+}
+.btn-inverse:active {
+  transform: scale(0.97);
+}
+
+/* 71UI 40-44px CTA Button */
+.btn-cta {
+  height: 42px;
+  padding: 0 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 150ms ease-out, transform 100ms ease-out;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.btn-cta:hover {
+  background-color: var(--color-primary-hover);
+}
+.btn-cta:active {
+  transform: scale(0.97);
+}
+
+/* 71UI 20px Badges with 6px radius */
+.badge-71 {
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.badge-success-71 {
+  background-color: var(--color-success-fill);
+  color: var(--color-on-success);
+}
+.badge-warning-71 {
+  background-color: var(--color-warning-fill);
+  color: var(--color-on-warning);
+}
+.badge-danger-71 {
+  background-color: var(--color-danger-fill);
+  color: var(--color-on-danger);
+}
+.badge-info-71 {
+  background-color: var(--color-info-fill);
+  color: var(--color-on-info);
+}
+.badge-neutral-71 {
+  background-color: var(--color-surface-2);
+  color: var(--color-ink);
+  border: 1px solid var(--color-hairline);
+}
+
+/* 71UI Card Container */
+.card-71 {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-hairline);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow-ring);
+  transition: border-color 150ms ease-out;
+}
+
+/* Custom Sleek Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.6);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(168, 85, 247, 0.25);
+  background: var(--color-hairline-strong);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(168, 85, 247, 0.45);
-}
-
-@keyframes pulseGlow {
-  0%, 100% {
-    opacity: 0.35;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.55;
-    transform: scale(1.05);
-  }
-}
-
-.animate-pulse-glow {
-  animation: pulseGlow 6s ease-in-out infinite;
+  background: var(--color-control-border);
 }
